@@ -26,7 +26,8 @@ export enum ContentType {
 
 export enum ErrorType {
     None,
-    Generic,
+    InternalServerError,
+    Unauthorized,
     Forbidden,
     BadRequest
 }

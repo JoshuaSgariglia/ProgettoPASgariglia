@@ -1,5 +1,3 @@
-version: "1.0.0"
-
 services:
   app:
     build: 
@@ -8,8 +6,6 @@ services:
     ports:
       - "${APP_PORT}:${APP_PORT}"
     environment:
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
     volumes:

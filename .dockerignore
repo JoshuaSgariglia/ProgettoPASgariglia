@@ -13,5 +13,9 @@ logs/
 tmp/
 temp/
 
+# Old files\versions
+*.old
+old/
+
 # Dockerfiles
 Dockerfile*

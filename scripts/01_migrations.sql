@@ -14,7 +14,10 @@ CREATE TABLE users (
     "surname" VARCHAR(64) NOT NULL,
     "password" VARCHAR(512) NOT NULL,
     "role" user_role NOT NULL DEFAULT 'user',
-    "tokenAmount" INTEGER NOT NULL DEFAULT 50
+    "tokenAmount" INTEGER NOT NULL DEFAULT 50,
+    "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeDeleted" TIMESTAMPTZ
 );
 
 -- Computing Resources
@@ -23,7 +26,10 @@ CREATE TABLE computing_resources (
     "model" VARCHAR(64) NOT NULL,
     "serial" BIGINT NOT NULL,
     "manufacturer" VARCHAR(64) NOT NULL,
-    "type" resource_type NOT NULL DEFAULT 'gpu'
+    "type" resource_type NOT NULL DEFAULT 'gpu',
+    "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeDeleted" TIMESTAMPTZ
 );
 
 -- Calendars
@@ -32,7 +38,10 @@ CREATE TABLE calendars (
     "resource" UUID NOT NULL,
     "name" VARCHAR(64) NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT FALSE,
-    CONSTRAINT fk_calendar_resource FOREIGN KEY ("resource") REFERENCES "Resources" ("uuid") ON DELETE CASCADE
+    "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeDeleted" TIMESTAMPTZ,
+    CONSTRAINT fk_calendar_resource FOREIGN KEY ("resource") REFERENCES "computing_resources" ("uuid") ON DELETE CASCADE
 );
 
 -- Slot Requests
@@ -46,6 +55,9 @@ CREATE TABLE slot_requests (
     "title" VARCHAR(128) NOT NULL,
     "reason" VARCHAR(512) NOT NULL,
     "refusalReason" VARCHAR(512),
-    CONSTRAINT fk_request_user FOREIGN KEY ("user") REFERENCES "Users" ("uuid") ON DELETE CASCADE,
-    CONSTRAINT fk_request_calendar FOREIGN KEY ("calendar") REFERENCES "Calendars" ("uuid") ON DELETE CASCADE
+    "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    "datetimeDeleted" TIMESTAMPTZ,
+    CONSTRAINT fk_request_user FOREIGN KEY ("user") REFERENCES "users" ("uuid") ON DELETE CASCADE,
+    CONSTRAINT fk_request_calendar FOREIGN KEY ("calendar") REFERENCES "calendars" ("uuid") ON DELETE CASCADE
 );

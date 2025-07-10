@@ -6,7 +6,7 @@ CREATE TYPE resource_type AS ENUM ('gpu', 'cpu');
 CREATE TYPE request_status AS ENUM ('pending', 'invalid', 'approved', 'refused');
 
 -- Users
-CREATE TABLE Users (
+CREATE TABLE users (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "username" VARCHAR(32) NOT NULL,
     "email" VARCHAR(128) NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE Users (
     "tokenAmount" INTEGER NOT NULL DEFAULT 50
 );
 
--- Resources
-CREATE TABLE Resources (
+-- Computing Resources
+CREATE TABLE computing_resources (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "model" VARCHAR(64) NOT NULL,
     "serial" BIGINT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Resources (
 );
 
 -- Calendars
-CREATE TABLE Calendars (
+CREATE TABLE calendars (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "resource" UUID NOT NULL,
     "name" VARCHAR(64) NOT NULL,
@@ -35,8 +35,8 @@ CREATE TABLE Calendars (
     CONSTRAINT fk_calendar_resource FOREIGN KEY ("resource") REFERENCES "Resources" ("uuid") ON DELETE CASCADE
 );
 
--- Requests
-CREATE TABLE Requests (
+-- Slot Requests
+CREATE TABLE slot_requests (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "user" UUID NOT NULL,
     "calendar" UUID NOT NULL,

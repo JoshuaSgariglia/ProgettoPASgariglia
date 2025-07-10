@@ -1,7 +1,7 @@
 -- Seeding
 
 -- Insert Resources
-INSERT INTO Resources ("uuid", "model", "serial", "manufacturer", "type") VALUES
+INSERT INTO computing_resources ("uuid", "model", "serial", "manufacturer", "type") VALUES
 ('bc607e5e-2286-4ce9-95f5-c52098138883', 'Tesla T4', 913423, 'nvidia', 'gpu'),
 ('452d3098-86ad-471d-8c96-85ae7cf3dbee', 'RTX PRO 6000', 25719, 'nvidia', 'gpu'),
 ('4e345ce9-cc52-4bb9-8ffd-4ac825adc286', 'RTX 4090', 5234102, 'nvidia', 'gpu'),
@@ -9,7 +9,7 @@ INSERT INTO Resources ("uuid", "model", "serial", "manufacturer", "type") VALUES
 ('87c5ec26-dd51-47a1-bbe4-803fd11f903e', 'Intel Core i9-10980XE', 139784, 'intel', 'cpu'),
 
 -- Insert Users
-INSERT INTO Users ("uuid", "username", "email", "name", "surname", "password", "role") VALUES
+INSERT INTO users ("uuid", "username", "email", "name", "surname", "password", "role") VALUES
 ('72a84090-8f1a-4067-828b-1c975669eea4', 'mariorossi89', 'mario.rossi@gmail.com', 'Mario', 'Rossi', 'hashed-password', 'user'),
 ('5664c112-a2b3-417c-a146-136c1f2c005b', 'giuse77', 'giuseppeverdi@gmail.com', 'Giuseppe', 'Verdi', 'hashed-password', 'user'),
 ('b638c97e-5e2b-41ce-8654-74c3e0bb69ac', 'mark_white', 'mark.white@libero.it', 'Marco', 'Bianchi', 'hashed-password', 'user'),
@@ -17,13 +17,13 @@ INSERT INTO Users ("uuid", "username", "email", "name", "surname", "password", "
 ('44679278-d7e5-481b-b873-b476287c551f', 'sullyking', 'keat.prescott@tiscali.it', 'Keaton', 'Prescott', 'hashed-password', 'admin'),
 
 -- Insert Calendars
-INSERT INTO Calendars ("uuid", "resource", "name", "isArchived") VALUES
+INSERT INTO calendars ("uuid", "resource", "name", "isArchived") VALUES
 ('1baa324d-c819-4187-92da-41ab7508d13c', 'bc607e5e-2286-4ce9-95f5-c52098138883', 'Calendario Computer Vision - 1', false),
 ('78819106-363f-482a-8a88-71982fdf671c', '452d3098-86ad-471d-8c96-85ae7cf3dbee', 'Calendario Computer Vision - 2', false),
 ('871e8757-f393-4fa0-bb18-2010bcbbedbe', '02ab7562-4bee-4163-a894-2e24ad6e626c', 'Calendario per Machine Learning - dip. ricerca', true),
 
--- Insert Requests (non-overlapping per calendar)
-INSERT INTO Requests (
+-- Insert Slot Requests
+INSERT INTO slot_requests (
   "uuid", "user", "calendar", "status",
   "datetimeStart", "datetimeEnd", "title", "reason", "refusalReason"
 ) VALUES

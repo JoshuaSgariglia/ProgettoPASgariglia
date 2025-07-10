@@ -20,12 +20,7 @@ services:
           target: /usr/app
           action: sync  
     depends_on:
-      - redis
       - postgres
-  redis:
-    image: redis:7
-    ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
   postgres:
     image: postgres:17.5
     environment:

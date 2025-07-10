@@ -1,4 +1,5 @@
 import { DataTypes, Sequelize, InferAttributes, InferCreationAttributes, Model, CreationOptional } from 'sequelize';
+import { RequestStatus } from '../utils/enums';
 
 
 

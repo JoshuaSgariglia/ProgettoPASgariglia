@@ -1,0 +1,14 @@
+# Compiled files, libraries, and other generated files
+dist/
+node_modules/
+package-lock.json
+
+# Logs
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Dockerfiles
+Dockerfile*

@@ -1,0 +1,44 @@
+version: "1.0.0"
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.nodemon
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    volumes:
+      - app_logs:/usr/app/logs 
+    develop:
+      watch:
+        - path: .
+          target: /usr/app
+          action: sync  
+    depends_on:
+      - redis
+      - postgres
+  redis:
+    image: redis:7
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+  postgres:
+    image: postgres:17.5
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports: 
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
+    restart: always
+
+volumes:
+  postgres_data: {}
+  app_logs: {}

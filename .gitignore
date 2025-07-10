@@ -7,8 +7,15 @@ node_modules/
 package-lock.json
 
 # Logs
+*.log
 logs/
 
-# Temporary files
+# Temporary files and folders
 *.tmp
 *.temp
+tmp/
+temp/
+
+# Old files\versions
+*.old
+old/

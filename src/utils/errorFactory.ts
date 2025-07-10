@@ -82,7 +82,7 @@ class BadRequest extends ErrorResponse {
     }
 }
 
-class ErrorFactory {
+export class ErrorFactory {
     public static getError(type: ErrorType): ErrorResponse {
         let retval: ErrorResponse;
         switch (type) {

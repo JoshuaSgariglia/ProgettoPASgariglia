@@ -33,9 +33,15 @@ export enum ErrorType {
     NotFound,
     InternalServerError,
     // Unathorized errors
-    UndefinedRouteOrInvalidMethod,
+    MissingAuthorizationHeader,
+    InvalidAuthorizationType,
+    TokenExpired,
+    TokenNotActivated,
+    InvalidToken,
+    MissingTokenPayload,
+    InvalidTokenPayload,
     // NotFound errors
-    MissingAuthorization
+    UndefinedRouteOrInvalidMethod,
 }
 
 export enum SuccessType {

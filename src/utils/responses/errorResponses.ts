@@ -69,9 +69,45 @@ export class InternalServerError extends ErrorResponse {
 // Specialized ErrorResponse classes
 
 // Unauthorized errors
-export class MissingAuthorization extends Unauthorized {
+export class MissingAuthorizationHeader extends Unauthorized {
     constructor() {
         super("Authorization header is missing")
+    }
+}
+
+export class InvalidAuthorizationType extends Unauthorized {
+    constructor() {
+        super("Authorization type is invalid - Bearer token is requested")
+    }
+}
+
+export class TokenExpired extends Unauthorized {
+    constructor() {
+        super("Token has expired")
+    }
+}
+
+export class TokenNotActivated extends Unauthorized {
+    constructor() {
+        super("Token not yet activated - Retry in a few seconds")
+    }
+}
+
+export class InvalidToken extends Unauthorized {
+    constructor() {
+        super("Token signature and\\or form is not valid")
+    }
+}
+
+export class MissingTokenPayload extends Unauthorized {
+    constructor() {
+        super("Token payload is missing")
+    }
+}
+
+export class InvalidTokenPayload extends Unauthorized {
+    constructor() {
+        super("Token payload is invalid - UUID and role are requested")
     }
 }
 

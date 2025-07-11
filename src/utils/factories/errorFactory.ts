@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InternalServerError, MissingAuthorization, NotFound, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
+import { BadRequest, ErrorResponse, Forbidden, InternalServerError, InvalidAuthorizationType, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType): ErrorResponse {
@@ -22,8 +22,26 @@ export class ErrorFactory {
                 error = new InternalServerError();
                 break;
             // Unauthorized errors
-            case ErrorType.MissingAuthorization:
-                error = new MissingAuthorization()
+            case ErrorType.MissingAuthorizationHeader:
+                error = new MissingAuthorizationHeader()
+                break;
+            case ErrorType.InvalidAuthorizationType:
+                error = new InvalidAuthorizationType()
+                break;
+            case ErrorType.TokenExpired:
+                error = new TokenExpired()
+                break;
+            case ErrorType.TokenNotActivated:
+                error = new TokenNotActivated()
+                break;
+            case ErrorType.InvalidToken:
+                error = new InvalidToken()
+                break;
+            case ErrorType.MissingTokenPayload:
+                error = new MissingTokenPayload()
+                break;
+            case ErrorType.InvalidTokenPayload:
+                error = new InvalidTokenPayload()
                 break;
             // NotFound errors
             case ErrorType.UndefinedRouteOrInvalidMethod:

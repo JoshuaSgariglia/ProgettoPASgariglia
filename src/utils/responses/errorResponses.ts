@@ -50,7 +50,7 @@ export class NotFound extends ErrorResponse {
     constructor(message?: string) {
         super(
             message ?? "The submitted request data is invalid",
-            StatusCodes.BAD_REQUEST,
+            StatusCodes.NOT_FOUND,
         )
     }
 }
@@ -77,8 +77,8 @@ export class MissingAuthorization extends Unauthorized {
 
 
 // NotFound errors
-export class UndefinedRoute extends NotFound {
+export class UndefinedRouteOrInvalidMethod extends NotFound {
     constructor() {
-        super("The inserted route does not exist")
+        super("The selected route and\\or method are invalid")
     }
 }

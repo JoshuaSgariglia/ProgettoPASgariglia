@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 import { withDatabaseConnected } from "./utils/connector/connect";
 import { Sequelize } from "sequelize";
 import { SuccessResponseFactory } from "./utils/factories/successFactory";
+import { errorHandlers } from "./middleware/errorHandlers";
+import { asyncHandler } from "./utils/asyncHandler";
 
 const result = dotenv.config();
 
@@ -21,25 +23,27 @@ const APP_HOST = process.env.APP_HOST || 'localhost';
 const APP_PORT = process.env.APP_PORT || 8080;
 
 
-app.use(express.json());
-//app.use("/api", userRoutes);
 
 withDatabaseConnected((sequelize: Sequelize) => {
+  app.use(express.json());
+  //app.use("/api", userRoutes);
+
   app.locals.db = sequelize;
 
-  app.get('/', async (req: any, res: any) => {
-    try {
-      const userList = await User.findAll();
-      ErrorFactory.getError(ErrorType.MissingAuthorization).send(res)
-      SuccessResponseFactory.getResponse(SuccessType.ServiceOnline, userList).send(res);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch users' });
-    }
-  });
+  app.get('/', asyncHandler(async (req: any, res: any) => {
+      //const userList = await User.findAll();
+      SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).send(res);
+   
+  }));
+
+  // Use logging handlers
+  app.use(...errorHandlers)
+
+  // Use error handlers
+  app.use(...errorHandlers)
 
   app.listen(APP_PORT, () => {
     console.log(`App listening at http://${APP_HOST}:${APP_PORT}`);
   });
 });
-
 

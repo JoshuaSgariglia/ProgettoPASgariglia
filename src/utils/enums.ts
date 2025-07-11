@@ -33,7 +33,7 @@ export enum ErrorType {
     NotFound,
     InternalServerError,
     // Unathorized errors
-    UndefinedRoute,
+    UndefinedRouteOrInvalidMethod,
     // NotFound errors
     MissingAuthorization
 }

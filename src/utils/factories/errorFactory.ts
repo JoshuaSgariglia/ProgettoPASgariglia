@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InternalServerError, MissingAuthorization, NotFound, Unauthorized, UndefinedRoute } from "../responses/errorResponses";
+import { BadRequest, ErrorResponse, Forbidden, InternalServerError, MissingAuthorization, NotFound, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType): ErrorResponse {
@@ -26,8 +26,8 @@ export class ErrorFactory {
                 error = new MissingAuthorization()
                 break;
             // NotFound errors
-            case ErrorType.UndefinedRoute:
-                error = new UndefinedRoute();
+            case ErrorType.UndefinedRouteOrInvalidMethod:
+                error = new UndefinedRouteOrInvalidMethod();
                 break;
             // Default error
             default:

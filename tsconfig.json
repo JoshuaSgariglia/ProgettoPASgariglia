@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./**/*"],
+  "include": ["./**/*", "expressCustom.d.ts"],
   "exclude": ["node_modules", "dist", "src/old"]
 }

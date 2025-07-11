@@ -46,7 +46,7 @@ const withRetry = (
         }
 
         if (!connected) {
-            console.error('All retry attempts failed. Exiting.');
+            console.error('[FATAL] All retry attempts failed. Exiting with code 1.');
             process.exit(1);
         } else {
             return sequelize;

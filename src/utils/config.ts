@@ -9,14 +9,13 @@ const PUBLIC_KEY_FILENAME: string = 'publicRS256.key'
 let privateKey: string;
 let publicKey: string;
 
-const loadCertificate = (filename: string) => fs.readFileSync(path.join(CERTS_DIRECTORY, filename), 'utf8')
+const loadCertificate = (filename: string) => fs.readFileSync(path.join(CERTS_DIRECTORY, filename), 'utf8');
 
 try {
   privateKey = loadCertificate(PRIVATE_KEY_FILENAME);
   publicKey = loadCertificate(PUBLIC_KEY_FILENAME);
-} catch (err) {
-  console.error('[FATAL] Failed to load RSA keys:', err instanceof Error ? err.message : err);
-  console.error('Shutting down application - Exiting with code 1.');
+} catch {
+  console.error('[FATAL] Failed to load RSA keys. Exiting with code 1.');
   process.exit(1);
 }
 

@@ -1,4 +1,5 @@
 import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import { ResourceType } from '../utils/enums';
 
 
 export class ComputingResource extends Model<InferAttributes<ComputingResource>, InferCreationAttributes<ComputingResource>> {

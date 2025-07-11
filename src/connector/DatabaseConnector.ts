@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import { User, defineUserModel } from './User';
-import { SlotRequest, defineSlotRequestModel } from './SlotRequest';
-import { Calendar, defineCalendarModel } from './Calendar';
-import { ComputingResource, defineComputingResourceModel } from './ComputingResource';
+import { User, defineUserModel } from '../models/User';
+import { SlotRequest, defineSlotRequestModel } from '../models/SlotRequest';
+import { Calendar, defineCalendarModel } from '../models/Calendar';
+import { ComputingResource, defineComputingResourceModel } from '../models/ComputingResource';
 
 export class DatabaseConnector {
   private static instance: Sequelize;
@@ -32,7 +32,7 @@ export class DatabaseConnector {
   private static initSequelize(): Sequelize {
     return new Sequelize(
         process.env.POSTGRES_DB || "postgres",
-        process.env.POSTGRES_USER || "admin",
+        process.env.POSTGRES_USER || "db-admin",
         process.env.POSTGRES_PASSWORD || "password",
         {
           host: process.env.POSTGRES_HOST || "localhost",

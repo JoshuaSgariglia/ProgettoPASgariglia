@@ -1,4 +1,5 @@
 import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import { UserRole } from '../utils/enums';
 
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -52,7 +53,7 @@ export function defineUserModel(sequelize: Sequelize): void {
             defaultValue: UserRole.User,
         },
         tokenAmount: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 50,
         },

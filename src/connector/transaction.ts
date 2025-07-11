@@ -1,5 +1,5 @@
 import { Transaction } from "sequelize";
-import { DatabaseConnector } from "../orm/DatabaseConnector";
+import { DatabaseConnector } from "../connector/DatabaseConnector";
 
 type TransactionCallback = (transaction: Transaction) => Promise<void>;
 

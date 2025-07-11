@@ -22,7 +22,7 @@ const connect: ConnectionFunction = async (sequelize) => {
  */
 const withRetry = (
     connect: ConnectionFunction,
-    retryOptions: RetryOptions = { retryCount: 5, retryDelay: 1000 }
+    retryOptions: RetryOptions = { retryCount: 5, retryDelay: 2000 }
 ) => {
     return async (sequelize: Sequelize) => {
         let connected = false;

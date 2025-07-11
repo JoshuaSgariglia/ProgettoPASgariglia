@@ -25,9 +25,22 @@ export enum ContentType {
 }
 
 export enum ErrorType {
+    // Base errors
     None,
-    InternalServerError,
+    BadRequest,
     Unauthorized,
     Forbidden,
-    BadRequest
+    NotFound,
+    InternalServerError,
+    // Unathorized errors
+    UndefinedRoute,
+    // NotFound errors
+    MissingAuthorization
+}
+
+export enum SuccessType {
+    None,
+    ServiceOnline,
+    AccountLoggedIn,
+    AccountRegistered
 }

@@ -10,5 +10,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["./**/*"],
-  "exclude": ["node_modules", "dist", "old"]
+  "exclude": ["node_modules", "dist", "src/old"]
 }

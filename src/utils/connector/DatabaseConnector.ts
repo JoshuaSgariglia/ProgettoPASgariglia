@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
-import { User, defineUserModel } from '../models/User';
-import { SlotRequest, defineSlotRequestModel } from '../models/SlotRequest';
-import { Calendar, defineCalendarModel } from '../models/Calendar';
-import { ComputingResource, defineComputingResourceModel } from '../models/ComputingResource';
+import { User, defineUserModel } from '../../models/User';
+import { SlotRequest, defineSlotRequestModel } from '../../models/SlotRequest';
+import { Calendar, defineCalendarModel } from '../../models/Calendar';
+import { ComputingResource, defineComputingResourceModel } from '../../models/ComputingResource';
 
 export class DatabaseConnector {
   private static instance: Sequelize;

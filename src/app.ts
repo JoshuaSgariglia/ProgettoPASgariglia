@@ -1,12 +1,12 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes";
-import { ErrorFactory } from "./utils/errorFactory"
-import { ErrorType } from "./utils/enums";
+import { ErrorFactory } from "./utils/factories/errorFactory"
+import { ErrorType, SuccessType } from "./utils/enums";
 import { User } from "./models/User";
-import { DatabaseConnector } from "./connector/DatabaseConnector";
 import dotenv from 'dotenv';
-import { withDatabaseConnected } from "./connector/connect";
+import { withDatabaseConnected } from "./utils/connector/connect";
 import { Sequelize } from "sequelize";
+import { SuccessResponseFactory } from "./utils/factories/successFactory";
 
 const result = dotenv.config();
 
@@ -30,8 +30,8 @@ withDatabaseConnected((sequelize: Sequelize) => {
   app.get('/', async (req: any, res: any) => {
     try {
       const userList = await User.findAll();
-      //ErrorFactory.getError(ErrorType.Unauthorized).send(res)
-      res.json(userList);
+      ErrorFactory.getError(ErrorType.MissingAuthorization).send(res)
+      SuccessResponseFactory.getResponse(SuccessType.ServiceOnline, userList).send(res);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch users' });
     }

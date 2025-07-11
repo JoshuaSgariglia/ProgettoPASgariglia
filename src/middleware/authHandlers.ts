@@ -22,7 +22,7 @@ function checkAuthType(req: Request, res: Response, next: NextFunction) {
 
     if (authHeaderSplit.length === 2 && authHeaderSplit[0] === 'Bearer') {
         // Save Bearer token
-        req.token = authHeaderSplit[1];
+        res.locals.token = authHeaderSplit[1];
         next();
     } else {
         next(ErrorType.InvalidAuthorizationType);
@@ -31,9 +31,8 @@ function checkAuthType(req: Request, res: Response, next: NextFunction) {
 
 function verifyToken(req: Request, res: Response, next: NextFunction) {
     try {
-        // req.token is not undefined thanks to checkAuthType
-        let tokenPayload = jwt.verify(req.token!, PUBLIC_KEY, { algorithms: [SIGNING_ALGORITHM] });
-        req.tokenPayload = tokenPayload;
+        // res.locals.token is not undefined thanks to checkAuthType
+        res.locals.tokenPayload = jwt.verify(res.locals.token, PUBLIC_KEY, { algorithms: [SIGNING_ALGORITHM] });
         next();
     } catch (err) {
         if (err instanceof TokenExpiredError) {
@@ -53,13 +52,13 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
 }
 
 function verifyTokenPayload(req: Request, res: Response, next: NextFunction) {
-    let tokenPayload = req.tokenPayload;
+    let tokenPayload = res.locals.tokenPayload;
     // Check that tokenPayload is not undefined
     if (tokenPayload) {
         // Check that tokenPayload is of type UserPayload
         const result = TokenPayloadSchema.safeParse(tokenPayload);
         if (result.success) {
-            req.tokenPayload = result.data;
+            res.locals.tokenPayload = result.data;
             next();
 
         } else {
@@ -71,10 +70,10 @@ function verifyTokenPayload(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
+const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
     (req: Request, res: Response, next: NextFunction): void => {
         // tokenPayload is of type TokenPayload thanks to verifyTokenPayload
-        const tokenPayload = req.tokenPayload as TokenPayload;
+        const tokenPayload = res.locals.tokenPayload as TokenPayload;
 
         if (tokenPayload.role === requiredRole) {
             next();
@@ -84,4 +83,4 @@ export const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
 
     };
 
-const getAuthHandlers = (requiredRole: UserRole) => [checkAuthHeader, checkAuthType, verifyToken, verifyTokenPayload, verifyAuthorizationGenerator(requiredRole)];
+export const getAuthHandlers = (requiredRole: UserRole) => [checkAuthHeader, checkAuthType, verifyToken, verifyTokenPayload, verifyAuthorizationGenerator(requiredRole)];

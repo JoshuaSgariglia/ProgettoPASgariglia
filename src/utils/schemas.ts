@@ -4,6 +4,7 @@ import { z } from 'zod';
 // TokenPayload
 
 // Schema
+
 export const TokenPayloadSchema = z.object({
   uuid: z.string(),
   role: z.enum(UserRole),

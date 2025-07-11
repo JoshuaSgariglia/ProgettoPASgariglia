@@ -40,6 +40,8 @@ export enum ErrorType {
     InvalidToken,
     MissingTokenPayload,
     InvalidTokenPayload,
+    // Forbidden
+    InsufficientPermissions,
     // NotFound errors
     UndefinedRouteOrInvalidMethod,
 }

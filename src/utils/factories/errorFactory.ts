@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InternalServerError, InvalidAuthorizationType, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
+import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType): ErrorResponse {
@@ -43,6 +43,9 @@ export class ErrorFactory {
             case ErrorType.InvalidTokenPayload:
                 error = new InvalidTokenPayload()
                 break;
+            // Forbidden errors
+            case ErrorType.InsufficientPermissions:
+                error = new InsufficientPermissions()
             // NotFound errors
             case ErrorType.UndefinedRouteOrInvalidMethod:
                 error = new UndefinedRouteOrInvalidMethod();

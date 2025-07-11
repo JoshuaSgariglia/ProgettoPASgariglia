@@ -111,6 +111,12 @@ export class InvalidTokenPayload extends Unauthorized {
     }
 }
 
+// Forbidden errors
+export class InsufficientPermissions extends Forbidden {
+    constructor() {
+        super("Insufficient permissions to access this resource")
+    }
+}
 
 // NotFound errors
 export class UndefinedRouteOrInvalidMethod extends NotFound {

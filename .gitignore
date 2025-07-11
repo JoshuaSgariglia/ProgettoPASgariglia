@@ -1,5 +1,8 @@
 # Environment
 .env
+.key
+.pem
+certs/
 
 # Compiled files, libraries, and other generated files
 dist/

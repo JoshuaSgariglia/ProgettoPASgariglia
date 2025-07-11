@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import { DatabaseConnector } from "./DatabaseConnector";
+import { RETRY_COUNT, RETRY_DELAY } from "../config";
 
 interface RetryOptions {
     retryCount: number;
@@ -22,7 +23,7 @@ const connect: ConnectionFunction = async (sequelize) => {
  */
 const withRetry = (
     connect: ConnectionFunction,
-    retryOptions: RetryOptions = { retryCount: 5, retryDelay: 2000 }
+    retryOptions: RetryOptions = { retryCount: RETRY_COUNT, retryDelay: RETRY_DELAY }
 ) => {
     return async (sequelize: Sequelize) => {
         let connected = false;

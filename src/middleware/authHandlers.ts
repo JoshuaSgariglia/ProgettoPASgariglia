@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ErrorType, UserRole } from "../utils/enums";
 import jwt, { NotBeforeError, TokenExpiredError } from "jsonwebtoken";
 import { TokenPayload, TokenPayloadSchema } from "../utils/schemas";
+import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
 
 
 function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
@@ -31,7 +32,7 @@ function checkAuthType(req: Request, res: Response, next: NextFunction) {
 function verifyToken(req: Request, res: Response, next: NextFunction) {
     try {
         // req.token is not undefined thanks to checkAuthType
-        let tokenPayload = jwt.verify(req.token!, 'mysupersecretkey');
+        let tokenPayload = jwt.verify(req.token!, PUBLIC_KEY, { algorithms: [SIGNING_ALGORITHM] });
         req.tokenPayload = tokenPayload;
         next();
     } catch (err) {

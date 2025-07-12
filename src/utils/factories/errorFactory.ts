@@ -1,8 +1,8 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
+import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
 
 export class ErrorFactory {
-    public static getError(type: ErrorType): ErrorResponse {
+    public static getError(type: ErrorType = ErrorType.InternalServerError): ErrorResponse {
         let error: ErrorResponse;
         switch (type) {
             // Base errors
@@ -21,6 +21,15 @@ export class ErrorFactory {
             case ErrorType.InternalServerError:
                 error = new InternalServerError();
                 break;
+
+            // BadRequest errors
+            case ErrorType.MissingPayload:
+                error = new MissingPayload()
+                break;
+            case ErrorType.InvalidPayload:
+                error = new InvalidPayload()
+                break;
+
             // Unauthorized errors
             case ErrorType.MissingAuthorizationHeader:
                 error = new MissingAuthorizationHeader()
@@ -43,16 +52,16 @@ export class ErrorFactory {
             case ErrorType.InvalidTokenPayload:
                 error = new InvalidTokenPayload()
                 break;
+
             // Forbidden errors
             case ErrorType.InsufficientPermissions:
                 error = new InsufficientPermissions()
+                break;
+
             // NotFound errors
             case ErrorType.UndefinedRouteOrInvalidMethod:
                 error = new UndefinedRouteOrInvalidMethod();
                 break;
-            // Default error
-            default:
-                error = new InternalServerError()
         }
         return error;
     }

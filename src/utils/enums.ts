@@ -25,13 +25,16 @@ export enum ContentType {
 }
 
 export enum ErrorType {
-  // Base errors
-  None = "None",
+  // Base Errors
   BadRequest = "BadRequest",
   Unauthorized = "Unauthorized",
   Forbidden = "Forbidden",
   NotFound = "NotFound",
   InternalServerError = "InternalServerError",
+
+  // BadRequest errors
+  MissingPayload = "MissingPayload",
+  InvalidPayload = "InvalidPayload",
 
   // Unauthorized errors
   MissingAuthorizationHeader = "MissingAuthorizationHeader",
@@ -50,8 +53,14 @@ export enum ErrorType {
 }
 
 export enum SuccessType {
-  None = "None",
+  // Base success
+  OK = "OK",
+  Created = "Created",
+
+  // OK success
   ServiceOnline = "ServiceOnline",
+
+  // Created Success
   AccountLoggedIn = "AccountLoggedIn",
   AccountRegistered = "AccountRegistered",
 }

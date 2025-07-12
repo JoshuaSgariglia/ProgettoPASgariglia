@@ -2,17 +2,32 @@ import { UserConfig } from "./config";
 import { ErrorType, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 
+
+
 // --- Validate ---
-function validate(schema: ZodType, input: unknown, defaultError: ErrorType) {
+export function validate<T>(
+  schema: ZodType<T>, 
+  input: unknown, 
+  defaultInvalidError: ErrorType = ErrorType.InvalidPayload, 
+  defaultMissingError: ErrorType = ErrorType.MissingPayload
+) {
+
+  // If input is null or undefined, it returns a MissingPayload error
+  if (!input) {
+    return { success: false, error: defaultMissingError }
+  }
+
+  // Else, it validates the input accordint to the schema
   const result = schema.safeParse(input);
 
+  // Check if validation was successful
   if (!result.success) {
-    const errors = result.error.issues.map((err: { message: any; path: any[]; }) => {
-      const isCustomError = Object.values(ErrorType).includes(err.message as ErrorType);
-      return isCustomError ? err.message : defaultError;
-    });
+    // Extract the ErrorTypes provided in the schema from the first issue
+    const firstIssueMessage = result.error.issues[0].message
+    const isCustomError = Object.values(ErrorType).includes(firstIssueMessage as ErrorType);
+    const error = isCustomError ? firstIssueMessage as ErrorType : defaultInvalidError;
 
-    return { success: false, errors: errors };
+    return { success: false, error: error };
   }
 
   return { success: true, data: result.data };

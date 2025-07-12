@@ -68,6 +68,18 @@ export class InternalServerError extends ErrorResponse {
 
 // Specialized ErrorResponse classes
 
+// BadRequest errors
+export class MissingPayload extends BadRequest {
+    constructor() {
+        super("Missing payload in request body")
+    }
+}
+export class InvalidPayload extends BadRequest {
+    constructor() {
+        super("Invalid payload in request body")
+    }
+}
+
 // Unauthorized errors
 export class MissingAuthorizationHeader extends Unauthorized {
     constructor() {

@@ -75,6 +75,7 @@ const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
         // tokenPayload is of type TokenPayload thanks to verifyTokenPayload
         const tokenPayload = res.locals.tokenPayload as TokenPayload;
 
+        // Check role authorization
         if (tokenPayload.role === requiredRole) {
             next();
         } else {
@@ -84,3 +85,4 @@ const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
     };
 
 export const getAuthHandlers = (requiredRole: UserRole) => [checkAuthHeader, checkAuthType, verifyToken, verifyTokenPayload, verifyAuthorizationGenerator(requiredRole)];
+

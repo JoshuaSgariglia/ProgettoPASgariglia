@@ -1,21 +1,30 @@
 import { SuccessType } from "../enums";
-import { AccountLoggedIn, AccountRegistered, OkayResponse, ServiceOnline, SuccessResponse } from "../responses/successResponses";
+import { AccountLoggedIn, AccountRegistered, CreatedResponse, OkayResponse, ServiceOnline, SuccessResponse } from "../responses/successResponses";
 
 export class SuccessResponseFactory {
-    public static getResponse(type: SuccessType = SuccessType.None, data: object = {}): SuccessResponse {
+    public static getResponse(type: SuccessType = SuccessType.OK, data?: object): SuccessResponse {
         let response: SuccessResponse;
         switch (type) {
+            // Base success
+            case SuccessType.OK:
+                response = new OkayResponse(undefined, data);
+                break;
+            case SuccessType.Created:
+                response = new CreatedResponse(undefined, data);
+                break;
+
+            // OK success
             case SuccessType.ServiceOnline:
                 response = new ServiceOnline(data);
                 break;
+
+            // Created success
             case SuccessType.AccountLoggedIn:
                 response = new AccountLoggedIn(data);
                 break;
             case SuccessType.AccountRegistered:
                 response = new AccountRegistered(data);
                 break;
-            default:
-                response = new OkayResponse()
         }
         return response;
     }

@@ -25,30 +25,33 @@ export enum ContentType {
 }
 
 export enum ErrorType {
-    // Base errors
-    None,
-    BadRequest,
-    Unauthorized,
-    Forbidden,
-    NotFound,
-    InternalServerError,
-    // Unathorized errors
-    MissingAuthorizationHeader,
-    InvalidAuthorizationType,
-    TokenExpired,
-    TokenNotActivated,
-    InvalidToken,
-    MissingTokenPayload,
-    InvalidTokenPayload,
-    // Forbidden
-    InsufficientPermissions,
-    // NotFound errors
-    UndefinedRouteOrInvalidMethod,
+  // Base errors
+  None = "None",
+  BadRequest = "BadRequest",
+  Unauthorized = "Unauthorized",
+  Forbidden = "Forbidden",
+  NotFound = "NotFound",
+  InternalServerError = "InternalServerError",
+
+  // Unauthorized errors
+  MissingAuthorizationHeader = "MissingAuthorizationHeader",
+  InvalidAuthorizationType = "InvalidAuthorizationType",
+  TokenExpired = "TokenExpired",
+  TokenNotActivated = "TokenNotActivated",
+  InvalidToken = "InvalidToken",
+  MissingTokenPayload = "MissingTokenPayload",
+  InvalidTokenPayload = "InvalidTokenPayload",
+
+  // Forbidden
+  InsufficientPermissions = "InsufficientPermissions",
+
+  // NotFound errors
+  UndefinedRouteOrInvalidMethod = "UndefinedRouteOrInvalidMethod",
 }
 
 export enum SuccessType {
-    None,
-    ServiceOnline,
-    AccountLoggedIn,
-    AccountRegistered
+  None = "None",
+  ServiceOnline = "ServiceOnline",
+  AccountLoggedIn = "AccountLoggedIn",
+  AccountRegistered = "AccountRegistered",
 }

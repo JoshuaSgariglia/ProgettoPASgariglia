@@ -17,13 +17,18 @@ export class SuccessResponseFactory {
             case SuccessType.ServiceOnline:
                 response = new ServiceOnline(data);
                 break;
-
-            // Created success
             case SuccessType.AccountLoggedIn:
                 response = new AccountLoggedIn(data);
                 break;
+
+            // Created success
             case SuccessType.AccountRegistered:
                 response = new AccountRegistered(data);
+                break;
+
+            // Default success
+            default:
+                response = new OkayResponse(undefined, data);
                 break;
         }
         return response;

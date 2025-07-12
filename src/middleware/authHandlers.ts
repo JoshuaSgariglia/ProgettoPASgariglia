@@ -6,6 +6,8 @@ import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
 
 
 function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
+    console.log("Entered authentication middleware")
+
     const authHeader = req.headers.authorization;
     if (authHeader) {
         next();

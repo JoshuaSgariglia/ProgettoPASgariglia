@@ -35,6 +35,7 @@ export enum ErrorType {
   // BadRequest errors
   MissingPayload = "MissingPayload",
   InvalidPayload = "InvalidPayload",
+  InvalidLoginCredentials = "InvalidCredentials",
 
   // Unauthorized errors
   MissingAuthorizationHeader = "MissingAuthorizationHeader",

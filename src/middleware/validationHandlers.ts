@@ -12,9 +12,9 @@ const validationHandlerGenerator = <T>(
     source: "body" | "query" | "params" = "body",
     defaultInvalidError: ErrorType = ErrorType.InvalidPayload,
     defaultMissingError: ErrorType = ErrorType.MissingPayload
-) => (req: Request, res: Response, next: NextFunction) => {
-    const input = req[source];
-    const result = validate(schema, input, defaultInvalidError, defaultMissingError);
+) => (req: Request, res: Response, next: NextFunction): void => {
+    console.log("Entered validation middleware", req[source])
+    const result = validate(schema, req[source], defaultInvalidError, defaultMissingError);
 
     if (result.success) {
         // Attach validated data to reponse.locals

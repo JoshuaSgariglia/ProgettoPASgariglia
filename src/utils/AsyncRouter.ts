@@ -1,8 +1,8 @@
-import e, { Router, RequestHandler, Request, Response, NextFunction } from "express";
+import e, { Request, Response, NextFunction } from "express";
 
 // AsyncRouter wrapper class
 export class AsyncRouter {
-    public router: e.Router;
+    public readonly router: e.Router;
 
     // Catch errors in async functions
     private asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {

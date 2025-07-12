@@ -45,7 +45,7 @@ export const PUBLIC_KEY: string = publicKey;
 
 // JWT
 export const SIGNING_ALGORITHM: Algorithm = 'RS256';
-export const TOKEN_DURATION: string = '1h';
+export const TOKEN_DURATION = '1h'; // StringValue type, but it's not exported from jsonwebtokens
 
 // Postgres connection
 export const RETRY_COUNT: number = 5;

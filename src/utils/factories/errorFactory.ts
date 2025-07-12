@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
+import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType = ErrorType.InternalServerError): ErrorResponse {
@@ -24,33 +24,36 @@ export class ErrorFactory {
 
             // BadRequest errors
             case ErrorType.MissingPayload:
-                error = new MissingPayload()
+                error = new MissingPayload();
                 break;
             case ErrorType.InvalidPayload:
-                error = new InvalidPayload()
+                error = new InvalidPayload();
+                break;
+            case ErrorType.InvalidLoginCredentials:
+                error = new InvalidLoginCredentials();
                 break;
 
             // Unauthorized errors
             case ErrorType.MissingAuthorizationHeader:
-                error = new MissingAuthorizationHeader()
+                error = new MissingAuthorizationHeader();
                 break;
             case ErrorType.InvalidAuthorizationType:
-                error = new InvalidAuthorizationType()
+                error = new InvalidAuthorizationType();
                 break;
             case ErrorType.TokenExpired:
-                error = new TokenExpired()
+                error = new TokenExpired();
                 break;
             case ErrorType.TokenNotActivated:
-                error = new TokenNotActivated()
+                error = new TokenNotActivated();
                 break;
             case ErrorType.InvalidToken:
-                error = new InvalidToken()
+                error = new InvalidToken();
                 break;
             case ErrorType.MissingTokenPayload:
-                error = new MissingTokenPayload()
+                error = new MissingTokenPayload();
                 break;
             case ErrorType.InvalidTokenPayload:
-                error = new InvalidTokenPayload()
+                error = new InvalidTokenPayload();
                 break;
 
             // Forbidden errors
@@ -61,6 +64,11 @@ export class ErrorFactory {
             // NotFound errors
             case ErrorType.UndefinedRouteOrInvalidMethod:
                 error = new UndefinedRouteOrInvalidMethod();
+                break;
+
+            // Default error
+            default:
+                error = new InternalServerError();
                 break;
         }
         return error;

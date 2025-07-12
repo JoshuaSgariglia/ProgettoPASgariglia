@@ -2,21 +2,17 @@ import { Router } from "express";
 import { UserController } from "../controllers/UserController";
 import { UserService } from "../services/UserService";
 import { UserRepository } from "../repositories/UserRepository";
-import { UserDAO } from "../dao/UserDAO";
+import { AsyncRouter } from "../utils/AsyncRouter";
 
-const router = Router();
+// Instantiate Router
+const router = new AsyncRouter();
 
-const userDAO = new UserDAO();
-const userRepo = new UserRepository(userDAO);
-const userService = new UserService(userRepo);
+// Instantiate architecture objects
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
+// Define routes
 
-router.get("/users", userController.list);
-router.get("/users-page", userController.listPage);
-router.post("/users", userController.create);
-router.get("/users/:id", userController.get);
-router.delete("/users/:id", userController.delete);
-
-
+// Export router as userRoutes
 export default router;

@@ -4,7 +4,7 @@ import { z, ZodType } from 'zod';
 
 
 
-// --- Validate ---
+// === Validate ===
 export function validate<T>(
   schema: ZodType<T>, 
   input: unknown, 
@@ -12,12 +12,13 @@ export function validate<T>(
   defaultMissingError: ErrorType = ErrorType.MissingPayload
 ) {
 
-  // If input is null or undefined, it returns a MissingPayload error
-  if (!input) {
-    return { success: false, error: defaultMissingError }
+  // Check for null, undefined, or empty object - If it is, return error
+  const isEmptyObject = typeof input === 'object' && Object.keys(input!).length === 0;
+  if (input === null || input === undefined || isEmptyObject) {
+    return { success: false, error: defaultMissingError };
   }
 
-  // Else, it validates the input accordint to the schema
+  // Else, it validates the input according to the schema
   const result = schema.safeParse(input);
 
   // Check if validation was successful
@@ -33,9 +34,9 @@ export function validate<T>(
   return { success: true, data: result.data };
 }
 
-// --- Schemas ---
+// === Schemas ===
 
-// TokenPayload
+// --- TokenPayload ---
 
 // Schema
 export const TokenPayloadSchema = z.object({
@@ -47,7 +48,7 @@ export const TokenPayloadSchema = z.object({
 export type TokenPayload = z.infer<typeof TokenPayloadSchema>;
 
 
-// LoginPayload
+// --- LoginPayload ---
 
 // Schema
 export const LoginPayloadSchema = z.object({

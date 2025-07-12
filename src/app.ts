@@ -27,13 +27,13 @@ withDatabaseConnected((sequelize: Sequelize) => {
   const router = Router();
 
   // Public routes (no auth)
-  router.use("/", publicRoutes);
+  router.use("/", publicRoutes.router);
 
   // Protected user routes
-  router.use("/user", ...getAuthHandlers(UserRole.User), userRoutes);
+  router.use("/user", ...getAuthHandlers(UserRole.User), userRoutes.router);
 
   // Protected admin routes
-  router.use("/admin", ...getAuthHandlers(UserRole.Admin), adminRoutes);
+  router.use("/admin", ...getAuthHandlers(UserRole.Admin), adminRoutes.router);
 
   // All routes are prefixed with "/api"
   app.use("/api", router); 

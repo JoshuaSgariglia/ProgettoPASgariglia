@@ -33,6 +33,8 @@ export class CreatedResponse extends SuccessResponse {
 }
 
 // Specialized SuccessResponse classes
+
+// OK responses
 export class ServiceOnline extends OkayResponse {
     constructor(data?: object) {
         super(
@@ -42,21 +44,22 @@ export class ServiceOnline extends OkayResponse {
     }
 }
 
-export class AccountRegistered extends CreatedResponse {
-    constructor(data?: object) {
-        super(
-            "The new account has been successfully registered", 
-            data
-        );
-    }
-}
-
-export class AccountLoggedIn extends OkayResponse {
+export class AccountLoggedIn extends CreatedResponse {
     constructor(data?: object) {
         super(
             "User logged in with success", 
             data
 
+        );
+    }
+}
+
+// Created responses
+export class AccountRegistered extends CreatedResponse {
+    constructor(data?: object) {
+        super(
+            "The new account has been successfully registered", 
+            data
         );
     }
 }

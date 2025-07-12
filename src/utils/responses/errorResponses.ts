@@ -79,6 +79,11 @@ export class InvalidPayload extends BadRequest {
         super("Invalid payload in request body")
     }
 }
+export class InvalidLoginCredentials extends BadRequest {
+    constructor() {
+        super("Invalid username and\\or password")
+    }
+}
 
 // Unauthorized errors
 export class MissingAuthorizationHeader extends Unauthorized {
@@ -119,7 +124,7 @@ export class MissingTokenPayload extends Unauthorized {
 
 export class InvalidTokenPayload extends Unauthorized {
     constructor() {
-        super("Token payload is invalid - UUID and role are requested")
+        super("Token payload is invalid")
     }
 }
 

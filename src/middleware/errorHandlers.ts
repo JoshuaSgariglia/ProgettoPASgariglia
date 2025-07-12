@@ -31,9 +31,10 @@ function errorResponseHandler(err: ErrorResponse | any, req: Request, res: Respo
 }
 
 // === 4. Uncaught Error Handler (generates default ErrorResponse) ===
-function uncaughtErrorHandler(err: any, req: Request, res: Response) {
+function uncaughtErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
     console.log(`Uncaught error - generating \"${ErrorType.InternalServerError}\"`)
     ErrorFactory.getError(ErrorType.InternalServerError).send(res);
+    next(err)
 }
 
 

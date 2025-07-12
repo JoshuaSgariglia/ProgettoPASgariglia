@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize, InferAttributes, InferCreationAttributes, Model, CreationOptional } from 'sequelize';
 import { RequestStatus } from '../utils/enums';
+import { SlotRequestConfig } from '../utils/config';
 
 
 
@@ -46,15 +47,15 @@ export function defineSlotRequestModel(sequelize: Sequelize) {
         allowNull: false,
       },
       title: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(SlotRequestConfig.MAX_TITLE_LENGTH),
         allowNull: false,
       },
       reason: {
-        type: DataTypes.STRING(512),
+        type: DataTypes.STRING(SlotRequestConfig.MAX_REASON_LENGTH),
         allowNull: false,
       },
       refusalReason: {
-        type: DataTypes.STRING(512),
+        type: DataTypes.STRING(SlotRequestConfig.MAX_REFUSAL_REASON_LENGTH),
         allowNull: true,
       },
     },

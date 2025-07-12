@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import { UserRole } from '../utils/enums';
+import { UserConfig } from '../utils/config';
 
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -11,12 +12,6 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
   declare password: string;
   declare role: CreationOptional<UserRole>;
   declare tokenAmount: CreationOptional<number>;
-
-  /* timestamps!
-  declare datetimeCreated: CreationOptional<Date>;
-  declare datetimeUpdated: CreationOptional<Date>;
-  declare datetimeDeleted: CreationOptional<Date | null>;
-  */
 }
 
 export function defineUserModel(sequelize: Sequelize): void {
@@ -28,23 +23,23 @@ export function defineUserModel(sequelize: Sequelize): void {
             primaryKey: true,
         },
         username: {
-            type: DataTypes.STRING(32),
+            type: DataTypes.STRING(UserConfig.MAX_USERNAME_LENGTH),
             allowNull: false,
         },
         email: {
-            type: DataTypes.STRING(128),
+            type: DataTypes.STRING(UserConfig.MAX_EMAIL_LENGTH),
             allowNull: false,
         },
         name: {
-            type: DataTypes.STRING(64),
+            type: DataTypes.STRING(UserConfig.MAX_NAME_LENGTH),
             allowNull: false,
         },
         surname: {
-            type: DataTypes.STRING(64),
+            type: DataTypes.STRING(UserConfig.MAX_SURNAME_LENGTH),
             allowNull: false,
         },
         password: {
-            type: DataTypes.STRING(512),
+            type: DataTypes.STRING(512), // Long string for hashes
             allowNull: false,
         },
         role: {
@@ -55,7 +50,7 @@ export function defineUserModel(sequelize: Sequelize): void {
         tokenAmount: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 50,
+            defaultValue: UserConfig.INITIAL_TOKEN_AMOUNT,
         },
     },
     {

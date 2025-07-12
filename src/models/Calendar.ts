@@ -1,4 +1,5 @@
 import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import { CalendarConfig } from '../utils/config';
 
 
 export class Calendar extends Model<InferAttributes<Calendar>, InferCreationAttributes<Calendar>> {
@@ -21,7 +22,7 @@ export function defineCalendarModel(sequelize: Sequelize) {
         allowNull: false,
       },
       name: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(CalendarConfig.MAX_NAME_LENGTH),
         allowNull: false,
       },
       isArchived: {

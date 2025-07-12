@@ -36,7 +36,7 @@ CREATE TABLE computing_resources (
 CREATE TABLE calendars (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "resource" UUID NOT NULL,
-    "name" VARCHAR(64) NOT NULL,
+    "name" VARCHAR(128) NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT FALSE,
     "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

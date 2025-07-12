@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import { ResourceType } from '../utils/enums';
+import { ComputingResourceConfig } from '../utils/config';
 
 
 export class ComputingResource extends Model<InferAttributes<ComputingResource>, InferCreationAttributes<ComputingResource>> {
@@ -20,7 +21,7 @@ export function defineComputingResourceModel(sequelize: Sequelize): void {
         primaryKey: true,
       },
       model: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(ComputingResourceConfig.MAX_MODEL_LENGTH),
         allowNull: false,
       },
       serial: {
@@ -28,7 +29,7 @@ export function defineComputingResourceModel(sequelize: Sequelize): void {
         allowNull: false,
       },
       manufacturer: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(ComputingResourceConfig.MAX_MANUFACTURER_LENGTH),
         allowNull: false,
       },
       type: {

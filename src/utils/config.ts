@@ -50,3 +50,39 @@ export const TOKEN_DURATION: string = '1h';
 // Postgres connection
 export const RETRY_COUNT: number = 5;
 export const RETRY_DELAY: number = 2000;
+
+// --- Model validation ---
+
+// User
+export class UserConfig {
+  static MIN_USERNAME_LENGTH: number = 3;
+  static MAX_USERNAME_LENGTH: number = 32;
+  static MAX_EMAIL_LENGTH: number = 128;
+  static MIN_NAME_LENGTH: number = 2;
+  static MAX_NAME_LENGTH: number = 64;
+  static MIN_SURNAME_LENGTH: number = 2;
+  static MAX_SURNAME_LENGTH: number = 64;
+  static MIN_PASSWORD_LENGTH: number = 6;
+  static MAX_PASSWORD_LENGTH: number = 64;
+  static MIN_TOKEN_AMOUNT: number = 0;
+  static INITIAL_TOKEN_AMOUNT: number = 50;
+}
+
+
+// SlotRequest
+export class SlotRequestConfig {
+  static MAX_TITLE_LENGTH: number = 128;
+  static MAX_REASON_LENGTH: number = 512;
+  static MAX_REFUSAL_REASON_LENGTH: number = 512;
+}
+
+// Calendar
+export class CalendarConfig {
+  static MAX_NAME_LENGTH: number = 128;
+}
+
+// ComputingResource
+export class ComputingResourceConfig {
+  static MAX_MODEL_LENGTH: number = 64;
+  static MAX_MANUFACTURER_LENGTH: number = 64;
+}

@@ -9,7 +9,7 @@ import { ErrorFactory } from "./factories/errorFactory";
 // === Validate ===
 export function validate<T>(
   schema: ZodType<T>,
-  input: unknown,
+  input: unknown
 ) {
 
   // Check for null, undefined, or empty object - If it is, return error
@@ -25,7 +25,7 @@ export function validate<T>(
   if (!result.success) {
     // Extract the ErrorTypes provided in the schema from the first issue
     const firstIssue = result.error.issues[0]
-    const issuePath = firstIssue.path[0] as string
+    const issueField = firstIssue.path[0] as string
 
     // Default error
     let message: string = firstIssue.message
@@ -35,40 +35,46 @@ export function validate<T>(
     switch (firstIssue.code) {
       case 'unrecognized_keys':
         message = firstIssue.message;
-        response = ErrorFactory.getError(ErrorType.UnrecognizedInputKey, message)
+        response = ErrorFactory.getError(ErrorType.UnrecognizedInputField, message)
         break;
 
       case 'invalid_type':
-        message = `Invalid "${issuePath}" type: Expected ${firstIssue.expected}, received ${firstIssue.message.split(' ').pop()}`;
-        response = ErrorFactory.getError(ErrorType.InvalidInputType, message)
+        const receivedType = firstIssue.message.split(' ').pop();
+        if (receivedType === "undefined") {
+          message = `Missing ${issueField} field`;
+          response = ErrorFactory.getError(ErrorType.MissingInputField, message)
+        } else {
+          message = `Invalid ${issueField} type: Expected ${firstIssue.expected}, received ${receivedType}`;
+          response = ErrorFactory.getError(ErrorType.InvalidInputType, message)
+        }
         break;
 
       case 'invalid_value':
-        message = `Invalid "${issuePath}" value: ${firstIssue.message}`;
+        message = `Invalid ${issueField} value: ${firstIssue.message}`;
         response = ErrorFactory.getError(ErrorType.InvalidInputValue, message)
         break;
 
       case 'invalid_format':
-        message = `Invalid "${issuePath}" format: ${firstIssue.message}`;
+        message = `Invalid ${issueField} format: ${firstIssue.message}`;
         response = ErrorFactory.getError(ErrorType.InvalidInputFormat, message)
         break;
 
       case 'too_big':
         if (firstIssue.message.toLowerCase().includes('characters')) {
-          message = `"${issuePath}" is too long: ${firstIssue.message}`;
+          message = `${issueField} is too long: ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooLong, message)
         } else {
-          message = `"${issuePath}" value is too big: ${firstIssue.message}`;
+          message = `${issueField} value is too big: ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooBig, message)
         }
         break;
 
       case 'too_small':
         if (firstIssue.message.toLowerCase().includes('characters')) {
-          message = `"${issuePath}" is too short: ${firstIssue.message}`;
+          message = `${issueField} is too short: ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooShort, message)
         } else {
-          message = `"${issuePath}" value is too small: ${firstIssue.message}`;
+          message = `${issueField} value is too small: ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooSmall, message)
         }
         break;

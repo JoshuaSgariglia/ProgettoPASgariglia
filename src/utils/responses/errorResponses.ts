@@ -100,9 +100,15 @@ export class EmailAlreadyInUse extends BadRequest {
 }
 
 // Bad Request errors - Payload validation
-export class UnrecognizedInputKey extends BadRequest {
+export class MissingInputField extends BadRequest {
     constructor(message?: string) {
-        super(message ?? "Unrecognized input key")
+        super(message ?? "Missing input field")
+    }
+}
+
+export class UnrecognizedInputField extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Unrecognized input field")
     }
 }
 
@@ -176,12 +182,6 @@ export class TokenNotActivated extends Unauthorized {
 export class InvalidToken extends Unauthorized {
     constructor() {
         super("Token signature and\\or form is not valid")
-    }
-}
-
-export class MissingTokenPayload extends Unauthorized {
-    constructor() {
-        super("Token payload is missing")
     }
 }
 

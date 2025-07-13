@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputKey, UsernameAlreadyInUse } from "../responses/errorResponses";
+import { BadRequest, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType = ErrorType.InternalServerError, message?: string): ErrorResponse {
@@ -40,8 +40,11 @@ export class ErrorFactory {
                 break;
 
             // BadRequest errors - Payload validation
-            case ErrorType.UnrecognizedInputKey:
-                error = new UnrecognizedInputKey(message);
+            case ErrorType.MissingInputField:
+                error = new MissingInputField(message);
+                break;
+            case ErrorType.UnrecognizedInputField:
+                error = new UnrecognizedInputField(message);
                 break;
             case ErrorType.InvalidInputType:
                 error = new InvalidInputType(message);
@@ -80,9 +83,6 @@ export class ErrorFactory {
                 break;
             case ErrorType.InvalidToken:
                 error = new InvalidToken();
-                break;
-            case ErrorType.MissingTokenPayload:
-                error = new MissingTokenPayload();
                 break;
             case ErrorType.InvalidTokenPayload:
                 error = new InvalidTokenPayload();

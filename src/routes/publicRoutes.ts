@@ -15,11 +15,14 @@ const userRepository = new UserRepository();
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 
-// Define routes
+// --- Define routes ---
+
+// Check if service is online
 router.getAsync('/', async (req: Request, res: Response) => {
     SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).send(res);
   });
 
+// Login
 router.postAsync("/login", loginPayloadHandler, authController.loginUser.bind(authController));
 
 // Export router as userRoutes

@@ -1,6 +1,6 @@
 import { ZodType } from "zod";
-import { ErrorType } from "../utils/enums";
-import { LoginPayloadSchema, validate } from "../utils/schemas";
+import { InputSource } from "../utils/enums";
+import { LoginPayloadSchema, UserPayloadSchema, validate } from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -9,12 +9,10 @@ import { Request, Response, NextFunction } from "express";
  */
 const validationHandlerGenerator = <T>(
     schema: ZodType<T>,
-    source: "body" | "query" | "params" = "body",
-    defaultInvalidError: ErrorType = ErrorType.InvalidPayload,
-    defaultMissingError: ErrorType = ErrorType.MissingPayload
+    source: InputSource = InputSource.BODY
 ) => (req: Request, res: Response, next: NextFunction): void => {
-    console.log("Entered validation middleware", req[source])
-    const result = validate(schema, req[source], defaultInvalidError, defaultMissingError);
+    console.log("Entered validation middleware");
+    const result = validate(schema, req[source]);
 
     if (result.success) {
         // Attach validated data to reponse.locals
@@ -25,4 +23,6 @@ const validationHandlerGenerator = <T>(
     }
 };
 
-export const loginPayloadHandler = validationHandlerGenerator(LoginPayloadSchema)
+// Generated handlers
+export const loginPayloadHandler = validationHandlerGenerator(LoginPayloadSchema);
+export const userPayloadHandler = validationHandlerGenerator(UserPayloadSchema);

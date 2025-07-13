@@ -24,6 +24,12 @@ export enum ContentType {
   XML = "application/xml"
 }
 
+export enum InputSource {
+  BODY = "body",
+  QUERY = "query",
+  PARAMS = "params"
+}
+
 export enum ErrorType {
   // Base Errors
   BadRequest = "BadRequest",
@@ -40,7 +46,8 @@ export enum ErrorType {
   EmailAlreadyInUse = "EmailAlreadyInUse",
 
   // BadRequest errors - Payload validation
-  UnrecognizedInputKey = "UnrecognizedInputKey",
+  MissingInputField = "MissingInputField",
+  UnrecognizedInputField = "UnrecognizedInputField",
   InvalidInputType = "InvalidInputType",
   InvalidInputValue = "InvalidInputValue",
   InvalidInputFormat = "InvalidInputFormat",
@@ -55,7 +62,6 @@ export enum ErrorType {
   TokenExpired = "TokenExpired",
   TokenNotActivated = "TokenNotActivated",
   InvalidToken = "InvalidToken",
-  MissingTokenPayload = "MissingTokenPayload",
   InvalidTokenPayload = "InvalidTokenPayload",
 
   // Forbidden

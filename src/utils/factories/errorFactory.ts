@@ -1,25 +1,25 @@
 import { ErrorType } from "../enums";
-import { BadRequest, ErrorResponse, Forbidden, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod } from "../responses/errorResponses";
+import { BadRequest, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingPayload, MissingTokenPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputKey, UsernameAlreadyInUse } from "../responses/errorResponses";
 
 export class ErrorFactory {
-    public static getError(type: ErrorType = ErrorType.InternalServerError): ErrorResponse {
+    public static getError(type: ErrorType = ErrorType.InternalServerError, message?: string): ErrorResponse {
         let error: ErrorResponse;
         switch (type) {
             // Base errors
             case ErrorType.BadRequest:
-                error = new BadRequest();
+                error = new BadRequest(message);
                 break;
             case ErrorType.Unauthorized:
-                error = new Unauthorized();
+                error = new Unauthorized(message);
                 break;
             case ErrorType.Forbidden:
-                error = new Forbidden();
+                error = new Forbidden(message);
                 break;
             case ErrorType.NotFound:
-                error = new NotFound();
+                error = new NotFound(message);
                 break;
             case ErrorType.InternalServerError:
-                error = new InternalServerError();
+                error = new InternalServerError(message);
                 break;
 
             // BadRequest errors
@@ -31,6 +31,38 @@ export class ErrorFactory {
                 break;
             case ErrorType.InvalidLoginCredentials:
                 error = new InvalidLoginCredentials();
+                break;
+            case ErrorType.UsernameAlreadyInUse:
+                error = new UsernameAlreadyInUse();
+                break;
+            case ErrorType.EmailAlreadyInUse:
+                error = new EmailAlreadyInUse();
+                break;
+
+            // BadRequest errors - Payload validation
+            case ErrorType.UnrecognizedInputKey:
+                error = new UnrecognizedInputKey(message);
+                break;
+            case ErrorType.InvalidInputType:
+                error = new InvalidInputType(message);
+                break;
+            case ErrorType.InvalidInputValue:
+                error = new InvalidInputValue(message);
+                break;
+            case ErrorType.InvalidInputFormat:
+                error = new InvalidInputFormat(message);
+                break;
+            case ErrorType.InputValueTooSmall:
+                error = new InputValueTooSmall(message);
+                break;
+            case ErrorType.InputValueTooBig:
+                error = new InputValueTooBig(message);
+                break;
+            case ErrorType.InputValueTooShort:
+                error = new InputValueTooShort(message);
+                break;
+            case ErrorType.InputValueTooLong:
+                error = new InputValueTooLong(message);
                 break;
 
             // Unauthorized errors
@@ -68,7 +100,7 @@ export class ErrorFactory {
 
             // Default error
             default:
-                error = new InternalServerError();
+                error = new InternalServerError(message);
                 break;
         }
         return error;

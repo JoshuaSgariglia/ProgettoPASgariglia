@@ -28,7 +28,8 @@ export class CreatedResponse extends SuccessResponse {
         super(
             message ?? "Item created successfully", 
             StatusCodes.CREATED, 
-            data);
+            data
+        );
     }
 }
 
@@ -44,12 +45,11 @@ export class ServiceOnline extends OkayResponse {
     }
 }
 
-export class AccountLoggedIn extends CreatedResponse {
+export class AccountLoggedIn extends OkayResponse {
     constructor(data?: object) {
         super(
             "User logged in with success", 
             data
-
         );
     }
 }

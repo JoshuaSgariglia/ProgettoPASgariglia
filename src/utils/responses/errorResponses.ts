@@ -74,14 +74,77 @@ export class MissingPayload extends BadRequest {
         super("Missing payload in request body")
     }
 }
+
 export class InvalidPayload extends BadRequest {
     constructor() {
         super("Invalid payload in request body")
     }
 }
+
 export class InvalidLoginCredentials extends BadRequest {
     constructor() {
         super("Invalid username and\\or password")
+    }
+}
+
+export class UsernameAlreadyInUse extends BadRequest {
+    constructor() {
+        super("The inserted username is already in use")
+    }
+}
+
+export class EmailAlreadyInUse extends BadRequest {
+    constructor() {
+        super("The inserted email is already in use")
+    }
+}
+
+// Bad Request errors - Payload validation
+export class UnrecognizedInputKey extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Unrecognized input key")
+    }
+}
+
+export class InvalidInputType extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input type")
+    }
+}
+
+export class InvalidInputValue extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input value")
+    }
+}
+
+export class InvalidInputFormat extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input format")
+    }
+}
+
+export class InputValueTooSmall extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input value: number too small")
+    }
+}
+
+export class InputValueTooBig extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input value: number too big")
+    }
+}
+
+export class InputValueTooShort extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input value: string too short")
+    }
+}
+
+export class InputValueTooLong extends BadRequest {
+    constructor(message?: string) {
+        super(message ?? "Invalid input value: string too long")
     }
 }
 

@@ -66,6 +66,7 @@ export class UserConfig {
   static MAX_PASSWORD_LENGTH: number = 64;
   static MIN_TOKEN_AMOUNT: number = 0;
   static INITIAL_TOKEN_AMOUNT: number = 50;
+  static MAX_TOKEN_AMOUNT: number = 5000
 }
 
 

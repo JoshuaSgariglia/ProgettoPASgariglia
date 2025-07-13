@@ -36,6 +36,18 @@ export enum ErrorType {
   MissingPayload = "MissingPayload",
   InvalidPayload = "InvalidPayload",
   InvalidLoginCredentials = "InvalidCredentials",
+  UsernameAlreadyInUse = "UsernameAlreadyInUse",
+  EmailAlreadyInUse = "EmailAlreadyInUse",
+
+  // BadRequest errors - Payload validation
+  UnrecognizedInputKey = "UnrecognizedInputKey",
+  InvalidInputType = "InvalidInputType",
+  InvalidInputValue = "InvalidInputValue",
+  InvalidInputFormat = "InvalidInputFormat",
+  InputValueTooSmall = "InputValueTooSmall",
+  InputValueTooBig = "InputValueTooBig",
+  InputValueTooShort = "InputValueTooShort",
+  InputValueTooLong = "InputValueTooLong",
 
   // Unauthorized errors
   MissingAuthorizationHeader = "MissingAuthorizationHeader",

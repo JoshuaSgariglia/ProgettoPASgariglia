@@ -7,8 +7,8 @@ import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
 
 function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
     console.log("Entered authentication middleware")
-
     const authHeader = req.headers.authorization;
+
     if (authHeader) {
         next();
     } else {
@@ -55,21 +55,17 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
 
 function verifyTokenPayload(req: Request, res: Response, next: NextFunction) {
     let tokenPayload = res.locals.tokenPayload;
-    // Check that tokenPayload is not undefined
-    if (tokenPayload) {
-        // Check that tokenPayload is of type UserPayload
-        const result = TokenPayloadSchema.safeParse(tokenPayload);
-        if (result.success) {
-            res.locals.tokenPayload = result.data;
-            next();
 
-        } else {
-            next(ErrorType.InvalidTokenPayload);
-        }
+    // Check that tokenPayload is of type UserPayload
+    const result = TokenPayloadSchema.safeParse(tokenPayload);
+    if (result.success) {
+        res.locals.tokenPayload = result.data;
+        next();
 
     } else {
-        next(ErrorType.MissingTokenPayload);
+        next(ErrorType.InvalidTokenPayload);
     }
+
 }
 
 const verifyAuthorizationGenerator = (requiredRole: UserRole) =>

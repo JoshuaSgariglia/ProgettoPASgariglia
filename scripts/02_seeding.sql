@@ -10,11 +10,11 @@ INSERT INTO computing_resources ("uuid", "model", "serial", "manufacturer", "typ
 
 -- Insert Users
 INSERT INTO users ("uuid", "username", "email", "name", "surname", "password", "role") VALUES
-('72a84090-8f1a-4067-828b-1c975669eea4', 'mariorossi89', 'mario.rossi@gmail.com', 'Mario', 'Rossi', 'hashed-password', 'user'),
-('5664c112-a2b3-417c-a146-136c1f2c005b', 'giuse77', 'giuseppeverdi@gmail.com', 'Giuseppe', 'Verdi', 'hashed-password', 'user'),
-('b638c97e-5e2b-41ce-8654-74c3e0bb69ac', 'mark_white', 'mark.white@libero.it', 'Marco', 'Bianchi', 'hashed-password', 'user'),
-('b3dc868d-8dff-41f1-b214-db9d7493d4ea', 'luca_bramb_92', 'lucabramb@tiscali.it', 'Luca', 'Brambilla', 'hashed-password', 'admin'),
-('44679278-d7e5-481b-b873-b476287c551f', 'sullyking', 'keat.prescott@tiscali.it', 'Keaton', 'Prescott', 'hashed-password', 'admin');
+('72a84090-8f1a-4067-828b-1c975669eea4', 'mariorossi89', 'mario.rossi@gmail.com', 'Mario', 'Rossi', '$2b$04$uUb0mPN9pdjTG./d/V9zjuNW4BESgZAaZQQoUPrLlWm/Qwt2uxVPO', 'user'),
+('5664c112-a2b3-417c-a146-136c1f2c005b', 'giuse77', 'giuseppeverdi@gmail.com', 'Giuseppe', 'Verdi', '$2b$04$uUb0mPN9pdjTG./d/V9zjuNW4BESgZAaZQQoUPrLlWm/Qwt2uxVPO', 'user'),
+('b638c97e-5e2b-41ce-8654-74c3e0bb69ac', 'mark_white', 'mark.white@libero.it', 'Marco', 'Bianchi', '$2b$04$uUb0mPN9pdjTG./d/V9zjuNW4BESgZAaZQQoUPrLlWm/Qwt2uxVPO', 'user'),
+('b3dc868d-8dff-41f1-b214-db9d7493d4ea', 'luca_bramb_92', 'lucabramb@tiscali.it', 'Luca', 'Brambilla', '$2b$04$uUb0mPN9pdjTG./d/V9zjuNW4BESgZAaZQQoUPrLlWm/Qwt2uxVPO', 'admin'),
+('44679278-d7e5-481b-b873-b476287c551f', 'sullyking', 'keat.prescott@tiscali.it', 'Keaton', 'Prescott', '$2b$04$uUb0mPN9pdjTG./d/V9zjuNW4BESgZAaZQQoUPrLlWm/Qwt2uxVPO', 'admin');
 
 -- Insert Calendars
 INSERT INTO calendars ("uuid", "resource", "name", "isArchived") VALUES

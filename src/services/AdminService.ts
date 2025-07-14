@@ -4,6 +4,7 @@ import { UserRepository } from "../repositories/UserRepository";
 import { UserPayload } from "../utils/schemas";
 import { genSalt, hash } from "bcrypt-ts";
 import { ErrorType } from "../utils/enums";
+import { SALT_ROUNDS } from "../utils/config";
 
 export class AdminService {
     constructor(private userRepository: UserRepository) { }
@@ -14,11 +15,14 @@ export class AdminService {
         // User does not exist
         if (user === null) {
             // Generate salt
-            const salt = await genSalt(Math.round(Math.random() * 100));
+            const salt = await genSalt(SALT_ROUNDS);
+
+            console.log("Generated salt")
 
             // Hash and salt password
             userPayload.password = await hash(userPayload.password, salt);
-            console.log(userPayload.password);
+
+            console.log("Hashed password")
 
             // Create new User
             return await this.userRepository.add(userPayload);

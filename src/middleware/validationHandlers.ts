@@ -11,9 +11,10 @@ const validationHandlerGenerator = <T>(
     schema: ZodType<T>,
     source: InputSource = InputSource.BODY
 ) => (req: Request, res: Response, next: NextFunction): void => {
-    console.log("Entered validation middleware");
+    console.log("Entering validation middleware");
     const result = validate(schema, req[source]);
 
+    console.log("Exiting validation middleware")
     if (result.success) {
         // Attach validated data to reponse.locals
         res.locals.validated = result.data;

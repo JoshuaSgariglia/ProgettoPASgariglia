@@ -47,6 +47,9 @@ export const PUBLIC_KEY: string = publicKey;
 export const SIGNING_ALGORITHM: Algorithm = 'RS256';
 export const TOKEN_DURATION = '1h'; // StringValue type, but it's not exported from jsonwebtokens
 
+// Salting
+export const SALT_ROUNDS: number = 10;
+
 // Postgres connection
 export const RETRY_COUNT: number = 5;
 export const RETRY_DELAY: number = 2000;

@@ -1,3 +1,4 @@
+import { compare } from "bcrypt-ts";
 import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
 import { PRIVATE_KEY, SIGNING_ALGORITHM, TOKEN_DURATION } from "../utils/config";
@@ -14,8 +15,7 @@ export class AuthService {
         const user: User | null = await this.userRepository.getByUsername(loginPayload.username)
 
         // Check username and password
-        //if (user === null || !await compare(loginPayload.password, user.password))
-        if (user === null || user.password !== loginPayload.password)
+        if (user === null || !await compare(loginPayload.password, user.password))
             throw ErrorType.InvalidLoginCredentials;
 
         // Generate and return JWT

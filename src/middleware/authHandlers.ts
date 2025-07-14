@@ -6,7 +6,7 @@ import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
 
 
 function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
-    console.log("Entered authentication middleware")
+    console.log("Entering authentication middleware")
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
@@ -74,12 +74,12 @@ const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
         const tokenPayload = res.locals.tokenPayload as TokenPayload;
 
         // Check role authorization
+        console.log("Exiting authentication middleware")
         if (tokenPayload.role === requiredRole) {
             next();
         } else {
             next(ErrorType.InsufficientPermissions);
         }
-
     };
 
 export const getAuthHandlers = (requiredRole: UserRole) => [checkAuthHeader, checkAuthType, verifyToken, verifyTokenPayload, verifyAuthorizationGenerator(requiredRole)];

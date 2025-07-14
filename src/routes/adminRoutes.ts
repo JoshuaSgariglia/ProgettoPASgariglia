@@ -2,7 +2,7 @@ import { UserRepository } from "../repositories/UserRepository";
 import { AsyncRouter } from "../utils/AsyncRouter";
 import { AdminService } from "../services/AdminService";
 import { AdminController } from "../controllers/AdminController";
-import { loginPayloadHandler, userPayloadHandler } from "../middleware/validationHandlers";
+import { userPayloadHandler } from "../middleware/validationHandlers";
 
 // Instantiate Router
 const router = new AsyncRouter();

@@ -50,7 +50,7 @@ export function validate<T>(
         break;
 
       case 'invalid_value':
-        message = `Invalid ${issueField} value: ${firstIssue.message}`;
+        message = `Invalid ${issueField} value - ${firstIssue.message}`;
         response = ErrorFactory.getError(ErrorType.InvalidInputValue, message)
         break;
 
@@ -61,20 +61,20 @@ export function validate<T>(
 
       case 'too_big':
         if (firstIssue.message.toLowerCase().includes('characters')) {
-          message = `${issueField} is too long: ${firstIssue.message}`;
+          message = `${issueField} is too long - ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooLong, message)
         } else {
-          message = `${issueField} value is too big: ${firstIssue.message}`;
+          message = `${issueField} value is too big - ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooBig, message)
         }
         break;
 
       case 'too_small':
         if (firstIssue.message.toLowerCase().includes('characters')) {
-          message = `${issueField} is too short: ${firstIssue.message}`;
+          message = `${issueField} is too short - ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooShort, message)
         } else {
-          message = `${issueField} value is too small: ${firstIssue.message}`;
+          message = `${issueField} value is too small - ${firstIssue.message}`;
           response = ErrorFactory.getError(ErrorType.InputValueTooSmall, message)
         }
         break;

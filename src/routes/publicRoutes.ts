@@ -19,7 +19,7 @@ const authController = new AuthController(authService);
 
 // Check if service is online
 router.getAsync('/', async (req: Request, res: Response) => {
-    SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).send(res);
+    SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).sendWith(res);
   });
 
 // Login

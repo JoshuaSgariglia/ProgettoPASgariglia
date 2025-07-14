@@ -10,6 +10,6 @@ export class AuthController {
   public async loginUser(req: Request, res: Response): Promise<void> {
     const authToken: string = await this.authService.login(res.locals.validated as LoginPayload);
 
-    SuccessResponseFactory.getResponse(SuccessType.AccountLoggedIn, { authToken: authToken }).send(res)
+    SuccessResponseFactory.getResponse(SuccessType.AccountLoggedIn, { authToken: authToken }).sendWith(res)
   };
 }

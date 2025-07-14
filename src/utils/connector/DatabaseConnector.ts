@@ -38,6 +38,7 @@ export class DatabaseConnector {
           host: process.env.POSTGRES_HOST || "localhost",
           port: Number(process.env.POSTGRES_PORT || "5432"),
           dialect: "postgres",
+          timezone: '+02:00',
           logging: false,
         }
       );

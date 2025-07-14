@@ -1,6 +1,6 @@
 import { ZodType } from "zod";
 import { InputSource } from "../utils/enums";
-import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, UserPayloadSchema, validate } from "../utils/schemas";
+import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, SlotRequestPayloadSchema, UserPayloadSchema, UUIDParameterSchema, validate } from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -25,7 +25,9 @@ const validationHandlerGenerator = <T>(
 };
 
 // Generated handlers
+export const uuidParameterHandler = validationHandlerGenerator(UUIDParameterSchema, InputSource.PARAMS);
 export const loginPayloadHandler = validationHandlerGenerator(LoginPayloadSchema);
 export const userPayloadHandler = validationHandlerGenerator(UserPayloadSchema);
 export const calendarCreationPayloadHandler = validationHandlerGenerator(CalendarCreationPayloadSchema);
 export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarUpdatePayloadSchema);
+export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestPayloadSchema);

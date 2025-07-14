@@ -13,7 +13,7 @@ function undefinedRouteHandler(req: Request, res: Response, next: NextFunction) 
 function errorTypeHandler(err: ErrorType | ErrorResponse | any, req: Request, res: Response, next: NextFunction) {
     if (Object.values(ErrorType).includes(err)) {
         console.log(`Generating error \"${err}\"`);
-        ErrorFactory.getError(err).send(res);
+        ErrorFactory.getError(err).sendWith(res);
     } else {
         next(err);
     }
@@ -23,7 +23,7 @@ function errorTypeHandler(err: ErrorType | ErrorResponse | any, req: Request, re
 function errorResponseHandler(err: ErrorResponse | any, req: Request, res: Response, next: NextFunction) {
     if (err instanceof ErrorResponse) {
         console.log(`Handling factory-generated error \"${err}\"`);
-        err.send(res)
+        err.sendWith(res)
     } else {
         next(err)
     }
@@ -32,8 +32,9 @@ function errorResponseHandler(err: ErrorResponse | any, req: Request, res: Respo
 
 // === 4. Uncaught Error Handler (generates default ErrorResponse) ===
 function uncaughtErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-    console.log(`Uncaught error - generating \"${ErrorType.InternalServerError}\"`)
-    ErrorFactory.getError(ErrorType.InternalServerError).send(res);
+    console.log("Uncaught error: ", err);
+    console.log(`Generating \"${ErrorType.InternalServerError}\"`);
+    ErrorFactory.getError(ErrorType.InternalServerError).sendWith(res);
     next(err)
 }
 

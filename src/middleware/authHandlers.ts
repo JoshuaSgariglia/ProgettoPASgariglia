@@ -83,4 +83,6 @@ const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
     };
 
 export const getAuthHandlers = (requiredRole: UserRole) => [checkAuthHeader, checkAuthType, verifyToken, verifyTokenPayload, verifyAuthorizationGenerator(requiredRole)];
+export const userAuthHandlers = getAuthHandlers(UserRole.User);
+export const adminAuthHandlers = getAuthHandlers(UserRole.Admin);
 

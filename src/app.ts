@@ -1,13 +1,12 @@
 import express, { Router } from "express";
 import userRoutes from "./routes/userRoutes";
-import { UserRole } from "./utils/enums";
 import { withDatabaseConnected } from "./utils/connector/connect";
 import { Sequelize } from "sequelize";
 import { errorHandlers } from "./middleware/errorHandlers";
 import publicRoutes from "./routes/publicRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import { APP_HOST, APP_PORT } from "./utils/config";
-import { getAuthHandlers } from "./middleware/authHandlers";
+import { adminAuthHandlers, userAuthHandlers } from "./middleware/authHandlers";
 import { logginghandlers } from "./middleware/loggingHandlers";
 
 // Initialize Express app
@@ -30,10 +29,10 @@ withDatabaseConnected((sequelize: Sequelize) => {
   router.use("/", publicRoutes.router);
 
   // Protected user routes
-  router.use("/user", ...getAuthHandlers(UserRole.User), userRoutes.router);
+  router.use("/user", ...userAuthHandlers, userRoutes.router);
 
   // Protected admin routes
-  router.use("/admin", ...getAuthHandlers(UserRole.Admin), adminRoutes.router);
+  router.use("/admin", ...adminAuthHandlers, adminRoutes.router);
 
   // All routes are prefixed with "/api"
   app.use("/api", router); 

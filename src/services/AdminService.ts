@@ -10,9 +10,15 @@ import { ComputingResourceRepository } from "../repositories/ComputingResourceRe
 import { ComputingResource } from "../models/ComputingResource";
 import { Transaction } from "sequelize";
 import { withTransaction } from "../utils/connector/transactionDecorator";
+import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 
 export class AdminService {
-    constructor(private userRepository: UserRepository, private calendarRepository: CalendarRepository, private computingResourceRepository: ComputingResourceRepository) { }
+    constructor(
+        private userRepository: UserRepository, 
+        private calendarRepository: CalendarRepository, 
+        private slotRequestRepository: SlotRequestRepository,
+        private computingResourceRepository: ComputingResourceRepository
+    ) { }
 
     public async createUser(userPayload: UserPayload): Promise<User> {
         // Search user by username or email
@@ -71,8 +77,7 @@ export class AdminService {
         }
 
         // Update calendar
-        await calendar.update(calendarPayload)
-        return await calendar.reload(); // Refresh with DB values
+        return await calendar.update(calendarPayload)
     }
 
     public async getCalendar(calendar_id: string): Promise<Calendar> {
@@ -84,22 +89,38 @@ export class AdminService {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
 
+        // === TODO: Check requests ===
+
         // Delete calendar
         await calendar.destroy();
-        return await calendar.reload(); // Refresh with DB values
+
+        return calendar;
     }
 
     public async archiveCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
 
+        // === TODO: Check requests ===
+
         // Update calendar
-        await calendar.update({ "isArchived": true })
-        return await calendar.reload(); // Refresh with DB values
+        return await calendar.update({ "isArchived": true })
     }
 
 
     // === Helper functions ===
+
+    // Checks requests
+    private async checkSlotRequests(calendar_id: string): Promise<Calendar> {
+        // Search calendar by id
+        const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
+
+        // Calendar does not exist
+        if (calendar === null)
+            throw ErrorType.CalendarNotFound;
+
+        return calendar;
+    }
 
     private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {
         // Search calendar by id

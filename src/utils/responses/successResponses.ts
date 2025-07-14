@@ -54,10 +54,10 @@ export class AccountLoggedIn extends OkayResponse {
     }
 }
 
-export class CalendarRetreived extends OkayResponse {
+export class CalendarRetrieved extends OkayResponse {
     constructor(data?: object) {
         super(
-            "Calendar found and retreived", 
+            "Calendar found and retrieved", 
             data
         );
     }

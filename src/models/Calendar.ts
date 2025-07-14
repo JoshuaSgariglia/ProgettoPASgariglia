@@ -7,6 +7,7 @@ export class Calendar extends Model<InferAttributes<Calendar>, InferCreationAttr
   declare resource: string;
   declare name: string;
   declare isArchived: CreationOptional<boolean>;
+  declare tokenCostPerHour: CreationOptional<number>;
 }
 
 export function defineCalendarModel(sequelize: Sequelize) {
@@ -28,6 +29,11 @@ export function defineCalendarModel(sequelize: Sequelize) {
       isArchived: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        allowNull: false,
+      },
+      tokenCostPerHour: {
+        type: DataTypes.INTEGER,
+        defaultValue: CalendarConfig.DEFAULT_TOKEN_COST_PER_HOUR,
         allowNull: false,
       },
     },

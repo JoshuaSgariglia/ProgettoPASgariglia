@@ -38,6 +38,7 @@ CREATE TABLE calendars (
     "resource" UUID NOT NULL,
     "name" VARCHAR(128) NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT FALSE,
+    "tokenCostPerHour" INTEGER NOT NULL DEFAULT 4,
     "datetimeCreated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "datetimeUpdated" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     "datetimeDeleted" TIMESTAMPTZ,

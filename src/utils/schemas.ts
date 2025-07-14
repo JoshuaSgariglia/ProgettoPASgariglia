@@ -1,4 +1,4 @@
-import { CalendarConfig, UserConfig } from "./config";
+import { CalendarConfig, SlotRequestConfig, UserConfig } from "./config";
 import { ErrorType, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
@@ -89,10 +89,15 @@ export function validate<T>(
 
 // === Schemas ===
 
-// --- Custom Validation Rules ---
-const rangedString = (min: number, max: number) => z.string().trim().min(min).max(max);
-const rangedInt = (min: number, max: number) => z.int().min(min).max(max);
+// Custom validation
 
+// Datetime that forces minutes and seconds to zero
+const datetimeStringSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
+    message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
+  })
+  .transform((str) => new Date(str.replace(" ", "T") + ":00"));
 
 // --- TokenPayload ---
 // Schema
@@ -104,6 +109,10 @@ export const TokenPayloadSchema = z.object({
 // Type
 export type TokenPayload = z.infer<typeof TokenPayloadSchema>;
 
+// --- UUIDParameter ---
+export const UUIDParameterSchema = z.object({
+  id: z.uuid(),
+}).strict();
 
 // --- LoginPayload ---
 // Schema
@@ -135,7 +144,7 @@ export type UserPayload = z.infer<typeof UserPayloadSchema>;
 // --- CalendarCreationPayload ---
 // Schema
 export const CalendarCreationPayloadSchema = z.object({
-  resource: z.string().trim(),
+  resource: z.uuid(),
   name: z.string().trim().min(CalendarConfig.MIN_NAME_LENGTH).max(CalendarConfig.MAX_NAME_LENGTH),
   tokenCostPerHour: z.int().min(CalendarConfig.MIN_TOKEN_COST_PER_HOUR).max(CalendarConfig.MAX_TOKEN_COST_PER_HOUR).optional()
 }).strict();
@@ -150,3 +159,22 @@ export const CalendarUpdatePayloadSchema = CalendarCreationPayloadSchema.partial
 
 // Type
 export type CalendarUpdatePayload = z.infer<typeof CalendarUpdatePayloadSchema>;
+
+
+// --- SlotRequestPayload ---
+// Schema
+export const SlotRequestPayloadSchema = z.object({
+  calendar: z.uuid(),
+  title: z.string().trim().min(SlotRequestConfig.MIN_TITLE_LENGTH).max(SlotRequestConfig.MAX_TITLE_LENGTH),
+  reason: z.string().trim().min(SlotRequestConfig.MIN_REASON_LENGTH).max(SlotRequestConfig.MAX_REASON_LENGTH),
+  datetimeStart: datetimeStringSchema,
+  datetimeEnd: datetimeStringSchema,
+}).strict()
+// Custom logic to make sure datetimeEnd comes after datetimeStart
+.refine((data) => data.datetimeEnd > data.datetimeStart, {
+  message: "datetimeEnd must be after datetimeStart",
+  path: ["datetimeEnd"], // Marks the error at datetimeEnd field
+});
+
+// Type
+export type SlotRequestPayload = z.infer<typeof CalendarUpdatePayloadSchema>;

@@ -3,8 +3,6 @@ import { ErrorType, RequestStatus, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
 import { ErrorFactory } from "./factories/errorFactory";
-import { SlotRequest } from "../models/SlotRequest";
-import { InferAttributes } from "sequelize";
 
 
 
@@ -102,11 +100,17 @@ export function validate<T>(
 
 // Datetime that forces minutes and seconds to zero
 const datetimeStringSchema = z
-	.string()
-	.regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
-		message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
-	})
-	.transform((str) => new Date(str.replace(" ", "T") + ":00"));
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
+    message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
+  })
+  .refine((str) => {
+    const date = new Date(str.replace(" ", "T") + ":00");
+    return !isNaN(date.getTime()); // Valid date
+  }, {
+    message: "Invalid date (e.g. month > 12, day > 31, etc.)",
+  })
+  .transform((str) => new Date(str.replace(" ", "T") + ":00"));
 
 // --- TokenPayload ---
 // Schema

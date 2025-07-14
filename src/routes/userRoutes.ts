@@ -17,7 +17,7 @@ const userService = new UserService(userRepository, calendarRepository, slotRequ
 const userController = new UserController(userService);
 
 // Define routes
-router.postAsync("/route", slotRequestPayloadHandler, userController.createSlotRequest);
+router.postAsync("/request", slotRequestPayloadHandler, userController.createSlotRequest);
 
 
 // Export router as userRoutes

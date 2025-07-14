@@ -9,8 +9,8 @@ export class SlotRequestRepository {
         return await SlotRequest.findByPk(request_id);
     }
 
-    public async getPeriodIntersectingRequests(
-        calendar_id: string, 
+    public async getActiveRequestsInPeriod(
+        calendar_id: string,
         status: RequestStatus,
         datetimeStart: Date,
         datetimeEnd: Date
@@ -21,8 +21,8 @@ export class SlotRequestRepository {
                 "status": status,
                 [Op.not]: {
                     [Op.or]: [
-                        { "datetimeEnd": { [Op.lte]: datetimeStart } }, // ends before this slot starts
-                        { "datetimeStart": { [Op.gte]: datetimeEnd } }, // starts after this slot ends
+                        { "datetimeEnd": { [Op.lte]: datetimeStart } }, // Ends before this slot starts
+                        { "datetimeStart": { [Op.gte]: datetimeEnd } }, // Starts after this slot ends
                     ],
                 },
             },
@@ -33,20 +33,18 @@ export class SlotRequestRepository {
         return await SlotRequest.create(requestData, transaction ? { transaction } : {});
     }
 
-    public async getDatetimeIntersectingRequests(
-        calendar_id: string, 
+    public async getActiveRequestsAtDatetime(
+        calendar_id: string,
         status: RequestStatus,
         datetime: Date
     ): Promise<SlotRequest[]> {
         return await SlotRequest.findAll({
             where: {
-                "calendar": calendar_id,
-                "status": status,
-                [Op.and]: [
-                        { "datetimeEnd": { [Op.gte]: datetime } }, // ends after the datetime
-                        { "datetimeStart": { [Op.lte]: datetime } }, // starts before the datetime
-                ],
-            },
+                calendar: calendar_id,
+                status,
+                datetimeStart: { [Op.lte]: datetime }, // Starts before the datetime
+                datetimeEnd: { [Op.gte]: datetime }, // Ends after the datetime
+            }
         });
     }
 

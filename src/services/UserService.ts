@@ -22,7 +22,7 @@ export class UserService {
 		const calendar: Calendar = await this.getCalendarIfExistsAndNotArchived(slotRequestPayload.calendar);
 
 		// Get intersecting requests
-		const requests: SlotRequest[] = await this.slotRequestRepository.getPeriodIntersectingRequests(
+		const requests: SlotRequest[] = await this.slotRequestRepository.getActiveRequestsInPeriod(
 			slotRequestPayload.calendar,
 			RequestStatus.Approved,
 			slotRequestPayload.datetimeStart,
@@ -75,6 +75,9 @@ export class UserService {
 
 		return { "request": slotRequest, "requestCost": requestCost, "remainingTokens": user!.tokenAmount  }
 	}
+
+
+	// === Helper functions ===
 
 	private async getCalendarIfExistsAndNotArchived(calendar_id: string): Promise<Calendar> {
 		// Search calendar by id

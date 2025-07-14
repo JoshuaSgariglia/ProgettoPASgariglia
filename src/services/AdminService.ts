@@ -120,7 +120,7 @@ export class AdminService {
     // Checks ongoing requests
     private async checkOngoingRequests(calendar_id: string): Promise<void> {
         // Search for active requests
-        const requests: SlotRequest[] = await this.slotRequestRepository.getDatetimeIntersectingRequests(
+        const requests: SlotRequest[] = await this.slotRequestRepository.getActiveRequestsAtDatetime(
             calendar_id,
             RequestStatus.Approved,
             new Date()

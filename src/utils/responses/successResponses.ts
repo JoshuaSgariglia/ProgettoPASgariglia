@@ -108,3 +108,21 @@ export class CalendarCreated extends CreatedResponse {
         );
     }
 }
+
+export class SlotRequestCreated extends CreatedResponse {
+    constructor(data?: object) {
+        super(
+            "The new request has been successfully created and is currently pending", 
+            data
+        );
+    }
+}
+
+export class InvalidSlotRequestCreated extends CreatedResponse {
+    constructor(data?: object) {
+        super(
+            "The new request has been created but its status is invalid due to insufficient tokens", 
+            data
+        );
+    }
+}

@@ -8,6 +8,10 @@ export class UserRepository {
         return await User.findAll()
     }
 
+    public async getById(user_id: string): Promise<User | null> {
+        return await User.findByPk(user_id)
+    }
+
     public async getByUsername(username: string): Promise<User | null> {
         return await User.findOne({ where: { "username": username } })
     }

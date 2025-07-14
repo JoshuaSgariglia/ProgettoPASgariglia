@@ -1,5 +1,5 @@
 import { SuccessType } from "../enums";
-import { AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted, CalendarRetrieved, CalendarUpdated, CreatedResponse, OkayResponse, ServiceOnline, SuccessResponse } from "../responses/successResponses";
+import { AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted, CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse, ServiceOnline, SlotRequestCreated, SuccessResponse } from "../responses/successResponses";
 
 export class SuccessResponseFactory {
     public static getResponse(type: SuccessType = SuccessType.OK, data?: object): SuccessResponse {
@@ -39,6 +39,12 @@ export class SuccessResponseFactory {
                 break;
             case SuccessType.CalendarCreated:
                 response = new CalendarCreated(data);
+                break;
+            case SuccessType.SlotRequestCreated:
+                response = new SlotRequestCreated(data);
+                break;
+            case SuccessType.InvalidSlotRequestCreated:
+                response = new InvalidSlotRequestCreated(data);
                 break;
 
             // Default success

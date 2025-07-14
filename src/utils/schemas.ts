@@ -1,8 +1,10 @@
 import { CalendarConfig, SlotRequestConfig, UserConfig } from "./config";
-import { ErrorType, UserRole } from "./enums";
+import { ErrorType, RequestStatus, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
 import { ErrorFactory } from "./factories/errorFactory";
+import { SlotRequest } from "../models/SlotRequest";
+import { InferAttributes } from "sequelize";
 
 
 
@@ -89,7 +91,7 @@ export function validate<T>(
 
 // === Schemas ===
 
-// Custom validation
+// Custom validation rules
 
 // Datetime that forces minutes and seconds to zero
 const datetimeStringSchema = z
@@ -170,11 +172,25 @@ export const SlotRequestPayloadSchema = z.object({
   datetimeStart: datetimeStringSchema,
   datetimeEnd: datetimeStringSchema,
 }).strict()
-// Custom logic to make sure datetimeEnd comes after datetimeStart
-.refine((data) => data.datetimeEnd > data.datetimeStart, {
-  message: "datetimeEnd must be after datetimeStart",
-  path: ["datetimeEnd"], // Marks the error at datetimeEnd field
-});
+  // Ensure datetimeEnd is after datetimeStart
+  .refine((data) => data.datetimeEnd > data.datetimeStart, {
+    message: "datetimeEnd must be after datetimeStart",
+    path: ["datetimeEnd"],
+  })
+  // Ensure datetimeStart is at least 24 hours in the future
+  .refine((data) => {
+    const now = new Date();
+    const minStart = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
+    return data.datetimeStart >= minStart;
+  }, {
+    message: "datetimeStart must be at least 24 hours from now",
+    path: ["datetimeStart"],
+  });
 
-// Type
-export type SlotRequestPayload = z.infer<typeof CalendarUpdatePayloadSchema>;
+// Types
+export type SlotRequestPayload = z.infer<typeof SlotRequestPayloadSchema>;
+
+export type SlotRequestCreationData = SlotRequestPayload & {
+  user: string;
+  status: RequestStatus;
+};

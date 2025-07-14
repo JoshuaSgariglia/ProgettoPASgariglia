@@ -9,7 +9,7 @@ export class HttpResponse {
     ) { }
 
     // Send response
-    public sendWith(res: Response): void {
+    public sendIn(res: Response): void {
         res.status(this.statusCode).json(this)
     }
 }

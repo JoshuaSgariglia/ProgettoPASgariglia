@@ -111,6 +111,12 @@ export class CalendarNameAlreadyInUse extends BadRequest {
     }
 }
 
+export class CalendarSlotUnavailable extends BadRequest {
+    constructor() {
+        super("The selected time range is already assigned to another request")
+    }
+}
+
 // Bad Request errors - Payload validation
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {

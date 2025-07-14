@@ -58,6 +58,7 @@ export class AdminService {
 
     public async updateCalendar(calendar_id: string, calendarPayload: CalendarUpdatePayload): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
+        // === TODO: Check also that the calendar is not archived ===
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id)
 
         // Check if resource needs updating

@@ -63,9 +63,6 @@ export class DatabaseConnector {
     Calendar.hasMany(SlotRequest, { foreignKey: 'calendar', sourceKey: 'uuid' });
 
     // Calendar has one ComputingResource
-    Calendar.hasOne(ComputingResource, { foreignKey: 'calendar', sourceKey: 'uuid' });
-
-    // ComputingResource belongs to Calendar
-    ComputingResource.belongsTo(Calendar, { foreignKey: 'calendar', targetKey: 'uuid' });
+    Calendar.belongsTo(ComputingResource, { foreignKey: 'resource', targetKey: 'uuid' });
   }
 }

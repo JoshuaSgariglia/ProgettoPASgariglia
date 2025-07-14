@@ -68,8 +68,8 @@ export class UserConfig {
   static MIN_PASSWORD_LENGTH: number = 6;
   static MAX_PASSWORD_LENGTH: number = 64;
   static MIN_TOKEN_AMOUNT: number = 0;
-  static INITIAL_TOKEN_AMOUNT: number = 50;
-  static MAX_TOKEN_AMOUNT: number = 5000
+  static INITIAL_TOKEN_AMOUNT: number = 100;
+  static MAX_TOKEN_AMOUNT: number = 10000
 }
 
 
@@ -82,7 +82,11 @@ export class SlotRequestConfig {
 
 // Calendar
 export class CalendarConfig {
+  static MIN_NAME_LENGTH: number = 3;
   static MAX_NAME_LENGTH: number = 128;
+  static MIN_TOKEN_COST_PER_HOUR: number = 1;
+  static DEFAULT_TOKEN_COST_PER_HOUR: number = 4;
+  static MAX_TOKEN_COST_PER_HOUR: number = 50;
 }
 
 // ComputingResource

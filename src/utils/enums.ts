@@ -55,6 +55,8 @@ export enum ErrorType {
   InputValueTooBig = "InputValueTooBig",
   InputValueTooShort = "InputValueTooShort",
   InputValueTooLong = "InputValueTooLong",
+  ComputingResourceUnavailable = "ComputingResourceUnavailable",
+  CalendarNameAlreadyInUse = "CalendarNameAlreadyInUse",
 
   // Unauthorized errors
   MissingAuthorizationHeader = "MissingAuthorizationHeader",
@@ -69,6 +71,8 @@ export enum ErrorType {
 
   // NotFound errors
   UndefinedRouteOrInvalidMethod = "UndefinedRouteOrInvalidMethod",
+  ComputingResourceNotFound = "ComputingResourceNotFound",
+  CalendarNotFound = "CalendarNotFound",
 }
 
 export enum SuccessType {
@@ -78,8 +82,13 @@ export enum SuccessType {
 
   // OK success
   ServiceOnline = "ServiceOnline",
+  CalendarRetreived = "CalendarRetreived",
+  CalendarUpdated = "CalendarUpdated",
+  CalendarDeleted = "CalendarDeleted",
+  CalendarArchived = "CalendarArchived",
 
   // Created Success
   AccountLoggedIn = "AccountLoggedIn",
   AccountRegistered = "AccountRegistered",
+  CalendarCreated = "CalendarCreated"
 }

@@ -54,11 +54,56 @@ export class AccountLoggedIn extends OkayResponse {
     }
 }
 
+export class CalendarRetreived extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "Calendar found and retreived", 
+            data
+        );
+    }
+}
+
+export class CalendarUpdated extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The calendar has been updated", 
+            data
+        );
+    }
+}
+
+export class CalendarDeleted extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The calendar has been deleted", 
+            data
+        );
+    }
+}
+
+export class CalendarArchived extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The calendar has been archived", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {
         super(
             "The new account has been successfully registered", 
+            data
+        );
+    }
+}
+
+export class CalendarCreated extends CreatedResponse {
+    constructor(data?: object) {
+        super(
+            "The new calendar has been successfully created", 
             data
         );
     }

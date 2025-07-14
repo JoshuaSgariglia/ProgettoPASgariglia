@@ -1,4 +1,4 @@
-import { UserConfig } from "./config";
+import { CalendarConfig, UserConfig } from "./config";
 import { ErrorType, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
@@ -93,8 +93,8 @@ export function validate<T>(
 const rangedString = (min: number, max: number) => z.string().trim().min(min).max(max);
 const rangedInt = (min: number, max: number) => z.int().min(min).max(max);
 
-// --- TokenPayload ---
 
+// --- TokenPayload ---
 // Schema
 export const TokenPayloadSchema = z.object({
   uuid: z.string(),
@@ -106,19 +106,17 @@ export type TokenPayload = z.infer<typeof TokenPayloadSchema>;
 
 
 // --- LoginPayload ---
-
 // Schema
 export const LoginPayloadSchema = z.object({
   username: z.string().trim(),
   password: z.string().trim(),
-});
+}).strict();
 
 // Type
 export type LoginPayload = z.infer<typeof LoginPayloadSchema>;
 
 
 // --- UserPayload ---
-
 // Schema
 export const UserPayloadSchema = z.object({
   username: z.string().trim().min(UserConfig.MIN_USERNAME_LENGTH).max(UserConfig.MAX_USERNAME_LENGTH),
@@ -128,7 +126,27 @@ export const UserPayloadSchema = z.object({
   surname: z.string().trim().min(UserConfig.MIN_SURNAME_LENGTH).max(UserConfig.MAX_SURNAME_LENGTH),
   role: z.enum(UserRole).optional(),
   tokenAmount: z.int().min(UserConfig.MIN_TOKEN_AMOUNT).max(UserConfig.MAX_TOKEN_AMOUNT).optional()
-});
+}).strict();
 
 // Type
 export type UserPayload = z.infer<typeof UserPayloadSchema>;
+
+
+// --- CalendarCreationPayload ---
+// Schema
+export const CalendarCreationPayloadSchema = z.object({
+  resource: z.string().trim(),
+  name: z.string().trim().min(CalendarConfig.MIN_NAME_LENGTH).max(CalendarConfig.MAX_NAME_LENGTH),
+  tokenCostPerHour: z.int().min(CalendarConfig.MIN_TOKEN_COST_PER_HOUR).max(CalendarConfig.MAX_TOKEN_COST_PER_HOUR).optional()
+}).strict();
+
+// Type
+export type CalendarCreationPayload = z.infer<typeof CalendarCreationPayloadSchema>;
+
+
+// --- CalendarUpdatePayload ---
+// Schema
+export const CalendarUpdatePayloadSchema = CalendarCreationPayloadSchema.partial();
+
+// Type
+export type CalendarUpdatePayload = z.infer<typeof CalendarUpdatePayloadSchema>;

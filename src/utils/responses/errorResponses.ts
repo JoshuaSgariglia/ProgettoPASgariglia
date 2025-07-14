@@ -99,6 +99,18 @@ export class EmailAlreadyInUse extends BadRequest {
     }
 }
 
+export class ComputingResourceUnavailable extends BadRequest {
+    constructor() {
+        super("The selected computing resource is already associated to a calendar")
+    }
+}
+
+export class CalendarNameAlreadyInUse extends BadRequest {
+    constructor() {
+        super("The selected name is already associated to a calendar")
+    }
+}
+
 // Bad Request errors - Payload validation
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {
@@ -202,5 +214,17 @@ export class InsufficientPermissions extends Forbidden {
 export class UndefinedRouteOrInvalidMethod extends NotFound {
     constructor() {
         super("The selected route and\\or method are invalid")
+    }
+}
+
+export class ComputingResourceNotFound extends NotFound {
+    constructor() {
+        super("The selected computing resource does not exist")
+    }
+}
+
+export class CalendarNotFound extends NotFound {
+    constructor() {
+        super("The selected calendar does not exist")
     }
 }

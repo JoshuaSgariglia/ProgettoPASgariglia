@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse } from "../responses/errorResponses";
+import { BadRequest, CalendarNameAlreadyInUse, CalendarNotFound, ComputingResourceNotFound, ComputingResourceUnavailable, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType = ErrorType.InternalServerError, message?: string): ErrorResponse {
@@ -37,6 +37,12 @@ export class ErrorFactory {
                 break;
             case ErrorType.EmailAlreadyInUse:
                 error = new EmailAlreadyInUse();
+                break;
+            case ErrorType.ComputingResourceUnavailable:
+                error = new ComputingResourceUnavailable();
+                break;
+            case ErrorType.CalendarNameAlreadyInUse:
+                error = new CalendarNameAlreadyInUse();
                 break;
 
             // BadRequest errors - Payload validation
@@ -96,6 +102,12 @@ export class ErrorFactory {
             // NotFound errors
             case ErrorType.UndefinedRouteOrInvalidMethod:
                 error = new UndefinedRouteOrInvalidMethod();
+                break;
+            case ErrorType.ComputingResourceNotFound:
+                error = new ComputingResourceNotFound();
+                break;
+            case ErrorType.CalendarNotFound:
+                error = new CalendarNotFound();
                 break;
 
             // Default error

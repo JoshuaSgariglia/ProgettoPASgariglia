@@ -1,6 +1,6 @@
 import { ZodType } from "zod";
 import { InputSource } from "../utils/enums";
-import { LoginPayloadSchema, UserPayloadSchema, validate } from "../utils/schemas";
+import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, UserPayloadSchema, validate } from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -27,3 +27,5 @@ const validationHandlerGenerator = <T>(
 // Generated handlers
 export const loginPayloadHandler = validationHandlerGenerator(LoginPayloadSchema);
 export const userPayloadHandler = validationHandlerGenerator(UserPayloadSchema);
+export const calendarCreationPayloadHandler = validationHandlerGenerator(CalendarCreationPayloadSchema);
+export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarUpdatePayloadSchema);

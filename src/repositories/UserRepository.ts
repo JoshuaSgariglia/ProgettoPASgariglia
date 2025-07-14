@@ -23,8 +23,8 @@ export class UserRepository {
         });
     }
 
-    public async add(userPayload: UserPayload): Promise<Omit<InferAttributes<User>, 'password'>> {
-        return (await User.create(userPayload)).toJSON();
+    public async add(userPayload: UserPayload): Promise<User> {
+        return await User.create(userPayload);
     }
 
 }

@@ -117,6 +117,18 @@ export class CalendarSlotUnavailable extends BadRequest {
     }
 }
 
+export class CalendarArchived extends BadRequest {
+    constructor() {
+        super("Cannot update an archived calendar")
+    }
+}
+
+export class OngoingRequests extends BadRequest {
+    constructor() {
+        super("Cannot delete or archive the calendar while there are ongoing requests")
+    }
+}
+
 // Bad Request errors - Payload validation
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {

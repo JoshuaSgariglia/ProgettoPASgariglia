@@ -44,7 +44,11 @@ export enum ErrorType {
 	InvalidLoginCredentials = "InvalidCredentials",
 	UsernameAlreadyInUse = "UsernameAlreadyInUse",
 	EmailAlreadyInUse = "EmailAlreadyInUse",
+	ComputingResourceUnavailable = "ComputingResourceUnavailable",
+	CalendarNameAlreadyInUse = "CalendarNameAlreadyInUse",
 	CalendarSlotUnavailable = "CalendarSlotUnavailable",
+	CalendarArchived = "CalendarArchived",
+	OngoingRequests = "OngoingRequests",
 
 	// BadRequest errors - Payload validation
 	MissingInputField = "MissingInputField",
@@ -56,8 +60,6 @@ export enum ErrorType {
 	InputValueTooBig = "InputValueTooBig",
 	InputValueTooShort = "InputValueTooShort",
 	InputValueTooLong = "InputValueTooLong",
-	ComputingResourceUnavailable = "ComputingResourceUnavailable",
-	CalendarNameAlreadyInUse = "CalendarNameAlreadyInUse",
 
 	// Unauthorized errors
 	MissingAuthorizationHeader = "MissingAuthorizationHeader",

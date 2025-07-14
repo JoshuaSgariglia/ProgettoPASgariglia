@@ -2,7 +2,7 @@ import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
 import { CalendarCreationPayload, CalendarUpdatePayload, UserPayload } from "../utils/schemas";
 import { genSalt, hash } from "bcrypt-ts";
-import { ErrorType } from "../utils/enums";
+import { ErrorType, RequestStatus } from "../utils/enums";
 import { SALT_ROUNDS } from "../utils/config";
 import { Calendar } from "../models/Calendar";
 import { CalendarRepository } from "../repositories/CalendarRepository";
@@ -11,6 +11,7 @@ import { ComputingResource } from "../models/ComputingResource";
 import { Transaction } from "sequelize";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
+import { SlotRequest } from "../models/SlotRequest";
 
 export class AdminService {
     constructor(
@@ -58,8 +59,11 @@ export class AdminService {
 
     public async updateCalendar(calendar_id: string, calendarPayload: CalendarUpdatePayload): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
-        // === TODO: Check also that the calendar is not archived ===
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id)
+
+        // Check also that the calendar is not archived
+        if (calendar.isArchived)
+            throw ErrorType.CalendarArchived;
 
         // Check if resource needs updating
         if (calendarPayload.resource !== undefined && calendarPayload.resource !== calendar.resource) {
@@ -89,8 +93,9 @@ export class AdminService {
     public async deleteCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
-
-        // === TODO: Check requests ===
+      
+        // Throws an error if there are ongoing requests
+        await this.checkOngoingRequests(calendar_id)
 
         // Delete calendar
         await calendar.destroy();
@@ -102,7 +107,8 @@ export class AdminService {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
 
-        // === TODO: Check requests ===
+        // Throws an error if there are ongoing requests
+        await this.checkOngoingRequests(calendar_id)
 
         // Update calendar
         return await calendar.update({ "isArchived": true })
@@ -111,16 +117,18 @@ export class AdminService {
 
     // === Helper functions ===
 
-    // Checks requests
-    private async checkSlotRequests(calendar_id: string): Promise<Calendar> {
-        // Search calendar by id
-        const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
+    // Checks ongoing requests
+    private async checkOngoingRequests(calendar_id: string): Promise<void> {
+        // Search for active requests
+        const requests: SlotRequest[] = await this.slotRequestRepository.getDatetimeIntersectingRequests(
+            calendar_id,
+            RequestStatus.Approved,
+            new Date()
+        );
 
-        // Calendar does not exist
-        if (calendar === null)
-            throw ErrorType.CalendarNotFound;
-
-        return calendar;
+        // There are active ongoing requests
+        if (requests.length !== 0)
+            throw ErrorType.OngoingRequests;
     }
 
     private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {

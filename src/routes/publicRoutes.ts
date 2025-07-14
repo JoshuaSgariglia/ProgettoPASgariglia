@@ -19,11 +19,11 @@ const authController = new AuthController(authService);
 
 // Check if service is online
 router.getAsync('/', async (req: Request, res: Response) => {
-    SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).sendWith(res);
-  });
+  SuccessResponseFactory.getResponse(SuccessType.ServiceOnline).sendWith(res);
+});
 
 // Login
-router.postAsync("/login", loginPayloadHandler, authController.loginUser.bind(authController));
+router.postAsync("/login", loginPayloadHandler, authController.loginUser);
 
 // Export router as userRoutes
 export default router;

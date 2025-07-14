@@ -21,14 +21,14 @@ const adminController = new AdminController(adminService);
 // --- Define routes ---
 
 // Register user
-router.postAsync("/user", userPayloadHandler, adminController.createUser.bind(adminController));
+router.postAsync("/user", userPayloadHandler, adminController.createUser);
 
 // Calendar CRUD
-router.postAsync("/calendar", calendarCreationPayloadHandler, adminController.createCalendar.bind(adminController));
-router.putAsync("/calendar/:id", uuidParameterHandler, calendarUpdatePayloadHandler, adminController.updateCalendar.bind(adminController));
-router.getAsync("/calendar/:id", uuidParameterHandler, adminController.getCalendar.bind(adminController));
-router.deleteAsync("/calendar/:id", uuidParameterHandler, adminController.deleteCalendar.bind(adminController));
-router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController.archiveCalendar.bind(adminController));
+router.postAsync("/calendar", calendarCreationPayloadHandler, adminController.createCalendar);
+router.putAsync("/calendar/:id", uuidParameterHandler, calendarUpdatePayloadHandler, adminController.updateCalendar);
+router.getAsync("/calendar/:id", uuidParameterHandler, adminController.getCalendar);
+router.deleteAsync("/calendar/:id", uuidParameterHandler, adminController.deleteCalendar);
+router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController.archiveCalendar);
 
 
 // Export router as userRoutes

@@ -7,7 +7,7 @@ import { SuccessType } from "../utils/enums";
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  public async loginUser(req: Request, res: Response): Promise<void> {
+  public readonly loginUser = async (req: Request, res: Response): Promise<void> => {
     const authToken: string = await this.authService.login(res.locals.validated as LoginPayload);
 
     SuccessResponseFactory.getResponse(SuccessType.AccountLoggedIn, { authToken: authToken }).sendWith(res)

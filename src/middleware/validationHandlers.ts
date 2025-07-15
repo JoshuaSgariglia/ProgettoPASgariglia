@@ -1,6 +1,6 @@
 import { ZodType } from "zod";
 import { InputSource } from "../utils/enums";
-import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, SlotRequestPayloadSchema, UserPayloadSchema, UUIDParameterSchema, validate } from "../utils/schemas";
+import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, RequestStatusAndCreationPayloadSchema, SlotRequestPayloadSchema, UserPayloadSchema, UUIDParameterSchema, validate } from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -9,10 +9,11 @@ import { Request, Response, NextFunction } from "express";
  */
 const validationHandlerGenerator = <T>(
     schema: ZodType<T>,
-    source: InputSource = InputSource.BODY
+    source: InputSource = InputSource.BODY,
+    payloadOptional: boolean = false
 ) => (req: Request, res: Response, next: NextFunction): void => {
     console.log("Entering validation middleware");
-    const result = validate(schema, req[source]);
+    const result = validate(schema, req[source], payloadOptional);
 
     console.log("Exiting validation middleware")
     if (result.success) {
@@ -31,3 +32,4 @@ export const userPayloadHandler = validationHandlerGenerator(UserPayloadSchema);
 export const calendarCreationPayloadHandler = validationHandlerGenerator(CalendarCreationPayloadSchema);
 export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarUpdatePayloadSchema);
 export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestPayloadSchema);
+export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(RequestStatusAndCreationPayloadSchema, InputSource.BODY, true);

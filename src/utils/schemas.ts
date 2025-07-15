@@ -9,16 +9,20 @@ import { ErrorFactory } from "./factories/errorFactory";
 // === Validate ===
 export function validate<T>(
 	schema: ZodType<T>,
-	input: unknown
+	input: unknown,
+	payloadOptional: boolean = false
 ) {
 
-	// Check for null, undefined, or empty object - If it is, return error
-	const isEmptyObject = typeof input === 'object' && Object.keys(input!).length === 0;
-	if (input === null || input === undefined || isEmptyObject) {
-		return { success: false, error: ErrorType.MissingPayload };
+	// If payload is optional...
+	if (!payloadOptional) {
+		// ...check for null, undefined, or empty object - If it is, return error
+		const isEmptyObject = typeof input === 'object' && Object.keys(input!).length === 0;
+		if (input === null || input === undefined || isEmptyObject) {
+			return { success: false, error: ErrorType.MissingPayload };
+		}
 	}
 
-	// Else, it validates the input according to the schema
+	// Validate the input according to the schema
 	const result = schema.safeParse(input);
 
 	// Check if validation was successful
@@ -99,19 +103,32 @@ export function validate<T>(
 // Custom validation rules
 
 // Datetime that forces minutes and seconds to zero
+const datetimeHourStringSchema = z
+	.string()
+	.regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
+		message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
+	})
+	.refine((str) => {
+		const date = new Date(str.replace(" ", "T") + ":00");
+		return !isNaN(date.getTime()); // Valid date
+	}, {
+		message: "Invalid date (e.g. month > 12, day > 31, etc.)",
+	})
+	.transform((str) => new Date(str.replace(" ", "T") + ":00"));
+
 const datetimeStringSchema = z
-  .string()
-  .regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
-    message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
-  })
-  .refine((str) => {
-    const date = new Date(str.replace(" ", "T") + ":00");
-    return !isNaN(date.getTime()); // Valid date
-  }, {
-    message: "Invalid date (e.g. month > 12, day > 31, etc.)",
-  })
-  .transform((str) => new Date(str.replace(" ", "T") + ":00"));
-  
+	.string()
+	.regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/, {
+		message: "Datetime must be in format YYYY-MM-DD HH:mm (seconds must be zero)",
+	})
+	.refine((str) => {
+		const date = new Date(str.replace(" ", "T") + ":00");
+		return !isNaN(date.getTime()); // Valid date
+	}, {
+		message: "Invalid date (e.g. month > 12, day > 31, etc.)",
+	})
+	.transform((str) => new Date(str.replace(" ", "T") + ":00"));
+
 
 // --- TokenPayload ---
 // Schema
@@ -181,8 +198,8 @@ export const SlotRequestPayloadSchema = z.object({
 	calendar: z.uuid(),
 	title: z.string().trim().min(SlotRequestConfig.MIN_TITLE_LENGTH).max(SlotRequestConfig.MAX_TITLE_LENGTH),
 	reason: z.string().trim().min(SlotRequestConfig.MIN_REASON_LENGTH).max(SlotRequestConfig.MAX_REASON_LENGTH),
-	datetimeStart: datetimeStringSchema,
-	datetimeEnd: datetimeStringSchema,
+	datetimeStart: datetimeHourStringSchema,
+	datetimeEnd: datetimeHourStringSchema,
 }).strict()
 	// Ensure datetimeEnd is after datetimeStart
 	.refine((data) => data.datetimeEnd > data.datetimeStart, {
@@ -206,3 +223,36 @@ export type SlotRequestCreationData = SlotRequestPayload & {
 	user: string;
 	status: RequestStatus;
 };
+
+
+// --- RequestStatusAndCreationPayload ---
+// Schema
+export const RequestStatusAndCreationPayloadSchema = z.object({
+	status: z.enum(RequestStatus).optional(),
+	datetimeCreatedFrom: datetimeStringSchema.optional(),
+	datetimeCreatedTo: datetimeStringSchema.optional()
+}).strict()
+	// Ensure datetimeCreatedTo is after datetimeCreatedFrom
+	.refine((data) => {
+		if (data.datetimeCreatedFrom && data.datetimeCreatedTo) {
+			return data.datetimeCreatedTo > data.datetimeCreatedFrom;
+		}
+		return true; // Skip validation if either is missing
+	}, {
+		message: "datetimeCreatedTo must be after datetimeCreatedFrom",
+		path: ["datetimeCreatedTo"],
+	});
+
+// Type
+export type RequestStatusAndCreationPayload = z.infer<typeof RequestStatusAndCreationPayloadSchema>;
+
+
+// --- CalendarCreationPayload ---
+// Schema
+export const ApproveRequestPayloadSchema = z.object({
+	approved: z.boolean(),
+	refusalReason: z.string().trim().min(SlotRequestConfig.MIN_REFUSAL_REASON_LENGTH).max(SlotRequestConfig.MAX_REFUSAL_REASON_LENGTH).optional(),
+}).strict()
+
+// Type
+export type ApproveRequestPayloadSchema = z.infer<typeof ApproveRequestPayloadSchema>;

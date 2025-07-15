@@ -90,6 +90,15 @@ export class CalendarArchived extends OkayResponse {
     }
 }
 
+export class SlotRequestsRetrieved extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The requests that match the filters have been retrieved", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {

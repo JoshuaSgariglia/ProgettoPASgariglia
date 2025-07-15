@@ -28,7 +28,7 @@ export class AdminController {
 	public readonly getCalendar = async (req: Request, res: Response): Promise<void> => {
 		const calendar = await this.adminService.getCalendar(req.params.id.toString());
 
-		SuccessResponseFactory.getResponse(SuccessType.CalendarRetreived, { calendar: calendar.toJSON() }).sendIn(res);
+		SuccessResponseFactory.getResponse(SuccessType.CalendarRetrieved, { calendar: calendar.toJSON() }).sendIn(res);
 	};
 
 	public readonly deleteCalendar = async (req: Request, res: Response): Promise<void> => {

@@ -9,7 +9,7 @@ export class SlotRequestRepository {
         return await SlotRequest.findByPk(request_id);
     }
 
-    public async getActiveRequestsInPeriod(
+    public async getRequestsInPeriod(
         calendar_id: string,
         status: RequestStatus,
         datetimeStart: Date,
@@ -33,18 +33,51 @@ export class SlotRequestRepository {
         return await SlotRequest.create(requestData, transaction ? { transaction } : {});
     }
 
-    public async getActiveRequestsAtDatetime(
+    public async getRequestsAtDatetime(
         calendar_id: string,
         status: RequestStatus,
         datetime: Date
     ): Promise<SlotRequest[]> {
         return await SlotRequest.findAll({
             where: {
-                calendar: calendar_id,
-                status,
-                datetimeStart: { [Op.lte]: datetime }, // Starts before the datetime
-                datetimeEnd: { [Op.gte]: datetime }, // Ends after the datetime
+                "calendar": calendar_id,
+                "status": status,
+                "datetimeStart": { [Op.lte]: datetime }, // Starts before the datetime
+                "datetimeEnd": { [Op.gte]: datetime }, // Ends after the datetime
             }
+        });
+    }
+
+    public async getRequestsByStatusAndCreationPeriod(
+        user_id: string,
+        status?: RequestStatus,
+        datetimeCreatedFrom?: Date,
+        datetimeCreatedTo?: Date
+    ): Promise<SlotRequest[]> {
+        const whereClause: any = {
+            "user": user_id
+        };
+
+        // Status filter
+        if (status) {
+            whereClause.status = status;
+        }
+
+        // Creation time period filter
+        if (datetimeCreatedFrom || datetimeCreatedTo) {
+            whereClause.datetimeCreated = {};
+            if (datetimeCreatedFrom) {
+                // Get requests created after datetimeCreatedFrom
+                whereClause.datetimeCreated[Op.gte] = datetimeCreatedFrom;
+            }
+            if (datetimeCreatedTo) {
+                // Get requests created before datetimeCreatedTo
+                whereClause.datetimeCreated[Op.lte] = datetimeCreatedTo;
+            }
+        }
+
+        return await SlotRequest.findAll({
+            where: whereClause,
         });
     }
 

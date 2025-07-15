@@ -85,10 +85,11 @@ export enum SuccessType {
 
 	// OK success
 	ServiceOnline = "ServiceOnline",
-	CalendarRetreived = "CalendarRetreived",
+	CalendarRetrieved = "CalendarRetrieved",
 	CalendarUpdated = "CalendarUpdated",
 	CalendarDeleted = "CalendarDeleted",
 	CalendarArchived = "CalendarArchived",
+	SlotRequestsRetrieved = "SlotRequestsRetrieved",
 
 	// Created Success
 	AccountLoggedIn = "AccountLoggedIn",

@@ -79,6 +79,7 @@ export class SlotRequestConfig {
   static MAX_TITLE_LENGTH: number = 128;
   static MIN_REASON_LENGTH: number = 3;
   static MAX_REASON_LENGTH: number = 512;
+  static MIN_REFUSAL_REASON_LENGTH: number = 3;
   static MAX_REFUSAL_REASON_LENGTH: number = 512;
 }
 

@@ -7,7 +7,7 @@ import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { UserRepository } from "../repositories/UserRepository";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
-import { SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
+import { RequestStatusAndCreationPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
 import { hoursDiff, SlotRequestCreationInfo } from "../utils/misc";
 
 export class UserService {
@@ -22,7 +22,7 @@ export class UserService {
 		const calendar: Calendar = await this.getCalendarIfExistsAndNotArchived(slotRequestPayload.calendar);
 
 		// Get intersecting requests
-		const requests: SlotRequest[] = await this.slotRequestRepository.getActiveRequestsInPeriod(
+		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
 			slotRequestPayload.calendar,
 			RequestStatus.Approved,
 			slotRequestPayload.datetimeStart,
@@ -74,6 +74,15 @@ export class UserService {
 		}
 
 		return { "request": slotRequest, "requestCost": requestCost, "remainingTokens": user!.tokenAmount  }
+	}
+
+	public async getRequestsByStatusAndCreationPeriod(user_id: string, slotRequestPayload: RequestStatusAndCreationPayload): Promise<SlotRequest[]> {
+		return await this.slotRequestRepository.getRequestsByStatusAndCreationPeriod(
+			user_id, 
+			slotRequestPayload.status, 
+			slotRequestPayload.datetimeCreatedFrom, 
+			slotRequestPayload.datetimeCreatedTo
+		);
 	}
 
 

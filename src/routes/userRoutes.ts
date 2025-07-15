@@ -3,7 +3,7 @@ import { UserService } from "../services/UserService";
 import { AsyncRouter } from "../utils/AsyncRouter";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { CalendarRepository } from "../repositories/CalendarRepository";
-import { slotRequestPayloadHandler } from "../middleware/validationHandlers";
+import { requestStatusAndCreationPayloadHandler, slotRequestPayloadHandler } from "../middleware/validationHandlers";
 import { UserRepository } from "../repositories/UserRepository";
 
 // Instantiate Router
@@ -18,6 +18,7 @@ const userController = new UserController(userService);
 
 // Define routes
 router.postAsync("/request", slotRequestPayloadHandler, userController.createSlotRequest);
+router.getAsync("/request-status", requestStatusAndCreationPayloadHandler, userController.getRequestsByStatusAndCreationPeriod);
 
 
 // Export router as userRoutes

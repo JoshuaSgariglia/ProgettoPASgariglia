@@ -31,3 +31,10 @@ export interface SlotRequestDeletionInfo {
     refundedTokens: number;
     remainingTokens: number;
 };
+
+export interface CalendarSlotInfo {
+    calendar_id: string;
+    datetimeStart: Date;
+    datetimeEnd: Date;
+    available: boolean;
+};

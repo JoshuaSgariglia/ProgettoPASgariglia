@@ -5,10 +5,10 @@ import { User } from "../models/User";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { UserRepository } from "../repositories/UserRepository";
-import { getTransaction, withTransaction } from "../utils/connector/transactionDecorator";
+import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
-import { RequestStatusAndCreationPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
-import { hoursDiff, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/misc";
+import { CheckSlotPayload, RequestStatusAndCreationPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
+import { CalendarSlotInfo, hoursDiff, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/misc";
 import { SlotRequestConfig } from "../utils/config";
 
 export class UserService {
@@ -25,9 +25,9 @@ export class UserService {
 		// Get intersecting requests
 		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
 			slotRequestPayload.calendar,
-			RequestStatus.Approved,
 			slotRequestPayload.datetimeStart,
-			slotRequestPayload.datetimeEnd
+			slotRequestPayload.datetimeEnd,
+			RequestStatus.Approved
 		);
 
 		// Check that there are no approved intersecting requests
@@ -173,6 +173,27 @@ export class UserService {
 				"refundedTokens": refund,
 				"remainingTokens": remainingTokens
 			};
+		}
+	}
+
+	public async checkCalendarSlot(checkSlotPayload: CheckSlotPayload): Promise<CalendarSlotInfo> {
+		// Throws error if calendar does not exist or if it is archived
+		const calendar: Calendar = await this.getCalendarIfExistsAndNotArchived(checkSlotPayload.calendar);
+
+		// Get intersecting requests
+		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
+			calendar.uuid,
+			checkSlotPayload.datetimeStart,
+			checkSlotPayload.datetimeEnd,
+			RequestStatus.Approved
+		);
+
+		// Return
+		return {
+			"calendar_id": calendar.uuid,
+			"datetimeStart": checkSlotPayload.datetimeStart, 
+			"datetimeEnd": checkSlotPayload.datetimeEnd,
+			"available": requests.length === 0
 		}
 	}
 

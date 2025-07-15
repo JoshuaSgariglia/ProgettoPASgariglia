@@ -128,9 +128,9 @@ export class AdminService {
             // Get intersecting approved requests in the same calendar
             const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
                 request.calendar,
-                RequestStatus.Approved,
                 request.datetimeStart,
-                request.datetimeEnd
+                request.datetimeEnd,
+                RequestStatus.Approved
             );
 
             // Throw an error if there are approved intersecting requests

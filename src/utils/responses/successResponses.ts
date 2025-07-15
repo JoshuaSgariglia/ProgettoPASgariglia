@@ -126,6 +126,24 @@ export class SlotRequestDeleted extends OkayResponse {
     }
 }
 
+export class CalendarSlotAvailable extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The selected calendar slot is available", 
+            data
+        );
+    }
+}
+
+export class CalendarSlotUnavailable extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The selected calendar slot is not available", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {

@@ -252,7 +252,7 @@ export const RequestStatusAndCreationPayloadSchema = z.object({
 export type RequestStatusAndCreationPayload = z.infer<typeof RequestStatusAndCreationPayloadSchema>;
 
 
-// --- CalendarCreationPayload ---
+// --- RequestApprovalPayload ---
 // Schema
 export const RequestApprovalPayloadSchema = z
 	.object({
@@ -287,3 +287,20 @@ export const RequestApprovalPayloadSchema = z
 
 // Type
 export type RequestApprovalPayload = z.infer<typeof RequestApprovalPayloadSchema>;
+
+
+// --- CheckSlotPayload ---
+// Schema
+export const CheckSlotPayloadSchema = z.object({
+	calendar: z.uuid(),
+	datetimeStart: datetimeStringSchema,
+	datetimeEnd: datetimeStringSchema,
+}).strict()
+	// Ensure datetimeCreatedTo is after datetimeCreatedFrom
+	.refine((data) => data.datetimeEnd > data.datetimeStart, {
+		message: "datetimeEnd must be after datetimeStart",
+		path: ["datetimeEnd"],
+	});
+
+// Type
+export type CheckSlotPayload = z.infer<typeof CheckSlotPayloadSchema>;

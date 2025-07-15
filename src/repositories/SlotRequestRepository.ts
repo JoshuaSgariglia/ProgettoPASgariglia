@@ -1,6 +1,6 @@
 import { Op, Transaction } from "sequelize";
 import { SlotRequest } from "../models/SlotRequest";
-import { SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
+import { SlotRequestCreationData } from "../utils/schemas";
 import { RequestStatus } from "../utils/enums";
 
 export class SlotRequestRepository {
@@ -9,24 +9,30 @@ export class SlotRequestRepository {
     }
 
     public async getRequestsInPeriod(
-        calendar_id: string,
-        status: RequestStatus,
-        datetimeStart: Date,
-        datetimeEnd: Date
-    ): Promise<SlotRequest[]> {
-        return await SlotRequest.findAll({
-            where: {
-                "calendar": calendar_id,
-                "status": status,
-                [Op.not]: {
-                    [Op.or]: [
-                        { "datetimeEnd": { [Op.lte]: datetimeStart } }, // Ends before this slot starts
-                        { "datetimeStart": { [Op.gte]: datetimeEnd } }, // Starts after this slot ends
-                    ],
-                },
-            },
-        });
+    calendar_id: string,
+    datetimeStart: Date,
+    datetimeEnd: Date,
+    status?: RequestStatus // Status is optional
+): Promise<SlotRequest[]> {
+    const whereClause: any = {
+        "calendar": calendar_id,
+        [Op.not]: {
+            [Op.or]: [
+                { "datetimeEnd": { [Op.lte]: datetimeStart } }, // Ends before this slot starts
+                { "datetimeStart": { [Op.gte]: datetimeEnd } }, // Starts after this slot ends
+            ],
+        },
+    };
+
+    // Conditionally add status if provided
+    if (status !== undefined) {
+        whereClause["status"] = status;
     }
+
+    return await SlotRequest.findAll({
+        where: whereClause,
+    });
+}
 
     public async add(requestData: SlotRequestCreationData, transaction?: Transaction): Promise<SlotRequest> {
         return await SlotRequest.create(requestData, transaction ? { transaction } : {});

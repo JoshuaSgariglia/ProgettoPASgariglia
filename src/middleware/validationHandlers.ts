@@ -3,6 +3,7 @@ import { InputSource } from "../utils/enums";
 import {
     CalendarCreationPayloadSchema,
     CalendarUpdatePayloadSchema,
+    CheckSlotPayloadSchema,
     LoginPayloadSchema,
     RequestApprovalPayloadSchema,
     RequestStatusAndCreationPayloadSchema,
@@ -44,3 +45,4 @@ export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarU
 export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestPayloadSchema);
 export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(RequestStatusAndCreationPayloadSchema, InputSource.BODY, true);
 export const requestApprovalPayloadHandler = validationHandlerGenerator(RequestApprovalPayloadSchema);
+export const checkSlotPayloadHandler = validationHandlerGenerator(CheckSlotPayloadSchema);

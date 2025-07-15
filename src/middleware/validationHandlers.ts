@@ -1,6 +1,16 @@
 import { ZodType } from "zod";
 import { InputSource } from "../utils/enums";
-import { CalendarCreationPayloadSchema, CalendarUpdatePayloadSchema, LoginPayloadSchema, RequestStatusAndCreationPayloadSchema, SlotRequestPayloadSchema, UserPayloadSchema, UUIDParameterSchema, validate } from "../utils/schemas";
+import {
+    CalendarCreationPayloadSchema,
+    CalendarUpdatePayloadSchema,
+    LoginPayloadSchema,
+    RequestApprovalPayloadSchema,
+    RequestStatusAndCreationPayloadSchema,
+    SlotRequestPayloadSchema,
+    UserPayloadSchema,
+    UUIDParameterSchema,
+    validate
+} from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
 /**
@@ -33,3 +43,4 @@ export const calendarCreationPayloadHandler = validationHandlerGenerator(Calenda
 export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarUpdatePayloadSchema);
 export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestPayloadSchema);
 export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(RequestStatusAndCreationPayloadSchema, InputSource.BODY, true);
+export const requestApprovalPayloadHandler = validationHandlerGenerator(RequestApprovalPayloadSchema);

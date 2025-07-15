@@ -129,6 +129,12 @@ export class OngoingRequests extends BadRequest {
     }
 }
 
+export class IntersectingRequests extends BadRequest {
+    constructor() {
+        super("Cannot approve the request because there are approved intersecting requests")
+    }
+}
+
 // Bad Request errors - Payload validation
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {
@@ -244,5 +250,11 @@ export class ComputingResourceNotFound extends NotFound {
 export class CalendarNotFound extends NotFound {
     constructor() {
         super("The selected calendar does not exist")
+    }
+}
+
+export class SlotRequestNotFound extends NotFound {
+    constructor() {
+        super("The selected slot request does not exist")
     }
 }

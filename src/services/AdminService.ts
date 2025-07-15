@@ -1,6 +1,6 @@
 import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
-import { CalendarCreationPayload, CalendarUpdatePayload, UserPayload } from "../utils/schemas";
+import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload } from "../utils/schemas";
 import { genSalt, hash } from "bcrypt-ts";
 import { ErrorType, RequestStatus } from "../utils/enums";
 import { SALT_ROUNDS } from "../utils/config";
@@ -8,15 +8,13 @@ import { Calendar } from "../models/Calendar";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { ComputingResourceRepository } from "../repositories/ComputingResourceRepository";
 import { ComputingResource } from "../models/ComputingResource";
-import { Transaction } from "sequelize";
-import { withTransaction } from "../utils/connector/transactionDecorator";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
 
 export class AdminService {
     constructor(
-        private userRepository: UserRepository, 
-        private calendarRepository: CalendarRepository, 
+        private userRepository: UserRepository,
+        private calendarRepository: CalendarRepository,
         private slotRequestRepository: SlotRequestRepository,
         private computingResourceRepository: ComputingResourceRepository
     ) { }
@@ -40,7 +38,7 @@ export class AdminService {
             // Create new User
             return await this.userRepository.add(userPayload);
 
-        // User already exists
+            // User already exists
         } else if (user.username === userPayload.username) {
             throw ErrorType.UsernameAlreadyInUse;
 
@@ -93,7 +91,7 @@ export class AdminService {
     public async deleteCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
-      
+
         // Throws an error if there are ongoing requests
         await this.checkOngoingRequests(calendar_id)
 
@@ -112,6 +110,40 @@ export class AdminService {
 
         // Update calendar
         return await calendar.update({ "isArchived": true })
+    }
+
+
+    public async updateRequestStatus(request_id: string, requestApprovalPayload: RequestApprovalPayload): Promise<SlotRequest> {
+        // Throws an error if the calendar is nonexistent
+        const request: SlotRequest = await this.getRequestIfExists(request_id);
+
+        if (requestApprovalPayload.approved) {
+            if (request.status === RequestStatus.Approved)
+                return request;
+
+            // Need to check if there are already approved requests in the same calendar and time period
+            // Get intersecting approved requests in the same calendar
+            const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
+                request.calendar,
+                RequestStatus.Approved,
+                request.datetimeStart,
+                request.datetimeEnd
+            );
+
+            // Throw an error if there are approved intersecting requests
+            if (requests.length !== 0)
+                throw ErrorType.IntersectingRequests;
+
+            // Update Request status to Approved
+            return await request.update({ "status": RequestStatus.Approved })
+
+        } else {
+            if (request.status === RequestStatus.Refused)
+                return request
+                
+            // Update Request status to Refused
+            return await request.update({ "status": RequestStatus.Refused })
+        }
     }
 
 
@@ -140,6 +172,17 @@ export class AdminService {
             throw ErrorType.CalendarNotFound;
 
         return calendar;
+    }
+
+    private async getRequestIfExists(request_id: string): Promise<SlotRequest> {
+        // Search calendar by id
+        const request: SlotRequest | null = await this.slotRequestRepository.getById(request_id);
+
+        // Calendar does not exist
+        if (request === null)
+            throw ErrorType.SlotRequestNotFound;
+
+        return request;
     }
 
     private async getResourceIfExists(resource_id: string): Promise<ComputingResource> {

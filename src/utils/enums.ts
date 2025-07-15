@@ -49,6 +49,7 @@ export enum ErrorType {
 	CalendarSlotUnavailable = "CalendarSlotUnavailable",
 	CalendarArchived = "CalendarArchived",
 	OngoingRequests = "OngoingRequests",
+    IntersectingRequests = "IntersectingRequests",
 
 	// BadRequest errors - Payload validation
 	MissingInputField = "MissingInputField",
@@ -76,6 +77,7 @@ export enum ErrorType {
 	UndefinedRouteOrInvalidMethod = "UndefinedRouteOrInvalidMethod",
 	ComputingResourceNotFound = "ComputingResourceNotFound",
 	CalendarNotFound = "CalendarNotFound",
+    SlotRequestNotFound = "SlotRequestNotFound",
 }
 
 export enum SuccessType {

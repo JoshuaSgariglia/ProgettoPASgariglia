@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AdminService } from "../services/AdminService";
-import { CalendarCreationPayload, CalendarUpdatePayload, UserPayload } from "../utils/schemas";
+import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload } from "../utils/schemas";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
 import { SuccessType } from "../utils/enums";
 
@@ -41,6 +41,12 @@ export class AdminController {
 		const calendar = await this.adminService.archiveCalendar(req.params.id.toString());
 
 		SuccessResponseFactory.getResponse(SuccessType.CalendarArchived, { calendar: calendar.toJSON() }).sendIn(res);
+	};
+
+	public readonly updateRequestStatus = async (req: Request, res: Response): Promise<void> => {
+		const request = await this.adminService.updateRequestStatus(req.params.id.toString(), res.locals.validated as RequestApprovalPayload);
+
+		SuccessResponseFactory.getResponse(SuccessType.CalendarArchived, { status: request }).sendIn(res);
 	};
 
 }

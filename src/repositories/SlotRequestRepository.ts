@@ -5,7 +5,6 @@ import { RequestStatus } from "../utils/enums";
 
 export class SlotRequestRepository {
     public async getById(request_id: string): Promise<SlotRequest | null> {
-        console.log(request_id);
         return await SlotRequest.findByPk(request_id);
     }
 

@@ -26,8 +26,7 @@ function errorResponseHandler(err: ErrorResponse | any, req: Request, res: Respo
         err.sendIn(res)
     } else {
         next(err)
-    }
-        
+    }       
 }
 
 // === 4. Uncaught Error Handler (generates default ErrorResponse) ===

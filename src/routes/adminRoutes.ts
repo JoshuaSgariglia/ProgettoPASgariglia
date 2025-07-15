@@ -2,7 +2,7 @@ import { UserRepository } from "../repositories/UserRepository";
 import { AsyncRouter } from "../utils/AsyncRouter";
 import { AdminService } from "../services/AdminService";
 import { AdminController } from "../controllers/AdminController";
-import { calendarCreationPayloadHandler, calendarUpdatePayloadHandler, userPayloadHandler, uuidParameterHandler } from "../middleware/validationHandlers";
+import { calendarCreationPayloadHandler, calendarUpdatePayloadHandler, requestApprovalPayloadHandler, userPayloadHandler, uuidParameterHandler } from "../middleware/validationHandlers";
 import { ComputingResourceRepository } from "../repositories/ComputingResourceRepository";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
@@ -29,6 +29,8 @@ router.putAsync("/calendar/:id", uuidParameterHandler, calendarUpdatePayloadHand
 router.getAsync("/calendar/:id", uuidParameterHandler, adminController.getCalendar);
 router.deleteAsync("/calendar/:id", uuidParameterHandler, adminController.deleteCalendar);
 router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController.archiveCalendar);
+
+router.patchAsync("/request-status/:id", uuidParameterHandler, requestApprovalPayloadHandler, adminController.updateRequestStatus);
 
 
 // Export router as userRoutes

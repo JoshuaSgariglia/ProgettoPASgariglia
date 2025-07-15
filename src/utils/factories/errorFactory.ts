@@ -1,5 +1,5 @@
 import { ErrorType } from "../enums";
-import { BadRequest, CalendarArchived, CalendarNameAlreadyInUse, CalendarNotFound, CalendarSlotUnavailable, ComputingResourceNotFound, ComputingResourceUnavailable, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, OngoingRequests, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse } from "../responses/errorResponses";
+import { BadRequest, CalendarArchived, CalendarNameAlreadyInUse, CalendarNotFound, CalendarSlotUnavailable, ComputingResourceNotFound, ComputingResourceUnavailable, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, IntersectingRequests, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, OngoingRequests, SlotRequestNotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse } from "../responses/errorResponses";
 
 export class ErrorFactory {
     public static getError(type: ErrorType = ErrorType.InternalServerError, message?: string): ErrorResponse {
@@ -53,7 +53,9 @@ export class ErrorFactory {
             case ErrorType.OngoingRequests:
                 error = new OngoingRequests();
                 break;
-
+            case ErrorType.IntersectingRequests:
+                error = new IntersectingRequests();
+                break;
 
             // BadRequest errors - Payload validation
             case ErrorType.MissingInputField:
@@ -118,6 +120,9 @@ export class ErrorFactory {
                 break;
             case ErrorType.CalendarNotFound:
                 error = new CalendarNotFound();
+                break;
+            case ErrorType.SlotRequestNotFound:
+                error = new SlotRequestNotFound();
                 break;
 
             // Default error

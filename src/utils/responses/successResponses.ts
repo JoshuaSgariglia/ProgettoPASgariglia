@@ -99,6 +99,24 @@ export class SlotRequestsRetrieved extends OkayResponse {
     }
 }
 
+export class SlotRequestsApproved extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The request has been approved", 
+            data
+        );
+    }
+}
+
+export class SlotRequestsRefused extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The request has been refused", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {

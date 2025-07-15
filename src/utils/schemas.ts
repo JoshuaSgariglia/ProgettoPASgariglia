@@ -255,33 +255,35 @@ export type RequestStatusAndCreationPayload = z.infer<typeof RequestStatusAndCre
 // --- CalendarCreationPayload ---
 // Schema
 export const RequestApprovalPayloadSchema = z
-  .object({
-    approved: z.boolean(),
-    refusalReason: z
-      .string()
-      .trim()
-      .min(SlotRequestConfig.MIN_REFUSAL_REASON_LENGTH)
-      .max(SlotRequestConfig.MAX_REFUSAL_REASON_LENGTH)
-      .optional(),
-  })
-  .refine(
-    (data) => {
-      return data.approved || !data.refusalReason;
-    },
-    {
-      message: "refusalReason is required when approved is false",
-      path: ["refusalReason"],
-    }
-  )
-  .refine(
-    (data) => {
-      return !data.approved || data.refusalReason === undefined;
-    },
-    {
-      message: "refusalReason must be omitted when approved is true",
-      path: ["refusalReason"],
-    }
-  );
+	.object({
+		approved: z.boolean(),
+		refusalReason: z
+			.string()
+			.trim()
+			.min(SlotRequestConfig.MIN_REFUSAL_REASON_LENGTH)
+			.max(SlotRequestConfig.MAX_REFUSAL_REASON_LENGTH)
+			.optional(),
+	}).strict()
+	// Ensure that refusal is present when approved === false
+	.refine(
+		(data) => {
+			return data.approved || data.refusalReason !== undefined;
+		},
+		{
+			message: "refusalReason is required when approved is false",
+			path: ["refusalReason"],
+		}
+	)
+	// Ensure that refusal is omitted when approved === true
+	.refine(
+		(data) => {
+			return !data.approved || data.refusalReason === undefined;
+		},
+		{
+			message: "refusalReason must be omitted when approved is true",
+			path: ["refusalReason"],
+		}
+	)
 
 // Type
 export type RequestApprovalPayload = z.infer<typeof RequestApprovalPayloadSchema>;

@@ -30,7 +30,9 @@ router.getAsync("/calendar/:id", uuidParameterHandler, adminController.getCalend
 router.deleteAsync("/calendar/:id", uuidParameterHandler, adminController.deleteCalendar);
 router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController.archiveCalendar);
 
+// Request
 router.patchAsync("/request-status/:id", uuidParameterHandler, requestApprovalPayloadHandler, adminController.updateRequestStatus);
+
 
 
 // Export router as userRoutes

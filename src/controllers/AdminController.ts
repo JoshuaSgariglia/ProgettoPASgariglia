@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AdminService } from "../services/AdminService";
 import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload } from "../utils/schemas";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
-import { SuccessType } from "../utils/enums";
+import { RequestStatus, SuccessType } from "../utils/enums";
 
 export class AdminController {
 	constructor(private adminService: AdminService) { }
@@ -45,8 +45,9 @@ export class AdminController {
 
 	public readonly updateRequestStatus = async (req: Request, res: Response): Promise<void> => {
 		const request = await this.adminService.updateRequestStatus(req.params.id.toString(), res.locals.validated as RequestApprovalPayload);
+		const successType = request.status === RequestStatus.Approved ? SuccessType.SlotRequestApproved : SuccessType.SlotRequestRefused;
 
-		SuccessResponseFactory.getResponse(SuccessType.CalendarArchived, { status: request }).sendIn(res);
+		SuccessResponseFactory.getResponse(successType, { request: request }).sendIn(res);
 	};
 
 }

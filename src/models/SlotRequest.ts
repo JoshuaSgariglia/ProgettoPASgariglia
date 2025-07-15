@@ -13,7 +13,7 @@ export class SlotRequest extends Model<InferAttributes<SlotRequest>, InferCreati
   declare datetimeEnd: Date;
   declare title: string;
   declare reason: string;
-  declare refusalReason: CreationOptional<string>;
+  declare refusalReason: CreationOptional<string | null>;
 
 }
 

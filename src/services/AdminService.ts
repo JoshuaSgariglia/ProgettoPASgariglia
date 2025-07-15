@@ -135,14 +135,14 @@ export class AdminService {
                 throw ErrorType.IntersectingRequests;
 
             // Update Request status to Approved
-            return await request.update({ "status": RequestStatus.Approved })
+            return await request.update({ "status": RequestStatus.Approved, "refusalReason": null })
 
         } else {
             if (request.status === RequestStatus.Refused)
                 return request
                 
             // Update Request status to Refused
-            return await request.update({ "status": RequestStatus.Refused })
+            return await request.update({ "status": RequestStatus.Refused, "refusalReason":  requestApprovalPayload.refusalReason })
         }
     }
 

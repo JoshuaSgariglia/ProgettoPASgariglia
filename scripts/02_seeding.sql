@@ -28,15 +28,16 @@ INSERT INTO slot_requests (
   "datetimeStart", "datetimeEnd", "title", "reason", "refusalReason"
 ) VALUES
 -- Calendar 1
-('1a6f365e-f852-429b-afca-d724844e354a', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'pending', date_trunc('hour', now()), date_trunc('hour', now()) + interval '4 hours', 'Request 1', 'Reason 1', NULL),
-('79315a5d-4c3a-4ca9-b79d-8f214c7a59dc', '5664c112-a2b3-417c-a146-136c1f2c005b', '1baa324d-c819-4187-92da-41ab7508d13c', 'approved', date_trunc('hour', now()) + interval '6 hours', date_trunc('hour', now()) + interval '14 hours', 'Request 2', 'Reason 2', NULL),
-('69ecebc7-085c-4300-b04a-794a5db50504', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'refused', date_trunc('hour', now()) + interval '12 hours', date_trunc('hour', now()) + interval '18 hours', 'Request 3', 'Reason 3', 'RefusalReason 3'),
-('96452607-52d9-48da-ac41-763033164a76', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'pending', date_trunc('hour', now()) + interval '20 hours', date_trunc('hour', now()) + interval '26 hours', 'Request 4', 'Reason 4', NULL),
-('072c5946-303f-4247-b442-c1d8e6847654', 'b638c97e-5e2b-41ce-8654-74c3e0bb69ac', '1baa324d-c819-4187-92da-41ab7508d13c', 'approved', date_trunc('hour', now()) + interval '27 hours', date_trunc('hour', now()) + interval '39 hours', 'Request 5', 'Reason 5', NULL),
+('621c5ecf-1319-4d08-abaf-3b92d51c3678', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'approved', date_trunc('hour', now()), date_trunc('hour', now()) + interval '12 hours', 'Request 1', 'Reason 1', NULL),
+('1a6f365e-f852-429b-afca-d724844e354a', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'pending', TIMESTAMP '2025-09-15 10:00:00', TIMESTAMP '2025-09-15 14:00:00', 'Request 1', 'Reason 1', NULL),
+('79315a5d-4c3a-4ca9-b79d-8f214c7a59dc', '5664c112-a2b3-417c-a146-136c1f2c005b', '1baa324d-c819-4187-92da-41ab7508d13c', 'approved', TIMESTAMP '2025-09-15 16:00:00', TIMESTAMP '2025-09-16 00:00:00', 'Request 2', 'Reason 2', NULL),
+('69ecebc7-085c-4300-b04a-794a5db50504', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'refused', TIMESTAMP '2025-09-15 22:00:00', TIMESTAMP '2025-09-16 04:00:00', 'Request 3', 'Reason 3', 'RefusalReason 3'),
+('96452607-52d9-48da-ac41-763033164a76', '72a84090-8f1a-4067-828b-1c975669eea4', '1baa324d-c819-4187-92da-41ab7508d13c', 'pending', TIMESTAMP '2025-09-16 06:00:00', TIMESTAMP '2025-09-16 12:00:00', 'Request 4', 'Reason 4', NULL),
+('072c5946-303f-4247-b442-c1d8e6847654', 'b638c97e-5e2b-41ce-8654-74c3e0bb69ac', '1baa324d-c819-4187-92da-41ab7508d13c', 'approved', TIMESTAMP '2025-09-16 13:00:00', TIMESTAMP '2025-09-17 06:00:00', 'Request 5', 'Reason 5', NULL),
 
 -- Calendar 2
-('308481e0-a814-4f7d-9909-a2352de25191', 'b638c97e-5e2b-41ce-8654-74c3e0bb69ac', '78819106-363f-482a-8a88-71982fdf671c', 'approved', date_trunc('hour', now()), date_trunc('hour', now()) + interval '8 hours', 'Request 6', 'Reason 6', NULL),
-('45a307bf-1762-4a9f-8388-21a070bd58fd', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'refused', date_trunc('hour', now()) + interval '6 hours', date_trunc('hour', now()) + interval '11 hours', 'Request 7', 'Reason 7', 'RefusalReason 7'),
-('7e30a03b-169d-43ba-a1bd-893d79a07b54', '72a84090-8f1a-4067-828b-1c975669eea4', '78819106-363f-482a-8a88-71982fdf671c', 'pending', date_trunc('hour', now()) + interval '10 hours', date_trunc('hour', now()) + interval '20 hours', 'Request 8', 'Reason 8', NULL),
-('1fa2c00d-defe-482c-ae8a-0e5cc3e20e92', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'approved', date_trunc('hour', now()) + interval '24 hours', date_trunc('hour', now()) + interval '32 hours', 'Request 9', 'Reason 9', NULL),
-('22e709c2-8a05-47f2-a88f-b8f7e3d339c5', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'pending', date_trunc('hour', now()) + interval '12 hours', date_trunc('hour', now()) + interval '20 hours', 'Request 10', 'Reason 10', NULL);
+('308481e0-a814-4f7d-9909-a2352de25191', 'b638c97e-5e2b-41ce-8654-74c3e0bb69ac', '78819106-363f-482a-8a88-71982fdf671c', 'approved', TIMESTAMP '2025-09-15 10:00:00', TIMESTAMP '2025-09-15 18:00:00', 'Request 6', 'Reason 6', NULL),
+('45a307bf-1762-4a9f-8388-21a070bd58fd', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'refused', TIMESTAMP '2025-09-15 16:00:00', TIMESTAMP '2025-09-15 21:00:00', 'Request 7', 'Reason 7', 'RefusalReason 7'),
+('7e30a03b-169d-43ba-a1bd-893d79a07b54', '72a84090-8f1a-4067-828b-1c975669eea4', '78819106-363f-482a-8a88-71982fdf671c', 'pending', TIMESTAMP '2025-09-15 20:00:00', TIMESTAMP '2025-09-16 06:00:00', 'Request 8', 'Reason 8', NULL),
+('1fa2c00d-defe-482c-ae8a-0e5cc3e20e92', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'approved', TIMESTAMP '2025-09-16 10:00:00', TIMESTAMP '2025-09-16 18:00:00', 'Request 9', 'Reason 9', NULL),
+('22e709c2-8a05-47f2-a88f-b8f7e3d339c5', '5664c112-a2b3-417c-a146-136c1f2c005b', '78819106-363f-482a-8a88-71982fdf671c', 'pending', TIMESTAMP '2025-09-15 22:00:00', TIMESTAMP '2025-09-16 06:00:00', 'Request 10', 'Reason 10', NULL);

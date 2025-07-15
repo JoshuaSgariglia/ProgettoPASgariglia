@@ -29,7 +29,7 @@ export class SlotRequestRepository {
 
         // Filter by user if provided
         if (user_id) {
-            whereClause.user_id = user_id;
+            whereClause.user = user_id;
         }
 
         // Apply datetime filtering based on provided values

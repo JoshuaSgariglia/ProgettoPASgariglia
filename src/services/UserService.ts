@@ -203,7 +203,7 @@ export class UserService {
 	public async getRequestsByStatusAndPeriod(user_id: string, slotRequestPayload: RequestStatusAndPeriodPayload): Promise<SlotRequest[]> {
 		if (slotRequestPayload.calendar)
 			// Throws error if calendar does not exist or if it is archived
-			await this.getCalendarIfExistsAndNotArchived(slotRequestPayload.calendar);
+			await this.getCalendarIfExists(slotRequestPayload.calendar);
 
 		// Return list of requests that match the filters
 		return await this.slotRequestRepository.getRequestsInPeriod(
@@ -214,9 +214,6 @@ export class UserService {
 			user_id
 		);
 	}
-
-
-
 
 	// === Helper functions ===
 
@@ -230,6 +227,17 @@ export class UserService {
 
 		return request;
 	}
+
+	private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {
+        // Search calendar by id
+        const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
+
+        // Calendar does not exist
+        if (calendar === null)
+            throw ErrorType.CalendarNotFound;
+
+        return calendar;
+    }
 
 	private async getCalendarIfExistsAndNotArchived(calendar_id: string): Promise<Calendar> {
 		// Search calendar by id

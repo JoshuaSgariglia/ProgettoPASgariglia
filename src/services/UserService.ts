@@ -87,10 +87,10 @@ export class UserService {
 	}
 
 	public async deleteSlotRequest(user_id: string, request_id: string): Promise<SlotRequestDeletionInfo> {
-		console.log("Checkpoint")
-
 		// Throws error if request does not exist or if it is not owned by the user
 		const request: SlotRequest = await this.getRequestIfExistsAndOwnedByUser(request_id, user_id);
+
+		console.log(request.status)
 
 		// Deny deletion if request is refused
 		if (request.status === RequestStatus.Refused)
@@ -130,7 +130,7 @@ export class UserService {
 			// Get current datetime
 			const now = new Date();
 
-			// Determine number of unused hours and value of pensalty
+			// Determine number of unused hours and value of penalty
 			let unusedHours: number;
 			let penalty: number;
 

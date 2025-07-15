@@ -50,8 +50,8 @@ export enum ErrorType {
 	CalendarArchived = "CalendarArchived",
 	OngoingRequests = "OngoingRequests",
     IntersectingRequests = "IntersectingRequests",
+	RefusedRequestDeletion = "RefusedRequestDeletion",
 	ArchivedRequestDeletion = "ArchivedRequestDeletion",
-	RefusedRequestDeletion = "ArchivedRequestDeletion",
 	FullyUsedRequestDeletion = "FullyUsedRequestDeletion",
 
 	// BadRequest errors - Payload validation

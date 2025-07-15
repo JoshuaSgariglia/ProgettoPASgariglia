@@ -3,7 +3,7 @@ import { UserService } from "../services/UserService";
 import { AsyncRouter } from "../utils/AsyncRouter";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { CalendarRepository } from "../repositories/CalendarRepository";
-import { checkSlotPayloadHandler, requestStatusAndCreationPayloadHandler, slotRequestPayloadHandler, uuidParameterHandler } from "../middleware/validationHandlers";
+import { checkSlotPayloadHandler, requestStatusAndCreationPayloadHandler, requestStatusAndPeriodPayloadHandler, slotRequestPayloadHandler, uuidParameterHandler } from "../middleware/validationHandlers";
 import { UserRepository } from "../repositories/UserRepository";
 
 // Instantiate Router
@@ -20,8 +20,9 @@ const userController = new UserController(userService);
 
 // Request
 router.postAsync("/request", slotRequestPayloadHandler, userController.createSlotRequest);
-router.getAsync("/requests-status", requestStatusAndCreationPayloadHandler, userController.getRequestsByStatusAndCreationPeriod);
+router.getAsync("/requests-status", requestStatusAndCreationPayloadHandler, userController.getRequestsByStatusAndCreation);
 router.deleteAsync("/request/:id", uuidParameterHandler, userController.deleteSlotRequest);
+router.getAsync("/requests", requestStatusAndPeriodPayloadHandler, userController.getRequestsByStatusAndPeriod);
 
 // Calendar slot
 router.getAsync("/calendar-slot", checkSlotPayloadHandler, userController.checkCalendarSlot);

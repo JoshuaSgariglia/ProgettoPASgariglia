@@ -7,6 +7,7 @@ import {
     LoginPayloadSchema,
     RequestApprovalPayloadSchema,
     RequestStatusAndCreationPayloadSchema,
+    RequestStatusAndPeriodPayloadSchema,
     SlotRequestPayloadSchema,
     UserPayloadSchema,
     UUIDParameterSchema,
@@ -46,3 +47,4 @@ export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestP
 export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(RequestStatusAndCreationPayloadSchema, InputSource.BODY, true);
 export const requestApprovalPayloadHandler = validationHandlerGenerator(RequestApprovalPayloadSchema);
 export const checkSlotPayloadHandler = validationHandlerGenerator(CheckSlotPayloadSchema);
+export const requestStatusAndPeriodPayloadHandler = validationHandlerGenerator(RequestStatusAndPeriodPayloadSchema, InputSource.BODY, true);

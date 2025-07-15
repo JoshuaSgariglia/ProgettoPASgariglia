@@ -7,7 +7,7 @@ import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { UserRepository } from "../repositories/UserRepository";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
-import { CheckSlotPayload, RequestStatusAndCreationPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
+import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
 import { CalendarSlotInfo, hoursDiff, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/misc";
 import { SlotRequestConfig } from "../utils/config";
 
@@ -25,9 +25,9 @@ export class UserService {
 		// Get intersecting requests
 		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
 			slotRequestPayload.calendar,
+			RequestStatus.Approved,
 			slotRequestPayload.datetimeStart,
 			slotRequestPayload.datetimeEnd,
-			RequestStatus.Approved
 		);
 
 		// Check that there are no approved intersecting requests
@@ -77,7 +77,8 @@ export class UserService {
 		return { "request": slotRequest, "requestCost": requestCost, "remainingTokens": user!.tokenAmount }
 	}
 
-	public async getRequestsByStatusAndCreationPeriod(user_id: string, slotRequestPayload: RequestStatusAndCreationPayload): Promise<SlotRequest[]> {
+	// Get list of requests filtered by user, status and creation datetime
+	public async getRequestsByStatusAndCreation(user_id: string, slotRequestPayload: RequestStatusAndCreationPayload): Promise<SlotRequest[]> {
 		return await this.slotRequestRepository.getRequestsByStatusAndCreationPeriod(
 			user_id,
 			slotRequestPayload.status,
@@ -143,6 +144,7 @@ export class UserService {
 				unusedHours = Math.floor(hoursDiff(now, request.datetimeEnd));
 				penalty = SlotRequestConfig.PARTIAL_USE_DELETION_PENALTY;
 			} else {
+				console.log("Checkpoint")
 				// Fully used
 				throw ErrorType.FullyUsedRequestDeletion
 			}
@@ -183,18 +185,34 @@ export class UserService {
 		// Get intersecting requests
 		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(
 			calendar.uuid,
+			RequestStatus.Approved,
 			checkSlotPayload.datetimeStart,
 			checkSlotPayload.datetimeEnd,
-			RequestStatus.Approved
 		);
 
-		// Return
+		// Return info about the availability of the slot
 		return {
 			"calendar_id": calendar.uuid,
 			"datetimeStart": checkSlotPayload.datetimeStart, 
 			"datetimeEnd": checkSlotPayload.datetimeEnd,
 			"available": requests.length === 0
 		}
+	}
+
+	// Get list of requests filtered by calendar, user, status and creation datetime
+	public async getRequestsByStatusAndPeriod(user_id: string, slotRequestPayload: RequestStatusAndPeriodPayload): Promise<SlotRequest[]> {
+		if (slotRequestPayload.calendar)
+			// Throws error if calendar does not exist or if it is archived
+			await this.getCalendarIfExistsAndNotArchived(slotRequestPayload.calendar);
+
+		// Return list of requests that match the filters
+		return await this.slotRequestRepository.getRequestsInPeriod(
+			slotRequestPayload.calendar,
+			slotRequestPayload.status,
+			slotRequestPayload.datetimeStart,
+			slotRequestPayload.datetimeEnd,
+			user_id
+		);
 	}
 
 

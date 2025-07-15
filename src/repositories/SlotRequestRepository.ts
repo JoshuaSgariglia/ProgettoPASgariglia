@@ -9,30 +9,50 @@ export class SlotRequestRepository {
     }
 
     public async getRequestsInPeriod(
-    calendar_id: string,
-    datetimeStart: Date,
-    datetimeEnd: Date,
-    status?: RequestStatus // Status is optional
-): Promise<SlotRequest[]> {
-    const whereClause: any = {
-        "calendar": calendar_id,
-        [Op.not]: {
-            [Op.or]: [
-                { "datetimeEnd": { [Op.lte]: datetimeStart } }, // Ends before this slot starts
-                { "datetimeStart": { [Op.gte]: datetimeEnd } }, // Starts after this slot ends
-            ],
-        },
-    };
+        calendar_id?: string,
+        status?: RequestStatus,
+        datetimeStart?: Date,
+        datetimeEnd?: Date,
+        user_id?: string  
+    ): Promise<SlotRequest[]> {
+        const whereClause: any = {};
 
-    // Conditionally add status if provided
-    if (status !== undefined) {
-        whereClause["status"] = status;
+        // Filter by calendar if provided
+        if (calendar_id) {
+            whereClause.calendar = calendar_id;
+        }
+
+        // Filter by status if provided
+        if (status) {
+            whereClause.status = status;
+        }
+
+        // Filter by user if provided
+        if (user_id) {
+            whereClause.user_id = user_id;
+        }
+
+        // Apply datetime filtering based on provided values
+        if (datetimeStart && datetimeEnd) {
+            // Overlapping condition: exclude requests that end before start or start after end
+            whereClause[Op.not] = {
+                [Op.or]: [
+                    { datetimeEnd: { [Op.lte]: datetimeStart } }, // Ends before this slot starts
+                    { datetimeStart: { [Op.gte]: datetimeEnd } }, // Starts after this slot ends
+                ],
+            };
+        } else if (datetimeStart) {
+            // Only filter requests that end after the provided start
+            whereClause.datetimeEnd = { [Op.gt]: datetimeStart };
+        } else if (datetimeEnd) {
+            // Only filter requests that start before the provided end
+            whereClause.datetimeStart = { [Op.lt]: datetimeEnd };
+        }
+
+        return await SlotRequest.findAll({
+            where: whereClause,
+        });
     }
-
-    return await SlotRequest.findAll({
-        where: whereClause,
-    });
-}
 
     public async add(requestData: SlotRequestCreationData, transaction?: Transaction): Promise<SlotRequest> {
         return await SlotRequest.create(requestData, transaction ? { transaction } : {});

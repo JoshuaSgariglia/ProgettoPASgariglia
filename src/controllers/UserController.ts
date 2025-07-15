@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/UserService";
-import { CheckSlotPayload, RequestStatusAndCreationPayload, SlotRequestPayload } from "../utils/schemas";
+import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestPayload } from "../utils/schemas";
 import { RequestStatus, SuccessType } from "../utils/enums";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
 
@@ -14,8 +14,8 @@ export class UserController {
 		SuccessResponseFactory.getResponse(successType, { "request": request.toJSON(), ...requestInfo }).sendIn(res);
 	}
 
-	public readonly getRequestsByStatusAndCreationPeriod = async (req: Request, res: Response): Promise<void> => {
-		const requests = await this.userService.getRequestsByStatusAndCreationPeriod(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
+	public readonly getRequestsByStatusAndCreation = async (req: Request, res: Response): Promise<void> => {
+		const requests = await this.userService.getRequestsByStatusAndCreation(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
 
 		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requests }).sendIn(res);
 	}
@@ -31,6 +31,12 @@ export class UserController {
 		const successType = calendarSlotInfo.available ? SuccessType.CalendarSlotAvailable : SuccessType.CalendarSlotUnavailable;
 
 		SuccessResponseFactory.getResponse(successType, calendarSlotInfo).sendIn(res);
+	}
+
+	public readonly getRequestsByStatusAndPeriod = async (req: Request, res: Response): Promise<void> => {
+		const requests = await this.userService.getRequestsByStatusAndPeriod(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndPeriodPayload);
+
+		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requests }).sendIn(res);
 	}
 
 }

@@ -293,10 +293,10 @@ export type RequestApprovalPayload = z.infer<typeof RequestApprovalPayloadSchema
 // Schema
 export const CheckSlotPayloadSchema = z.object({
 	calendar: z.uuid(),
-	datetimeStart: datetimeStringSchema,
-	datetimeEnd: datetimeStringSchema,
+	datetimeStart: datetimeHourStringSchema,
+	datetimeEnd: datetimeHourStringSchema,
 }).strict()
-	// Ensure datetimeCreatedTo is after datetimeCreatedFrom
+	// Ensure datetimeEnd is after datetimeStart
 	.refine((data) => data.datetimeEnd > data.datetimeStart, {
 		message: "datetimeEnd must be after datetimeStart",
 		path: ["datetimeEnd"],
@@ -304,3 +304,26 @@ export const CheckSlotPayloadSchema = z.object({
 
 // Type
 export type CheckSlotPayload = z.infer<typeof CheckSlotPayloadSchema>;
+
+
+// --- RequestStatusAndCreationPayload ---
+// Schema
+export const RequestStatusAndPeriodPayloadSchema = z.object({
+	calendar: z.uuid().optional(),
+	status: z.enum(RequestStatus).optional(),
+	datetimeStart: datetimeHourStringSchema.optional(),
+	datetimeEnd: datetimeHourStringSchema.optional()
+}).strict()
+	// Ensure datetimeEnd is after datetimeStart
+	.refine((data) => {
+		if (data.datetimeStart && data.datetimeEnd) {
+			return data.datetimeEnd > data.datetimeStart;
+		}
+		return true; // Skip validation if either is missing
+	}, {
+		message: "datetimeEnd must be after datetimeStart",
+		path: ["datetimeEnd"],
+	});
+
+// Type
+export type RequestStatusAndPeriodPayload = z.infer<typeof RequestStatusAndPeriodPayloadSchema>;

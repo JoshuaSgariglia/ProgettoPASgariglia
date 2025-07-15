@@ -6,12 +6,12 @@ import { ComputingResource, defineComputingResourceModel } from '../../models/Co
 
 export class DatabaseConnector {
   private static instance: Sequelize;
-  
-  private constructor() {}
+
+  private constructor() { }
 
   public static getInstance(): Sequelize {
     if (!DatabaseConnector.instance) {
-      DatabaseConnector.instance = this.getDatabaseConnector(); 
+      DatabaseConnector.instance = this.getDatabaseConnector();
     }
     return DatabaseConnector.instance;
   }
@@ -26,22 +26,25 @@ export class DatabaseConnector {
     // Setup associations
     this.associateModels();
 
+    // Set cascading behaviour for soft delete
+    this.setHooks()
+
     return sequelize;
   }
 
   private static initSequelize(): Sequelize {
     return new Sequelize(
-        process.env.POSTGRES_DB || "postgres",
-        process.env.POSTGRES_USER || "db-admin",
-        process.env.POSTGRES_PASSWORD || "password",
-        {
-          host: process.env.POSTGRES_HOST || "localhost",
-          port: Number(process.env.POSTGRES_PORT || "5432"),
-          dialect: "postgres",
-          timezone: '+02:00',
-          logging: false,
-        }
-      );
+      process.env.POSTGRES_DB || "postgres",
+      process.env.POSTGRES_USER || "db-admin",
+      process.env.POSTGRES_PASSWORD || "password",
+      {
+        host: process.env.POSTGRES_HOST || "localhost",
+        port: Number(process.env.POSTGRES_PORT || "5432"),
+        dialect: "postgres",
+        timezone: '+02:00',
+        logging: false,
+      }
+    );
   }
 
   private static defineModels(sequelize: Sequelize): void {
@@ -65,5 +68,18 @@ export class DatabaseConnector {
 
     // Calendar has one ComputingResource
     Calendar.belongsTo(ComputingResource, { foreignKey: 'resource', targetKey: 'uuid' });
+  }
+
+  private static setHooks(): void {
+    // Hook to soft delete related requests when a calendar is soft-deleted
+    Calendar.addHook('afterDestroy', async (calendar, options) => {
+      const calendarUuid = calendar.getDataValue('uuid'); // Safely access UUID
+
+      await SlotRequest.destroy({
+        where: { calendar: calendarUuid },
+        individualHooks: true,
+        transaction: options.transaction, // best practice if using transactions
+      });
+    });
   }
 }

@@ -3,7 +3,6 @@ import { UserService } from "../services/UserService";
 import { RequestStatusAndCreationPayload, SlotRequestPayload } from "../utils/schemas";
 import { RequestStatus, SuccessType } from "../utils/enums";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
-import { success } from "zod";
 
 export class UserController {
 	constructor(private userService: UserService) { }
@@ -19,6 +18,12 @@ export class UserController {
 		const requests = await this.userService.getRequestsByStatusAndCreationPeriod(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
 
 		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requests }).sendIn(res);
+	}
+
+	public readonly deleteSlotRequest = async (req: Request, res: Response): Promise<void> => {
+		const requestDeletionInfo = await this.userService.deleteSlotRequest(res.locals.tokenPayload.uuid, req.params.id.toString());
+
+		SuccessResponseFactory.getResponse(SuccessType.SlotRequestDeleted, requestDeletionInfo).sendIn(res);
 	}
 
 }

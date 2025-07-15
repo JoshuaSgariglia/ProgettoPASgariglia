@@ -21,3 +21,13 @@ export interface SlotRequestCreationInfo {
     requestCost: number;
     remainingTokens: number;
 };
+
+export interface SlotRequestDeletionInfo {
+    request: SlotRequest;
+    tokenCostPerHour: number;
+    tokenPenalty: number;
+    unusedHours: number;
+    totalHours: number;
+    refundedTokens: number;
+    remainingTokens: number;
+};

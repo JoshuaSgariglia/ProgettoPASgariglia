@@ -50,6 +50,9 @@ export enum ErrorType {
 	CalendarArchived = "CalendarArchived",
 	OngoingRequests = "OngoingRequests",
     IntersectingRequests = "IntersectingRequests",
+	ArchivedRequestDeletion = "ArchivedRequestDeletion",
+	RefusedRequestDeletion = "ArchivedRequestDeletion",
+	FullyUsedRequestDeletion = "FullyUsedRequestDeletion",
 
 	// BadRequest errors - Payload validation
 	MissingInputField = "MissingInputField",
@@ -94,6 +97,7 @@ export enum SuccessType {
 	SlotRequestsRetrieved = "SlotRequestsRetrieved",
 	SlotRequestApproved = "SlotRequestApproved",
 	SlotRequestRefused = "SlotRequestRefused",
+	SlotRequestDeleted = "SlotRequestDeleted",
 
 	// Created Success
 	AccountLoggedIn = "AccountLoggedIn",

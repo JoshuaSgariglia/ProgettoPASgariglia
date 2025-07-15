@@ -99,7 +99,7 @@ export class SlotRequestsRetrieved extends OkayResponse {
     }
 }
 
-export class SlotRequestsApproved extends OkayResponse {
+export class SlotRequestApproved extends OkayResponse {
     constructor(data?: object) {
         super(
             "The request has been approved", 
@@ -108,10 +108,19 @@ export class SlotRequestsApproved extends OkayResponse {
     }
 }
 
-export class SlotRequestsRefused extends OkayResponse {
+export class SlotRequestRefused extends OkayResponse {
     constructor(data?: object) {
         super(
             "The request has been refused", 
+            data
+        );
+    }
+}
+
+export class SlotRequestDeleted extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The request has been successfully deleted", 
             data
         );
     }

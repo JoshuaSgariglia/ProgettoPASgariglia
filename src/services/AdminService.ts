@@ -10,6 +10,7 @@ import { ComputingResourceRepository } from "../repositories/ComputingResourceRe
 import { ComputingResource } from "../models/ComputingResource";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
+import { getTransaction, withTransaction } from "../utils/connector/transactionDecorator";
 
 export class AdminService {
     constructor(
@@ -95,8 +96,10 @@ export class AdminService {
         // Throws an error if there are ongoing requests
         await this.checkOngoingRequests(calendar_id)
 
-        // Delete calendar
-        await calendar.destroy();
+        // Delete calendar - transaction is for cascading soft delete
+        await withTransaction(async (transaction) => {
+            await calendar.destroy({ transaction });
+        });
 
         return calendar;
     }
@@ -175,10 +178,10 @@ export class AdminService {
     }
 
     private async getRequestIfExists(request_id: string): Promise<SlotRequest> {
-        // Search calendar by id
+        // Search request by id
         const request: SlotRequest | null = await this.slotRequestRepository.getById(request_id);
 
-        // Calendar does not exist
+        // Request does not exist
         if (request === null)
             throw ErrorType.SlotRequestNotFound;
 

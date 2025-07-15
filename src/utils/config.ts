@@ -72,7 +72,6 @@ export class UserConfig {
   static MAX_TOKEN_AMOUNT: number = 10000
 }
 
-
 // SlotRequest
 export class SlotRequestConfig {
   static MIN_TITLE_LENGTH: number = 3;
@@ -81,6 +80,8 @@ export class SlotRequestConfig {
   static MAX_REASON_LENGTH: number = 512;
   static MIN_REFUSAL_REASON_LENGTH: number = 3;
   static MAX_REFUSAL_REASON_LENGTH: number = 512;
+  static UNUSED_DELETION_PENALTY: number = 1;
+  static PARTIAL_USE_DELETION_PENALTY: number = 2;
 }
 
 // Calendar

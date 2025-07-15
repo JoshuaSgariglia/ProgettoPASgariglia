@@ -135,6 +135,24 @@ export class IntersectingRequests extends BadRequest {
     }
 }
 
+export class RefusedRequestDeletion extends BadRequest {
+    constructor() {
+        super("Cannot delete a refused request")
+    }
+}
+
+export class ArchivedRequestDeletion extends BadRequest {
+    constructor() {
+        super("Cannot delete an archived request")
+    }
+}
+
+export class FullyUsedRequestDeletion extends BadRequest {
+    constructor() {
+        super("Cannot delete a request that has been fully used")
+    }
+}
+
 // Bad Request errors - Payload validation
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {

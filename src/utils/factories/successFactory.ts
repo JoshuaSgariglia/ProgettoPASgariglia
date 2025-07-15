@@ -1,5 +1,5 @@
 import { SuccessType } from "../enums";
-import { AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted, CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse, ServiceOnline, SlotRequestCreated, SlotRequestsApproved, SlotRequestsRefused, SlotRequestsRetrieved, SuccessResponse } from "../responses/successResponses";
+import { AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted, CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse, ServiceOnline, SlotRequestCreated, SlotRequestApproved, SlotRequestRefused, SlotRequestsRetrieved, SuccessResponse, SlotRequestDeleted } from "../responses/successResponses";
 
 export class SuccessResponseFactory {
     public static getResponse(type: SuccessType = SuccessType.OK, data?: object): SuccessResponse {
@@ -36,10 +36,13 @@ export class SuccessResponseFactory {
                 response = new SlotRequestsRetrieved(data);
                 break;
             case SuccessType.SlotRequestApproved:
-                response = new SlotRequestsApproved(data);
+                response = new SlotRequestApproved(data);
                 break;
             case SuccessType.SlotRequestRefused:
-                response = new SlotRequestsRefused(data);
+                response = new SlotRequestRefused(data);
+                break;
+            case SuccessType.SlotRequestDeleted:
+                response = new SlotRequestDeleted(data);
                 break;
 
             // Created success

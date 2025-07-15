@@ -3,9 +3,13 @@ import { DatabaseConnector } from "./DatabaseConnector";
 
 type TransactionCallback = (transaction: Transaction) => Promise<any>;
 
+export async function getTransaction(): Promise<Transaction> {
+    return await DatabaseConnector.getInstance().transaction();
+}
+
 export async function withTransaction(transactionCallback: TransactionCallback) {
     // Get a transaction from the conenctor and save it into a variable
-    const transaction: Transaction = await DatabaseConnector.getInstance().transaction();
+    const transaction: Transaction = await getTransaction()
 
     try {
         // Then, pass this transaction as argument to transactionCallback

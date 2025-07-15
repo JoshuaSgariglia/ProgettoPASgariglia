@@ -6,6 +6,16 @@ export function hoursDiff(datetimeStart: Date, datetimeEnd: Date): number {
     return diffInMs / (1000 * 60 * 60);    // Convert to hours
 }
 
+// Converts a standard API input date string to the date format
+export function inputStringToDate(dateString: string): Date {
+    return new Date(dateString.replace(" ", "T") + ":00");
+}
+
+export function isDateValid(date: Date) {
+    return !isNaN(date.getTime());
+}
+
+
 export interface SlotRequestCreationInfo {
     request: SlotRequest;
     requestCost: number;

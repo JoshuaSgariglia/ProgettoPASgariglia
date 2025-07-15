@@ -3,6 +3,7 @@ import { ErrorType, RequestStatus, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
 import { ErrorFactory } from "./factories/errorFactory";
+import { inputStringToDate, isDateValid } from "./misc";
 
 
 
@@ -103,31 +104,35 @@ export function validate<T>(
 // Custom validation rules
 
 // Datetime that forces minutes and seconds to zero
-const datetimeHourStringSchema = z
-	.string()
-	.regex(/^\d{4}-\d{2}-\d{2} \d{2}:00$/, {
-		message: "Datetime must be in format YYYY-MM-DD HH:00 (minutes and seconds must be zero)",
-	})
-	.refine((str) => {
-		const date = new Date(str.replace(" ", "T") + ":00");
-		return !isNaN(date.getTime()); // Valid date
-	}, {
-		message: "Invalid date (e.g. month > 12, day > 31, etc.)",
-	})
-	.transform((str) => new Date(str.replace(" ", "T") + ":00"));
+// Reusable factory for datetime schemas
+function createDatetimeSchema({ format, regex, errorMessage }: {
+	format: string;
+	regex: RegExp;
+	errorMessage: string;
+}) {
+	return z
+		.string()
+		.regex(regex, { message: `Datetime must be in format ${format} (${errorMessage})` })
+		.refine((str) => {
+			return isDateValid(inputStringToDate(str))
+		}, {
+			message: "Invalid date (e.g. month > 12, day > 31, etc.)"
+		})
+		.transform((str) => inputStringToDate(str));
+}
 
-const datetimeStringSchema = z
-	.string()
-	.regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/, {
-		message: "Datetime must be in format YYYY-MM-DD HH:mm (seconds must be zero)",
-	})
-	.refine((str) => {
-		const date = new Date(str.replace(" ", "T") + ":00");
-		return !isNaN(date.getTime()); // Valid date
-	}, {
-		message: "Invalid date (e.g. month > 12, day > 31, etc.)",
-	})
-	.transform((str) => new Date(str.replace(" ", "T") + ":00"));
+// Define specific schemas
+export const datetimeHourStringSchema = createDatetimeSchema({
+	format: "YYYY-MM-DD HH:00",
+	regex: /^\d{4}-\d{2}-\d{2} \d{2}:00$/,
+	errorMessage: "minutes and seconds must be zero"
+});
+
+export const datetimeStringSchema = createDatetimeSchema({
+	format: "YYYY-MM-DD HH:mm",
+	regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/,
+	errorMessage: "seconds must be zero"
+});
 
 
 // --- TokenPayload ---

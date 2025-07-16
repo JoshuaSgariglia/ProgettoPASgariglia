@@ -3,11 +3,11 @@ import { ErrorType, RequestStatus, UserRole } from "./enums";
 import { z, ZodType } from 'zod';
 import { ErrorResponse } from "./responses/errorResponses";
 import { ErrorFactory } from "./factories/errorFactory";
-import { inputStringToDate, isDateValid } from "./misc";
+import { inputStringToDate, isDateValid } from "./datetimeUtils";
 
 
 
-// === Validate ===
+// === Validate function ===
 export function validate<T>(
 	schema: ZodType<T>,
 	input: unknown,
@@ -38,7 +38,7 @@ export function validate<T>(
 		let message: string = firstIssue.message
 		let response: ErrorResponse = ErrorFactory.getError(ErrorType.InvalidPayload, message);
 
-		// Custom error based on first Zod reposted issue
+		// Custom error based on first Zod reposted issue (factory pattern)
 		switch (firstIssue.code) {
 			case 'unrecognized_keys':
 				message = firstIssue.message;
@@ -99,9 +99,7 @@ export function validate<T>(
 	return { success: true, data: result.data };
 }
 
-// === Schemas ===
-
-// Custom validation rules
+// === Custom validation rules for schemas ===
 
 // Datetime that forces minutes and seconds to zero
 // Reusable factory for datetime schemas
@@ -134,6 +132,7 @@ export const datetimeStringSchema = createDatetimeSchema({
 	errorMessage: "seconds must be zero"
 });
 
+// === Schemas and inferred types ===
 
 // --- TokenPayload ---
 // Schema
@@ -149,6 +148,7 @@ export type TokenPayload = z.infer<typeof TokenPayloadSchema>;
 export const UUIDParameterSchema = z.object({
 	id: z.uuid(),
 }).strict();
+
 
 // --- LoginPayload ---
 // Schema

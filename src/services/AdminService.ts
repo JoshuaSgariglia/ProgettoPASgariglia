@@ -11,7 +11,7 @@ import { ComputingResource } from "../models/ComputingResource";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
 import { withTransaction } from "../utils/connector/transactionDecorator";
-import { UserTokenUpdateInfo } from "../utils/misc";
+import { UserTokenUpdateInfo } from "../utils/interfaces";
 
 /*
  * Service with business logic, orchestrator between controller and repositories.

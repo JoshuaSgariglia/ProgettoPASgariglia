@@ -8,7 +8,8 @@ import { UserRepository } from "../repositories/UserRepository";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
 import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
-import { CalendarSlotInfo, hoursDiff, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/misc";
+import { CalendarSlotInfo, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/interfaces";
+import { hoursDiff } from "../utils/datetimeUtils";
 import { SlotRequestConfig } from "../utils/config";
 
 /*

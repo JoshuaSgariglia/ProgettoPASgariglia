@@ -1,20 +1,10 @@
 import { SlotRequest } from "../models/SlotRequest";
 
-// Calculates the difference in hours between two dates
-export function hoursDiff(datetimeStart: Date, datetimeEnd: Date): number {
-    const diffInMs = datetimeEnd.getTime() - datetimeStart.getTime(); // Milliseconds
-    return diffInMs / (1000 * 60 * 60);    // Convert to hours
-}
-
-// Converts a standard API input date string to the date format
-export function inputStringToDate(dateString: string): Date {
-    return new Date(dateString.replace(" ", "T") + ":00");
-}
-
-export function isDateValid(date: Date) {
-    return !isNaN(date.getTime());
-}
-
+/*
+ * This file includes interfaces used in the application.
+ * The interfaces are used in controllers\services to define
+ * the structure of the response data object in some app requests.
+*/
 
 export interface SlotRequestCreationInfo {
     request: SlotRequest;

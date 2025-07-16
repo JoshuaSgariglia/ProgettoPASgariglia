@@ -3,6 +3,7 @@ import { ErrorType, UserRole } from "../utils/enums";
 import jwt, { NotBeforeError, TokenExpiredError } from "jsonwebtoken";
 import { TokenPayload, TokenPayloadSchema } from "../utils/validation/schemas";
 import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
+import logger from "../utils/logger";
 
 /**
  * This file includes the middleware handlers for the authentication and authorization of users.
@@ -16,7 +17,7 @@ import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
  * Throws MissingAuthorizationHeader if the authorization header is missing.
 */
 function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
-    console.log("Entering authentication middleware")
+    logger.info("Entering authentication middleware")
     
     const authHeader: string | undefined = req.headers.authorization;
 
@@ -109,7 +110,7 @@ const verifyAuthorizationGenerator = (requiredRole: UserRole) =>
         // tokenPayload is of type TokenPayload thanks to verifyTokenPayload
         const tokenPayload = res.locals.tokenPayload as TokenPayload;
         
-        console.log("Exiting authentication middleware")
+        logger.info("Exiting authentication middleware")
 
         // Check role authorization
         if (tokenPayload.role === requiredRole) {

@@ -2,6 +2,8 @@
  * This file defines all the enum classes used in the app, including ErrorType and SuccessType.
 */
 
+import logger from "./logger";
+
 // Used by User model class
 export enum UserRole {
 	User = "user",
@@ -112,3 +114,5 @@ export enum SuccessType {
 	SlotRequestCreated = "SlotRequestCreated",
 	InvalidSlotRequestCreated = "InvalidSlotRequestCreated",
 }
+
+logger.info('Enum types loaded successfully');

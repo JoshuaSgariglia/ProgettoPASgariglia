@@ -4,6 +4,7 @@ import { SlotRequest, defineSlotRequestModel } from '../../models/SlotRequest';
 import { Calendar, defineCalendarModel } from '../../models/Calendar';
 import { ComputingResource, defineComputingResourceModel } from '../../models/ComputingResource';
 import { POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USER } from "../config";
+import logger from "../logger";
 
 /**
  * DatabaseConnector is used to connect to the database through Sequelize.
@@ -29,14 +30,22 @@ export class DatabaseConnector {
     // Initialize Sequelize connection with DB config
     const sequelize: Sequelize = this.initSequelize();
 
+    logger.info("Sequelize instance initialized")
+
     // Define all data models on the Sequelize instance
     this.defineModels(sequelize);
+
+    logger.info("Model classes properties defined")
 
     // Set up model associations
     this.associateModels();
 
+    logger.info("Model classes associations defined")
+
     // Set hooks for cascading behavior on soft deletes
     this.setHooks();
+
+    logger.info("Database hooks for cascading behaviour set")
 
     return sequelize;
   }

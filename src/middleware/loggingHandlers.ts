@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import logger from "../utils/logger";
 
 /**
  * This file includes the middleware handlers for the logging.
@@ -8,9 +9,9 @@ import { Request, Response, NextFunction } from "express";
 
 // Logs every request received by the server
 function logRouteMethod(req: Request, res: Response, next: NextFunction) {
-  console.log(`Received ${req.method} request on route ${req.originalUrl}`);
+  logger.info(`Received ${req.method} request on route ${req.originalUrl}`);
   next();
 }
 
 // --- Logging handler chain ---
-export const logginghandlers = [logRouteMethod];
+export const loggingHandlers = [logRouteMethod];

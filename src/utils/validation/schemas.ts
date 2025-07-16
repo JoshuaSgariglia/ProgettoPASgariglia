@@ -2,6 +2,7 @@ import { CalendarConfig, SlotRequestConfig, UserConfig } from "../config";
 import { RequestStatus, UserRole } from "../enums";
 import { z } from 'zod';
 import { datetimeHourStringSchema, datetimeStringSchema } from "./schemasUtils";
+import logger from "../logger";
 
 /**
  * This file defines validation schemas and corresponding inferred types
@@ -214,3 +215,5 @@ export const UserRechargePayloadSchema = z.object({
 
 // Type
 export type UserRechargePayload = z.infer<typeof UserRechargePayloadSchema>;
+
+logger.info('Schemas and inferred types loaded successfully');

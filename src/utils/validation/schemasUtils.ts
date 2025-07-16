@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isDateValid, inputStringToDate } from "../datetimeUtils";
+import logger from "../logger";
 
 /**
  * This file includes utility functions and reusable code for Zod schemas defined in "schemas.ts"
@@ -36,3 +37,5 @@ export const datetimeStringSchema = createDatetimeSchema({
 	regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/,
 	errorMessage: "seconds must be zero"
 });
+
+logger.info('Schema utils loaded successfully');

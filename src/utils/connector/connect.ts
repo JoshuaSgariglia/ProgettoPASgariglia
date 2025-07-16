@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { RETRY_COUNT, RETRY_DELAY } from "../config";
+import logger from "../logger";
 
 /**
  * This file includes the logic for connecting to the database, with retry.
@@ -37,7 +38,7 @@ const withRetry = (
         // Try connecting up to retryCount times
         for (let attempt = 1; attempt <= retryOptions.retryCount; attempt++) {
             try {
-                console.log(`Attempting to connect to database (Attempt ${attempt})...`);
+                logger.info(`Attempting to connect to database (Attempt ${attempt})...`);
 
                 await connect(sequelize);  // Try the actual connection
                 connected = true;          // Mark as connected if successful
@@ -46,14 +47,14 @@ const withRetry = (
 
             } catch (error) {
                 // Log error message if connection attempt fails
-                console.error(`Connection attempt ${attempt} failed:`, (error as Error).message);
+                logger.error(`Connection attempt ${attempt} failed: ${(error as Error).message}`);
 
                 // If this is not the last attempt, wait before retrying
                 if (attempt < retryOptions.retryCount) {
                     // Calculate new delay
                     const delay = retryOptions.retryDelay * 2 ** (attempt - 1);
 
-                    console.log(`Retrying in ${delay}ms...`);
+                    logger.info(`Retrying in ${delay}ms...`);
 
                     // Timeout before new attempt
                     await new Promise(resolve => setTimeout(resolve, delay));
@@ -63,7 +64,7 @@ const withRetry = (
 
         // If all attempts failed, log fatal message and exit process with error code 1...
         if (!connected) {
-            console.error('[FATAL] All retry attempts failed. Exiting with code 1.');
+            logger.error('[FATAL] All retry attempts failed. Exiting with code 1.');
             process.exit(1);
 
         } else { // ...else return the connected Sequelize instance on success
@@ -75,9 +76,9 @@ const withRetry = (
 // Decorator that wraps a connection function to add logging before and after connection attempts
 const withConnectionLogged = (connect: ConnectionFunction) => {
     return async (sequelize: Sequelize) => {
-        console.log('Attempting database connection');
+        logger.info('Attempting database connection');
         await connect(sequelize);  // Call the wrapped connection function
-        console.log('Successfully connected to database');
+        logger.info('Successfully connected to database');
 
         return sequelize;          
     };

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { Algorithm } from 'jsonwebtoken';
+import logger from './logger';
 
 /**
  * This file includes a series of configuration parameters, divided into categories.
@@ -11,13 +12,13 @@ import { Algorithm } from 'jsonwebtoken';
 // --- Environment config ---
 
 // Loading .env file
-console.info('Loading environment...');
+logger.info('Loading environment...');
 const result = dotenv.config();
 
 if (result.error) {
-  console.warn('.env file not found or failed to load. This could lead to crashes.');
+  logger.warn('.env file not found or failed to load. This could lead to crashes.');
 } else {
-  console.info('Environment loaded successfully');
+  logger.info('Environment loaded successfully');
 }
 
 // Use values from .env with fallbacks
@@ -43,7 +44,7 @@ const PRIVATE_KEY_FILENAME: string = 'privateRS256.key'
 const PUBLIC_KEY_FILENAME: string = 'publicRS256.key'
 
 // Loading certificates
-console.info('Loading certificates...');
+logger.info('Loading certificates...');
 
 let privateKey: string;
 let publicKey: string;
@@ -53,9 +54,9 @@ const loadCertificate = (filename: string) => fs.readFileSync(path.join(CERTS_DI
 try {
   privateKey = loadCertificate(PRIVATE_KEY_FILENAME);
   publicKey = loadCertificate(PUBLIC_KEY_FILENAME);
-  console.info('Certificates loaded successfully');
+  logger.info('Certificates loaded successfully');
 } catch {
-  console.error('[FATAL] Failed to load RSA keys. Exiting with code 1.');
+  logger.error('[FATAL] Failed to load RSA keys. Exiting with code 1.');
   process.exit(1);
 }
 
@@ -122,3 +123,5 @@ export class ComputingResourceConfig {
   static MAX_MODEL_LENGTH: number = 64;
   static MAX_MANUFACTURER_LENGTH: number = 64;
 }
+
+logger.info('Configuration file loaded successfully');

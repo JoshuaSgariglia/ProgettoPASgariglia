@@ -1,4 +1,5 @@
 import e, { Request, Response, NextFunction, RequestHandler } from "express";
+import logger from "./logger";
 
 /**
  * AsyncRouter is a wrapper around Express's Router that ensures all async route handlers
@@ -17,7 +18,7 @@ export class AsyncRouter {
 
     // Wraps an async handler so any thrown errors are passed to next()
     private asyncHandlerWrapper = (fn: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-        console.log(`Entering controller action`);
+        logger.info(`Entering controller action`);
         Promise.resolve(fn(req, res, next)).catch(next);
     }
 

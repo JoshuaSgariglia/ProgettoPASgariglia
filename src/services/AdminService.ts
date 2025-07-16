@@ -12,6 +12,7 @@ import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { UserTokenUpdateInfo } from "../utils/interfaces";
+import logger from "../utils/logger";
 
 /**
  * Service with business logic, orchestrator between controller and repositories.
@@ -35,6 +36,8 @@ export class AdminService {
 	 * If successful, returns the newly created user.
 	*/
     public async createUser(userPayload: UserPayload): Promise<User> {
+        logger.info(`Creating new user with username \"${userPayload.username}\"`);
+
         // Search user by username or email
         const user: User | null = await this.userRepository.getByUsernameOrEmail(userPayload.username, userPayload.email);
 
@@ -43,12 +46,8 @@ export class AdminService {
             // Generate salt
             const salt = await genSalt(SALT_ROUNDS);
 
-            console.log("Generated salt")
-
             // Hash and salt password
             userPayload.password = await hash(userPayload.password, salt);
-
-            console.log("Hashed password")
 
             // Create new User
             return await this.userRepository.add(userPayload);

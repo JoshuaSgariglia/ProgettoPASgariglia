@@ -114,8 +114,6 @@ export class UserService {
 		// Throws error if request does not exist or if it is not owned by the user
 		const request: SlotRequest = await this.getRequestIfExistsAndOwnedByUser(request_id, user_id);
 
-		console.log(request.status)
-
 		// Deny deletion if request is refused
 		if (request.status === RequestStatus.Refused)
 			throw ErrorType.RefusedRequestDeletion;
@@ -167,7 +165,6 @@ export class UserService {
 				unusedHours = Math.floor(hoursDiff(now, request.datetimeEnd));
 				penalty = SlotRequestConfig.PARTIAL_USE_DELETION_PENALTY;
 			} else {
-				console.log("Checkpoint")
 				// Fully used
 				throw ErrorType.FullyUsedRequestDeletion
 			}

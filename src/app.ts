@@ -7,11 +7,14 @@ import publicRoutes from "./routes/publicRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import { APP_HOST, APP_PORT } from "./utils/config";
 import { adminAuthHandlers, userAuthHandlers } from "./middleware/authHandlers";
-import { logginghandlers } from "./middleware/loggingHandlers";
+import { loggingHandlers } from "./middleware/loggingHandlers";
+import logger from "./utils/logger";
 
 /**
  * This is the entry point on the application.
 */
+
+logger.info('Starting Express application...');
 
 // Initialize Express app
 const app = express();
@@ -19,12 +22,12 @@ const app = express();
 // Ensures that the database is connected before proceeding
 withDatabaseConnected((sequelize: Sequelize) => {
   app.locals.sequelize = sequelize;
-  
+
   // Automatically parses incoming requests with a Content-Type of application/json
   app.use(express.json());
 
   // Use logging handlers
-  app.use(...logginghandlers)
+  app.use(...loggingHandlers)
 
   // Main router - to group routes and to add a prefix
   const router = Router();
@@ -39,14 +42,17 @@ withDatabaseConnected((sequelize: Sequelize) => {
   router.use("/admin", ...adminAuthHandlers, adminRoutes.router);
 
   // All routes are prefixed with "/api"
-  app.use("/api", router); 
+  app.use("/api", router);
 
   // Use error handlers
   app.use(...errorHandlers)
 
   // Start listening on port APP_PORT
   app.listen(APP_PORT, () => {
-    console.log(`App listening at http://${APP_HOST}:${APP_PORT}`);
+    logger.info(`App listening at http://${APP_HOST}:${APP_PORT}`);
   });
+
+  logger.info('Express application initialization completed');
 });
+
 

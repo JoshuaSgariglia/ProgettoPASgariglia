@@ -1,54 +1,88 @@
-import winston from 'winston';           // Logging library
-import path from 'path';                // Node.js path utility
-import fs from 'fs';                    // Node.js file system module
-import { LOGS_PATH } from './config';
+import winston from 'winston';          
+import path from 'path';                
+import fs from 'fs';                 
 
-// Ensure that the log directory exists. Create it recursively if it doesn't.
-if (!fs.existsSync(LOGS_PATH)) {
+// In Docker if .dockerenv is present
+const inDocker = fs.existsSync('/.dockerenv');
+
+// Default logs path
+const LOGS_PATH = '/usr/app/logs'
+
+// Ensure that the log directory exists only if in Docker
+if (inDocker && !fs.existsSync(LOGS_PATH)) {
     fs.mkdirSync(LOGS_PATH, { recursive: true });
 }
 
-// Get current date and time in ISO format and split date/time parts
-const [datePart, timePart] = new Date().toISOString().split('T');
+// === Timestamp Helpers ===
 
-// Format time to HH-MM-SS (remove milliseconds and replace colons with dashes)
-const timeFormatted = timePart.split('.')[0].replace(/:/g, '-');
+// Format a Date object into "YYYY-MM-DD HH:mm:ss.ms" using local time
+function formatTimestamp(date: Date): string {
+    const pad = (n: number, width = 2) => n.toString().padStart(width, '0');
 
-// Final log file name: log_YYYY-MM-DD_HH-MM-SS.txt
-const logFilename = path.join(LOGS_PATH, `log_${datePart}_${timeFormatted}.txt`);
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+    const milliseconds = pad(date.getMilliseconds(), 3);
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+}
+
+// Format local timestamp for filename: log_YYYY-MM-DD_HH-MM-SS.txt
+function formatLogFilenameTimestamp(date: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `log_${year}-${month}-${day}_${hours}-${minutes}-${seconds}.txt`;
+}
+
+const now = new Date();
+const logFilename = path.join(LOGS_PATH, formatLogFilenameTimestamp(now));
 
 // Define the log message format:
-// Example: 2025-07-16_12-43-28 - users.service.ts - INFO - Application started
+// Example: 2025-07-16 12:43:28.123 - users.service.ts - INFO - Application started
 const logFormat = winston.format.printf(({ timestamp, level, message, label }) => {
     return `${timestamp} - ${label || 'app'} - ${level.toUpperCase()} - ${message}`;
 });
 
-// Set up the logger transports (destinations):
-// Log to the console and to a file
+// Set up the logger transports:
+// Always log to console. Log to file only if running in Docker.
 const transports: winston.transport[] = [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: logFilename }),
 ];
+
+if (inDocker) {
+    transports.push(
+        new winston.transports.File({ filename: logFilename })
+    );
+}
 
 // Create the base Winston logger instance
 const baseLogger = winston.createLogger({
-    level: 'info', // Log only 'info' and higher levels (warn, error)
+    level: 'info',
     format: winston.format.combine(
-        winston.format.timestamp(),      // Automatically add timestamps
-        logFormat                        // Apply the custom format above
+        winston.format.timestamp({ format: () => formatTimestamp(new Date()) }), // Local time, custom format
+        logFormat
     ),
-    transports, // Attach the defined transports
+    transports,
 });
 
 // --- Helper to get the caller file name ---
-
-// Extracts the filename from the stack trace
 function getCallerFile(): string {
     const stack = new Error().stack;
     if (!stack) return 'unknown';
 
     const stackLines = stack.split('\n');
-    // Stack line that represents the caller (index 3 may vary by runtime)
     const callerLine = stackLines[3] || '';
     const match = callerLine.match(/at (?:.+ \()?(.+):\d+:\d+\)?/);
     if (!match) return 'unknown';
@@ -57,8 +91,6 @@ function getCallerFile(): string {
 }
 
 // --- Logger wrapper with dynamic label ---
-
-// Wrap logger methods to inject the caller file name as label
 const logger = {
     info: (msg: string) =>
         baseLogger.info(msg, { label: getCallerFile() }),
@@ -68,9 +100,10 @@ const logger = {
         baseLogger.error(msg, { label: getCallerFile() }),
     debug: (msg: string) =>
         baseLogger.debug(msg, { label: getCallerFile() }),
-    // Optional: access the raw logger if needed
     raw: baseLogger,
 };
 
-// Export the logger for use across the application
+logger.info("Logger initialized successfully")
+logger.info(inDocker ? "Logging enabled on console and on file" : "Logging enabled on console only")
+
 export default logger;

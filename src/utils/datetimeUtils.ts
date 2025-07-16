@@ -3,6 +3,8 @@
  * This file includes some utility functions for datetime usage\formatting.
 */
 
+import logger from "./logger";
+
 // Calculates the difference in hours between two dates
 export function hoursDiff(datetimeStart: Date, datetimeEnd: Date): number {
     const diffInMs = datetimeEnd.getTime() - datetimeStart.getTime(); // Milliseconds
@@ -18,3 +20,5 @@ export function inputStringToDate(dateString: string): Date {
 export function isDateValid(date: Date): boolean {
     return !isNaN(date.getTime());
 }
+
+logger.info('Datetime utility functions loaded successfully');

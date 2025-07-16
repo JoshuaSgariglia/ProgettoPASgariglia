@@ -2,6 +2,7 @@ import { ZodType } from "zod";
 import { ErrorType } from "../enums";
 import { ErrorFactory } from "../factories/errorFactory";
 import { ErrorResponse } from "../responses/errorResponses";
+import logger from "../logger";
 
 /**
  * This file includes the validate function, which uses a Zod schema to validate some input data.
@@ -36,7 +37,7 @@ export function validate<T>(
 		const firstIssue = result.error.issues[0];
 		const issueField = firstIssue.path[0] as string;
 
-		console.log(firstIssue);
+		logger.error(`Validation error: ${firstIssue.code} - ${firstIssue.message}`);
 
 		// Default error
 		let message: string = firstIssue.message;

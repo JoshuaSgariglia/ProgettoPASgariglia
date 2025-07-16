@@ -1,4 +1,5 @@
 import { SlotRequest } from "../models/SlotRequest";
+import logger from "./logger";
 
 /**
  * This file includes interfaces used in the application.
@@ -34,3 +35,5 @@ export interface UserTokenUpdateInfo {
     oldTokenAmount: number;
     newTokenAmount: number;
 };
+
+logger.info('Interfaces loaded successfully');

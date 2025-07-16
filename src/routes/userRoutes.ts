@@ -5,6 +5,7 @@ import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { checkSlotPayloadHandler, requestStatusAndCreationPayloadHandler, requestStatusAndPeriodPayloadHandler, slotRequestPayloadHandler, uuidParameterHandler } from "../middleware/validationHandlers";
 import { UserRepository } from "../repositories/UserRepository";
+import logger from "../utils/logger";
 
 // === Create objects ===
 
@@ -46,3 +47,5 @@ router.getAsync("/calendar-slot", checkSlotPayloadHandler, userController.checkC
 
 // Export router as userRoutes (used is app.ts)
 export default router;
+
+logger.info("User routes successfully defined")

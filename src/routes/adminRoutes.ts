@@ -6,6 +6,7 @@ import { calendarCreationPayloadHandler, calendarUpdatePayloadHandler, requestAp
 import { ComputingResourceRepository } from "../repositories/ComputingResourceRepository";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
+import logger from "../utils/logger";
 
 // === Create objects ===
 
@@ -68,3 +69,5 @@ router.patchAsync("/user/:id/tokens", uuidParameterHandler, userRechargePayloadH
 
 // Export router as adminRoutes (used is app.ts)
 export default router;
+
+logger.info("Admin routes successfully defined")

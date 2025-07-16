@@ -14,6 +14,7 @@ import {
     UUIDParameterSchema} from "../utils/validation/schemas";
 import { validate } from "../utils/validation/validate";
 import { Request, Response, NextFunction } from "express";
+import logger from "../utils/logger";
 
 /**
  * This file includes the middleware handlers for the validation of URL params and body payloads.
@@ -31,12 +32,12 @@ const validationHandlerGenerator = <T>(
     source: InputSource = InputSource.BODY,
     payloadOptional: boolean = false
 ) => (req: Request, res: Response, next: NextFunction): void => {
-    console.log("Entering validation middleware");
+    logger.info("Entering validation middleware");
 
     // Validate the input data based on the schema
     const result = validate(schema, req[source], payloadOptional);
     
-    console.log("Exiting validation middleware")
+    logger.info("Exiting validation middleware")
     
     if (result.success) {
         // Attach validated data to "res.locals"

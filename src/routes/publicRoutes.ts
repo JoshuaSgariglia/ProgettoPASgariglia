@@ -6,6 +6,7 @@ import { AuthController } from "../controllers/AuthController";
 import { AuthService } from "../services/AuthService";
 import { loginPayloadHandler } from "../middleware/validationHandlers";
 import { AsyncRouter } from "../utils/AsyncRouter";
+import logger from "../utils/logger";
 
 // --- Create objects ---
 
@@ -30,3 +31,5 @@ router.postAsync("/login", loginPayloadHandler, authController.loginUser);
 
 // Export router as publicRoutes (used is app.ts)
 export default router;
+
+logger.info("Public routes successfully defined")

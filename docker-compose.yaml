@@ -9,7 +9,7 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
     volumes:
-      - app_logs:/usr/app/logs 
+      - app_logs:${LOGS_PATH}
     develop:
       watch:
         - path: .
@@ -18,7 +18,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: postgres:17.5
+    image: postgres:${POSTGRES_VERSION}
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -26,7 +26,7 @@ services:
     ports: 
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:${POSTGRES_PATH}
       - ./scripts:/docker-entrypoint-initdb.d
     restart: always
 

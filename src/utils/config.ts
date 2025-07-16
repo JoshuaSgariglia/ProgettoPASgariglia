@@ -3,6 +3,8 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { Algorithm } from 'jsonwebtoken';
 
+// --- Environment config ---
+
 // Loading .env file
 console.info('Loading environment...');
 const result = dotenv.config();
@@ -16,6 +18,19 @@ if (result.error) {
 // Use values from .env with fallbacks
 export const APP_HOST: string = process.env.APP_HOST || 'localhost';
 export const APP_PORT: number = Number(process.env.APP_PORT) || 8080;
+
+export const POSTGRES_VERSION: number = Number(process.env.POSTGRES_VERSION) || 17.5;
+export const POSTGRES_DB: string = process.env.POSTGRES_DB || 'progetto-pa-sgariglia';
+export const POSTGRES_USER: string = process.env.POSTGRES_USER || 'db-admin';
+export const POSTGRES_PASSWORD: string = process.env.POSTGRES_PASSWORD || 'postgres';
+export const POSTGRES_HOST: string = process.env.POSTGRES_HOST ||'postgres';
+export const POSTGRES_PORT: number = Number(process.env.POSTGRES_PORT) || 5432;
+
+export const POSTGRES_PATH: string = process.env.POSTGRES_PATH || '/var/lib/postgresql/data'
+export const LOGS_PATH: string = process.env.LOGS_PATH || '/usr/app/logs'
+
+
+// --- Certificates config ---
 
 // Certificates
 const CERTS_DIRECTORY: string = path.resolve(__dirname, '../../certs');
@@ -43,6 +58,9 @@ try {
 export const PRIVATE_KEY: string = privateKey;
 export const PUBLIC_KEY: string = publicKey;
 
+
+// --- Miscellaneous config ---
+
 // JWT
 export const SIGNING_ALGORITHM: Algorithm = 'RS256';
 export const TOKEN_DURATION = '1h'; // StringValue type, but it's not exported from jsonwebtokens
@@ -54,7 +72,8 @@ export const SALT_ROUNDS: number = 10;
 export const RETRY_COUNT: number = 5;
 export const RETRY_DELAY: number = 2000;
 
-// --- Model validation ---
+
+// --- Model validation config ---
 
 // User
 export class UserConfig {

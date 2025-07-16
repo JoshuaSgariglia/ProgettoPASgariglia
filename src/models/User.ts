@@ -2,8 +2,12 @@ import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, 
 import { UserRole } from '../utils/enums';
 import { UserConfig } from '../utils/config';
 
-
+/*
+ * User model class that extends Sequelize's Model class.
+ * "CreationOptional" marks properties that can be undefined during creation, since they have default values.
+*/
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+    // Properties declaration
     declare uuid: CreationOptional<string>;
     declare username: string;
     declare email: string;
@@ -20,8 +24,14 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     }
 }
 
+/*
+ * Function that initializes the User class, defining the declared properties and the options.
+ * Static class UserConfig (defined in config.ts) is used to get the default values.
+ * "paranoid: true" ensures that soft deletion is enabled.
+*/
 export function defineUserModel(sequelize: Sequelize): void {
     User.init(
+        // Properties characterization
         {
             uuid: {
                 type: DataTypes.UUID,
@@ -59,6 +69,7 @@ export function defineUserModel(sequelize: Sequelize): void {
                 defaultValue: UserConfig.INITIAL_TOKEN_AMOUNT,
             },
         },
+        // Options
         {
             sequelize,
             modelName: 'User',

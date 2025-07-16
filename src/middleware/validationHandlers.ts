@@ -16,9 +16,16 @@ import {
 } from "../utils/schemas";
 import { Request, Response, NextFunction } from "express";
 
+/*
+ * This file includes the middleware handlers for the validation of URL params and body payloads.
+*/
+
+// --- Validation handler generator ---
+
 /**
- * Creates an Express middleware that validates input from a specified request part
- * using a Zod schema. If validation fails, it passes the error to next().
+ * Generator of handlers that validate input data from a specified source using a Zod schema.
+ * It is possible to validate the input data only if present (set "payloadOptional" to true).
+ * If validation fails, it passes the error to the error handlers.
  */
 const validationHandlerGenerator = <T>(
     schema: ZodType<T>,
@@ -26,27 +33,65 @@ const validationHandlerGenerator = <T>(
     payloadOptional: boolean = false
 ) => (req: Request, res: Response, next: NextFunction): void => {
     console.log("Entering validation middleware");
-    const result = validate(schema, req[source], payloadOptional);
 
+    // Validate the input data based on the schema
+    const result = validate(schema, req[source], payloadOptional);
+    
     console.log("Exiting validation middleware")
+    
     if (result.success) {
-        // Attach validated data to reponse.locals
+        // Attach validated data to "res.locals"
         res.locals.validated = result.data;
         next();
+
     } else {
         next(result.error);
     }
 };
 
-// Generated handlers
+// --- Generated handlers ---
+
+// Validates UUID parameters in URL paths (e.g. "/calendar/:id", used in many routes)
 export const uuidParameterHandler = validationHandlerGenerator(UUIDParameterSchema, InputSource.PARAMS);
+
+// Validates login payload structure (route /login POST in publicRoutes.ts)
 export const loginPayloadHandler = validationHandlerGenerator(LoginPayloadSchema);
+
+// Validates user registration payload (route /user POST in adminRoutes.ts)
 export const userPayloadHandler = validationHandlerGenerator(UserPayloadSchema);
+
+// Validates calendar creation payload (route /calendar POST in adminRoutes.ts)
 export const calendarCreationPayloadHandler = validationHandlerGenerator(CalendarCreationPayloadSchema);
+
+// Validates calendar update payload (route /calendar/:id PUT in adminRoutes.ts)
 export const calendarUpdatePayloadHandler = validationHandlerGenerator(CalendarUpdatePayloadSchema);
+
+// Validates slot request creation payload (route /request POST in userRoutes.ts)
 export const slotRequestPayloadHandler = validationHandlerGenerator(SlotRequestPayloadSchema);
-export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(RequestStatusAndCreationPayloadSchema, InputSource.BODY, true);
+
+// Validates request status and creation date range filters (route /requests-status GET in userRoutes.ts)
+export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator(
+  RequestStatusAndCreationPayloadSchema,
+  InputSource.BODY,
+  true
+);
+
+// Validates request approval payload (route /request-status/:id PATCH in adminRoutes.ts)
 export const requestApprovalPayloadHandler = validationHandlerGenerator(RequestApprovalPayloadSchema);
+
+// Validates input for checking calendar slot availability (route /calendar-slot GET in userRoutes.ts)
 export const checkSlotPayloadHandler = validationHandlerGenerator(CheckSlotPayloadSchema);
-export const requestStatusAndPeriodPayloadHandler = validationHandlerGenerator(RequestStatusAndPeriodPayloadSchema, InputSource.BODY, true);
-export const userRechargePayloadHandler = validationHandlerGenerator(UserRechargePayloadSchema, InputSource.BODY, true);
+
+// Validates request calendar, status and period filters (route /requests GET in userRoutes.ts)
+export const requestStatusAndPeriodPayloadHandler = validationHandlerGenerator(
+  RequestStatusAndPeriodPayloadSchema,
+  InputSource.BODY,
+  true
+);
+
+// Validates user token recharge payload (e.g., PATCH /user/:id/tokens in adminRoutes.ts)
+export const userRechargePayloadHandler = validationHandlerGenerator(
+  UserRechargePayloadSchema,
+  InputSource.BODY,
+  true
+);

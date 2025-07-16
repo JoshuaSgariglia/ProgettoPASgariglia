@@ -1,7 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import { HttpResponse } from "./HttpResponse";
 
-// SuccessResponse class
+/*
+ * This file includes a list of predefined SuccessResponses, divided into categories.
+ * The base SuccessResponse class extends the HttpResponse class.
+ * Middle SuccessResponse classes extend the base SuccessResponse class.
+ * Specialized SuccessResponse classes extend a midlle SuccessResponse class.
+*/
+
+// --- Base SuccessResponse class ---
 export class SuccessResponse extends HttpResponse {
     constructor(
         message: string,
@@ -12,7 +19,7 @@ export class SuccessResponse extends HttpResponse {
     }
 }
 
-// Middle SuccessResponseClasses
+// --- Middle SuccessResponse classes ---
 export class OkayResponse extends SuccessResponse {
     constructor(message?: string, data?: object) {
         super(
@@ -33,7 +40,7 @@ export class CreatedResponse extends SuccessResponse {
     }
 }
 
-// Specialized SuccessResponse classes
+// --- Specialized SuccessResponse classes ---
 
 // OK responses
 export class ServiceOnline extends OkayResponse {

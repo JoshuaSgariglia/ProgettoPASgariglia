@@ -1,6 +1,17 @@
 import { SuccessType } from "../enums";
-import { AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted, CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse, ServiceOnline, SlotRequestCreated, SlotRequestApproved, SlotRequestRefused, SlotRequestsRetrieved, SuccessResponse, SlotRequestDeleted, CalendarSlotAvailable, CalendarSlotUnavailable, CalendarRequestsRetrieved, UserTokensRecharged } from "../responses/successResponses";
+import {
+    AccountLoggedIn, AccountRegistered, CalendarArchived, CalendarCreated, CalendarDeleted,
+    CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse,
+    ServiceOnline, SlotRequestCreated, SlotRequestApproved, SlotRequestRefused, SlotRequestsRetrieved,
+    SuccessResponse, SlotRequestDeleted, CalendarSlotAvailable, CalendarSlotUnavailable,
+    CalendarRequestsRetrieved, UserTokensRecharged
+} from "../responses/successResponses";
 
+/*
+ * Factory class to generate SuccessResponses based on a SuccessType and 
+ * (optionally) some data to include in the response.
+ * It uses predefined success response classes defined in "successResponses.ts".
+*/
 export class SuccessResponseFactory {
     public static getResponse(type: SuccessType = SuccessType.OK, data?: object): SuccessResponse {
         let response: SuccessResponse;

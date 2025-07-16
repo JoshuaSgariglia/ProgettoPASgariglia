@@ -2,8 +2,12 @@ import { DataTypes, Sequelize, Model, InferAttributes, InferCreationAttributes, 
 import { ResourceType } from '../utils/enums';
 import { ComputingResourceConfig } from '../utils/config';
 
-
+/*
+ * ComputingResource model class that extends Sequelize's Model class.
+ * "CreationOptional" marks properties that can be undefined during creation, since they have default values.
+*/
 export class ComputingResource extends Model<InferAttributes<ComputingResource>, InferCreationAttributes<ComputingResource>> {
+  // Properties declaration
   declare uuid: CreationOptional<string>;
   declare model: string;
   declare serial: number;
@@ -12,8 +16,14 @@ export class ComputingResource extends Model<InferAttributes<ComputingResource>,
 
 }
 
+/*
+ * Function that initializes the ComputingResource class, defining the declared properties and the options.
+ * Static class ComputingResourceConfig (defined in config.ts) is used to get the default values.
+ * "paranoid: true" ensures that soft deletion is enabled.
+*/
 export function defineComputingResourceModel(sequelize: Sequelize): void {
   ComputingResource.init(
+    // Properties characterization
     {
       uuid: {
         type: DataTypes.UUID,
@@ -38,6 +48,7 @@ export function defineComputingResourceModel(sequelize: Sequelize): void {
         defaultValue: ResourceType.GPU,
       },
     },
+    // Options
     {
       sequelize,
       modelName: 'ComputingResource',

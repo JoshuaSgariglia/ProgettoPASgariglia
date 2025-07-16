@@ -1,13 +1,20 @@
+/*
+ * This file defines all the enum classes used in the app, including ErrorType and SuccessType.
+*/
+
+// Used by User model class
 export enum UserRole {
 	User = "user",
 	Admin = "admin"
 }
 
+// Used by ComputingResource model class
 export enum ResourceType {
 	CPU = "cpu",
 	GPU = "gpu"
 }
 
+// Used by SlotRequest model class
 export enum RequestStatus {
 	Pending = "pending",
 	Invalid = "invalid",
@@ -15,21 +22,14 @@ export enum RequestStatus {
 	Refused = "refused",
 }
 
-export enum ContentType {
-	JSON = "application/json",
-	HTML = "text/html",
-	TEXT = "text/plain",
-	FORM = "application/x-www-form-urlencoded",
-	MULTIPART = "multipart/form-data",
-	XML = "application/xml"
-}
-
+// Used in "validationHandlers.ts" to know where to look for the input data
 export enum InputSource {
 	BODY = "body",
 	QUERY = "query",
 	PARAMS = "params"
 }
 
+// Thrown in the service layer for error response generation with ErrorFactory
 export enum ErrorType {
 	// Base Errors
 	BadRequest = "BadRequest",
@@ -84,6 +84,7 @@ export enum ErrorType {
     UserNotFound = "UserNotFound",
 }
 
+// Used in the controller layer for response generation with SuccessResponseFactory
 export enum SuccessType {
 	// Base success
 	OK = "OK",

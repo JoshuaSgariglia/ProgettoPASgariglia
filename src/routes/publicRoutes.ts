@@ -7,10 +7,12 @@ import { AuthService } from "../services/AuthService";
 import { loginPayloadHandler } from "../middleware/validationHandlers";
 import { AsyncRouter } from "../utils/AsyncRouter";
 
+// --- Create objects ---
+
 // Instantiate Router
 const router = new AsyncRouter();
 
-// Instantiate architecture objects
+// Instantiate repository, service and controller objects
 const userRepository = new UserRepository();
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
@@ -25,5 +27,6 @@ router.getAsync('/', async (req: Request, res: Response) => {
 // Login
 router.postAsync("/login", loginPayloadHandler, authController.loginUser);
 
-// Export router as userRoutes
+
+// Export router as publicRoutes (used is app.ts)
 export default router;

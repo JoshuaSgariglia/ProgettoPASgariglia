@@ -121,7 +121,7 @@ function createDatetimeSchema({ format, regex, errorMessage }: {
 		.transform((str) => inputStringToDate(str));
 }
 
-// Define specific schemas
+// Define specific schemas for datetimes
 export const datetimeHourStringSchema = createDatetimeSchema({
 	format: "YYYY-MM-DD HH:00",
 	regex: /^\d{4}-\d{2}-\d{2} \d{2}:00$/,

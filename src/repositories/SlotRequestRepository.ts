@@ -3,17 +3,25 @@ import { SlotRequest } from "../models/SlotRequest";
 import { SlotRequestCreationData } from "../utils/schemas";
 import { RequestStatus } from "../utils/enums";
 
+/*
+ * Repository class for the SlotRequest model.
+ * Provides higher-level methods to interact with the SlotRequest model.
+ */
 export class SlotRequestRepository {
+
+    // Retrieves a slot request by its UUID
     public async getById(request_id: string): Promise<SlotRequest | null> {
         return await SlotRequest.findByPk(request_id);
     }
 
+    // Retrieves slot requests that match optional filters:
+    // calendar ID, status, time range (start and end), and user ID
     public async getRequestsInPeriod(
         calendar_id?: string,
         status?: RequestStatus,
         datetimeStart?: Date,
         datetimeEnd?: Date,
-        user_id?: string  
+        user_id?: string
     ): Promise<SlotRequest[]> {
         const whereClause: any = {};
 
@@ -54,10 +62,12 @@ export class SlotRequestRepository {
         });
     }
 
+    // Creates a new slot request in the database, optionally within a transaction
     public async add(requestData: SlotRequestCreationData, transaction?: Transaction): Promise<SlotRequest> {
         return await SlotRequest.create(requestData, transaction ? { transaction } : {});
     }
 
+    // Retrieves all requests for a calendar by status and datetime
     public async getRequestsAtDatetime(
         calendar_id: string,
         status: RequestStatus,
@@ -68,11 +78,12 @@ export class SlotRequestRepository {
                 "calendar": calendar_id,
                 "status": status,
                 "datetimeStart": { [Op.lte]: datetime }, // Starts before the datetime
-                "datetimeEnd": { [Op.gte]: datetime }, // Ends after the datetime
+                "datetimeEnd": { [Op.gte]: datetime },   // Ends after the datetime
             }
         });
     }
 
+    // Retrieves all requests for a user that match optional status and creation date range
     public async getRequestsByStatusAndCreationPeriod(
         user_id: string,
         status?: RequestStatus,
@@ -105,7 +116,4 @@ export class SlotRequestRepository {
             where: whereClause,
         });
     }
-
-
-
 }

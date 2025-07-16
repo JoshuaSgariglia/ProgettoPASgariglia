@@ -1,8 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import { HttpResponse } from "./HttpResponse";
 
+/*
+ * This file includes a list of predefined ErrorResponses, divided into categories.
+ * The base ErrorResponse class extends the HttpResponse class.
+ * Middle ErrorResponse classes extend the base ErrorResponse class.
+ * Specialized ErrorResponse classes extend a midlle ErrorResponse class.
+*/
 
-// Base ErrorResponse class
+// --- Base ErrorResponse class ---
 export class ErrorResponse extends HttpResponse {
     protected errorType: string;
 
@@ -18,7 +24,7 @@ export class ErrorResponse extends HttpResponse {
 }
 
 
-// Middle ErrorResponse classes
+// --- Middle ErrorResponse classes ---
 export class BadRequest extends ErrorResponse {
     constructor(message?: string) {
         super(
@@ -66,9 +72,9 @@ export class InternalServerError extends ErrorResponse {
 }
 
 
-// Specialized ErrorResponse classes
+// --- Specialized ErrorResponse classes ---
 
-// BadRequest errors
+// BadRequest errors - Domain-specific
 export class MissingPayload extends BadRequest {
     constructor() {
         super("Missing payload in request body")
@@ -153,7 +159,7 @@ export class FullyUsedRequestDeletion extends BadRequest {
     }
 }
 
-// Bad Request errors - Payload validation
+// Bad Request errors - Payload validation with Zod
 export class MissingInputField extends BadRequest {
     constructor(message?: string) {
         super(message ?? "Missing input field")

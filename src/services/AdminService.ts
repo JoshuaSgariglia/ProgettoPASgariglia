@@ -10,9 +10,15 @@ import { ComputingResourceRepository } from "../repositories/ComputingResourceRe
 import { ComputingResource } from "../models/ComputingResource";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
-import { getTransaction, withTransaction } from "../utils/connector/transactionDecorator";
+import { withTransaction } from "../utils/connector/transactionDecorator";
 import { UserTokenUpdateInfo } from "../utils/misc";
 
+/*
+ * Service with business logic, orchestrator between controller and repositories.
+ * Requires all four repository objects, passed through dependency injection.
+ * Throws ErrorType instances in case of domain-specific errors.
+ * Used exclusively by AdminController.
+*/
 export class AdminService {
     constructor(
         private userRepository: UserRepository,
@@ -21,6 +27,13 @@ export class AdminService {
         private computingResourceRepository: ComputingResourceRepository
     ) { }
 
+    // === Main methods ===
+
+    /*
+	 * Creates a new user. 
+     * Uses a UserPayload instance to create the user.
+	 * If successful, returns the newly created user.
+	*/
     public async createUser(userPayload: UserPayload): Promise<User> {
         // Search user by username or email
         const user: User | null = await this.userRepository.getByUsernameOrEmail(userPayload.username, userPayload.email);
@@ -49,6 +62,11 @@ export class AdminService {
         }
     }
 
+    /*
+	 * Creates a new calendar. 
+     * Uses a CalendarCreationPayload instance to create the calendar.
+	 * If successful, returns the newly created calendar.
+	*/
     public async createCalendar(calendarPayload: CalendarCreationPayload): Promise<Calendar> {
         // Throws errors if the resource is nonexistent or unavailable
         await this.checkResourceAvailability(calendarPayload.resource)
@@ -57,6 +75,11 @@ export class AdminService {
         return await this.calendarRepository.add(calendarPayload);
     }
 
+    /*
+	 * Updates a calendar. 
+     * Uses a CalendarUpdatePayload instance to update the calendar.
+	 * If successful, returns the updated calendar.
+	*/
     public async updateCalendar(calendar_id: string, calendarPayload: CalendarUpdatePayload): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id)
@@ -85,11 +108,19 @@ export class AdminService {
         return await calendar.update(calendarPayload)
     }
 
+    /*
+	 * Retrieves a calendar by its UUID. 
+	 * If successful, returns the found calendar.
+	*/
     public async getCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         return await this.getCalendarIfExists(calendar_id);
     }
 
+    /*
+	 * Deletes a calendar by its UUID. 
+	 * If successful, returns the deleted calendar.
+	*/
     public async deleteCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
@@ -105,6 +136,10 @@ export class AdminService {
         return calendar;
     }
 
+    /*
+	 * Archives a calendar by its UUID. 
+	 * If successful, returns the archived calendar.
+	*/
     public async archiveCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
@@ -116,7 +151,11 @@ export class AdminService {
         return await calendar.update({ "isArchived": true })
     }
 
-
+    /*
+	 * Updates the status of a request to either Approved or Refused. 
+     * Uses a RequestApprovalPayload instance to update the status of the request.
+	 * If successful, returns the request whose status was updated.
+	*/
     public async updateRequestStatus(request_id: string, requestApprovalPayload: RequestApprovalPayload): Promise<SlotRequest> {
         // Throws an error if the calendar is nonexistent
         const request: SlotRequest = await this.getRequestIfExists(request_id);
@@ -150,15 +189,23 @@ export class AdminService {
         }
     }
 
-    // Get the satus of all requests by calendar
+    /*
+	 * Retrieves all the requests by their calendar UUID. 
+	 * If successful, returns the list of filtered requests.
+	*/
     public async getRequestsByCalendar(calendar_id: string) {
         // Throws an error if the calendar is nonexistent
         await this.getCalendarIfExists(calendar_id);
 
+        // Only filters by calendar_id because all other parameters are undefined
         return await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
     }
 
-    // Update the tokens of a user
+    /*
+	 * Updates the amount of tokens a user possesses. 
+     * Uses a UserRechargePayload instance to update the tokens of the user.
+	 * If successful, returns information about the old and new token amounts.
+	*/
     public async updateUserTokens(user_id: string, userRechargePayload: UserRechargePayload): Promise<UserTokenUpdateInfo> {
         // Throws an error if the user is nonexistent
         const user: User = await this.getUserIfExists(user_id);
@@ -176,7 +223,7 @@ export class AdminService {
     }
 
 
-    // === Helper functions ===
+    // === Helper methods ===
 
     // Checks ongoing requests
     private async checkOngoingRequests(calendar_id: string): Promise<void> {
@@ -192,6 +239,7 @@ export class AdminService {
             throw ErrorType.OngoingRequests;
     }
 
+    // Retrieve a user by its UUID, if it exists
     private async getUserIfExists(user_id: string): Promise<User> {
         // Search user by id
         const user: User | null = await this.userRepository.getById(user_id);
@@ -203,6 +251,7 @@ export class AdminService {
         return user;
     }
 
+    // Retrieve a calendar by its UUID, if it exists
     private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {
         // Search calendar by id
         const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
@@ -214,6 +263,7 @@ export class AdminService {
         return calendar;
     }
 
+    // Retrieve a request by its UUID, if it exists
     private async getRequestIfExists(request_id: string): Promise<SlotRequest> {
         // Search request by id
         const request: SlotRequest | null = await this.slotRequestRepository.getById(request_id);
@@ -225,6 +275,7 @@ export class AdminService {
         return request;
     }
 
+    // Retrieve a Resource by its UUID, if it exists
     private async getResourceIfExists(resource_id: string): Promise<ComputingResource> {
         // Search resource by id
         const resource: ComputingResource | null = await this.computingResourceRepository.getById(resource_id);
@@ -250,5 +301,4 @@ export class AdminService {
 
         return resource;
     }
-
 }

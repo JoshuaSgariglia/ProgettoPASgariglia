@@ -1,6 +1,20 @@
 import { ErrorType } from "../enums";
-import { BadRequest, CalendarArchived, CalendarNameAlreadyInUse, CalendarNotFound, CalendarSlotUnavailable, ComputingResourceNotFound, ComputingResourceUnavailable, EmailAlreadyInUse, ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall, InsufficientPermissions, InternalServerError, IntersectingRequests, InvalidAuthorizationType, InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload, InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload, NotFound, OngoingRequests, ArchivedRequestDeletion, FullyUsedRequestDeletion, RefusedRequestDeletion, SlotRequestNotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod, UnrecognizedInputField, UsernameAlreadyInUse, UserNotFound } from "../responses/errorResponses";
+import {
+    BadRequest, CalendarArchived, CalendarNameAlreadyInUse, CalendarNotFound,
+    CalendarSlotUnavailable, ComputingResourceNotFound, ComputingResourceUnavailable, EmailAlreadyInUse,
+    ErrorResponse, Forbidden, InputValueTooBig, InputValueTooLong, InputValueTooShort, InputValueTooSmall,
+    InsufficientPermissions, InternalServerError, IntersectingRequests, InvalidAuthorizationType,
+    InvalidInputFormat, InvalidInputType, InvalidInputValue, InvalidLoginCredentials, InvalidPayload,
+    InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload,
+    NotFound, OngoingRequests, ArchivedRequestDeletion, FullyUsedRequestDeletion, RefusedRequestDeletion,
+    SlotRequestNotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod,
+    UnrecognizedInputField, UsernameAlreadyInUse, UserNotFound
+} from "../responses/errorResponses";
 
+/*
+ * Factory class to generate ErrorResponses based on an ErrorType and (optionally) an error message.
+ * It uses predefined error response classes defined in "errorResponses.ts".
+*/
 export class ErrorFactory {
     public static getError(type: ErrorType = ErrorType.InternalServerError, message?: string): ErrorResponse {
         let error: ErrorResponse;

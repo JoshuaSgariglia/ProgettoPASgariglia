@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import { DatabaseConnector } from "./DatabaseConnector";
 import { RETRY_COUNT, RETRY_DELAY } from "../config";
 
-/*
+/**
  * This file includes the logic for connecting to the database, with retry.
  * Implements the Decorator design pattern.
 */

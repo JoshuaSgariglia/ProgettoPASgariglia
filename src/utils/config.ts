@@ -3,7 +3,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { Algorithm } from 'jsonwebtoken';
 
-/*
+/**
  * This file includes a series of configuration parameters, divided into categories.
  * It is also responsible for the loading of the .env and certificate files.
 */

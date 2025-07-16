@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/UserService";
-import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestPayload } from "../utils/schemas";
+import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestPayload } from "../utils/validation/schemas";
 import { RequestStatus, SuccessType } from "../utils/enums";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
 
-/*
+/**
  * Controller for actions protected with authentication and User role authorization.
  * Requires a UserService object passed through dependency injection.
  * Uses SuccessResponseFactory class to generate and send JSON reponses.
@@ -14,7 +14,7 @@ export class UserController {
 	// Constructor with UserService instance
 	constructor(private userService: UserService) { }
 
-	/*
+	/**
 	 * Action that allows to create a slot request for a calendar.
 	 * Expects the authenticated user UUID to be present in "req.locals.tokenPayload.id".
 	 * Expects a validated SlotRequestPayload object to be present in "res.locals.validated".
@@ -27,7 +27,7 @@ export class UserController {
 		SuccessResponseFactory.getResponse(successType, { "request": request.toJSON(), ...requestInfo }).sendIn(res);
 	}
 
-	/*
+	/**
 	 * Action that allows to get a list of slot requests created by the user, filtered by status and creation datetime.
 	 * Expects the authenticated user UUID to be present in "res.locals.tokenPayload.id".
 	 * Expects a validated RequestStatusAndCreationPayload object to be present in "res.locals.validated".
@@ -39,7 +39,7 @@ export class UserController {
 		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requests }).sendIn(res);
 	}
 
-	/*
+	/**
 	 * Action that allows to delete a slot request created by the user.
 	 * Expects the authenticated user UUID to be present in "res.locals.tokenPayload.id".
 	 * Expects the request UUID to be present in "req.params.id".
@@ -51,7 +51,7 @@ export class UserController {
 		SuccessResponseFactory.getResponse(SuccessType.SlotRequestDeleted, requestDeletionInfo).sendIn(res);
 	}
 
-	/*
+	/**
 	 * Action that allows to check if a certain slot is available on a calendar.
 	 * Expects a validated CalendarSlotPayload object to be present in "res.locals.validated".
 	 * If successful, returns information on the availability of the slot.
@@ -63,7 +63,7 @@ export class UserController {
 		SuccessResponseFactory.getResponse(successType, calendarSlotInfo).sendIn(res);
 	}
 
-	/*
+	/**
 	 * Action that allows to get a list of slot requests created by the user, filtered by calendar, status and slot period.
 	 * Expects the authenticated user UUID to be present in "res.locals.tokenPayload.id".
 	 * Expects a validated RequestStatusAndPeriodPayload object to be present in "res.locals.validated".

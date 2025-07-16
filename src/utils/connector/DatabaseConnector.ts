@@ -5,7 +5,7 @@ import { Calendar, defineCalendarModel } from '../../models/Calendar';
 import { ComputingResource, defineComputingResourceModel } from '../../models/ComputingResource';
 import { POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USER } from "../config";
 
-/*
+/**
  * DatabaseConnector is used to connect to the database through Sequelize.
  * It encapsulates a Singleton instance of Sequelize to ensure a single DB connection throughout the app.
 */

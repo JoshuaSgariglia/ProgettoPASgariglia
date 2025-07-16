@@ -1,5 +1,5 @@
 
-/*
+/**
  * This file includes some utility functions for datetime usage\formatting.
 */
 

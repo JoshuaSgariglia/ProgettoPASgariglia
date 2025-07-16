@@ -1,4 +1,4 @@
-/*
+/**
  * This file defines all the enum classes used in the app, including ErrorType and SuccessType.
 */
 

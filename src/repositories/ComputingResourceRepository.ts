@@ -1,6 +1,6 @@
 import { ComputingResource } from "../models/ComputingResource";
 
-/*
+/**
  * Repository class for the ComputingResource model.
  * Provides higher-level methods to interact with the ComputingResource model.
  */

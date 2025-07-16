@@ -1,6 +1,6 @@
 import { SlotRequest } from "../models/SlotRequest";
 
-/*
+/**
  * This file includes interfaces used in the application.
  * The interfaces are used in controllers\services to define
  * the structure of the response data object in some app requests.

@@ -1,8 +1,8 @@
 import { InferAttributes, InferCreationAttributes, Op } from "sequelize";
 import { User } from "../models/User";
-import { UserPayload } from "../utils/schemas";
+import { UserPayload } from "../utils/validation/schemas";
 
-/*
+/**
  * Repository class for the User model.
  * Provides higher-level methods to interact with the User model.
  */

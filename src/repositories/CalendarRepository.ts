@@ -1,8 +1,8 @@
 import { Transaction } from "sequelize";
 import { Calendar } from "../models/Calendar";
-import { CalendarCreationPayload } from "../utils/schemas";
+import { CalendarCreationPayload } from "../utils/validation/schemas";
 
-/*
+/**
  * Repository class for the Calendar model.
  * Provides higher-level methods to interact with the Calendar model.
  */

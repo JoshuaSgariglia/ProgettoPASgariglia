@@ -1,6 +1,6 @@
 import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
-import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload, UserRechargePayload } from "../utils/schemas";
+import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload, UserRechargePayload } from "../utils/validation/schemas";
 import { genSalt, hash } from "bcrypt-ts";
 import { ErrorType, RequestStatus } from "../utils/enums";
 import { SALT_ROUNDS, UserConfig } from "../utils/config";
@@ -13,7 +13,7 @@ import { SlotRequest } from "../models/SlotRequest";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { UserTokenUpdateInfo } from "../utils/interfaces";
 
-/*
+/**
  * Service with business logic, orchestrator between controller and repositories.
  * Requires all four repository objects, passed through dependency injection.
  * Throws ErrorType instances in case of domain-specific errors.
@@ -29,7 +29,7 @@ export class AdminService {
 
     // === Main methods ===
 
-    /*
+    /**
 	 * Creates a new user. 
      * Uses a UserPayload instance to create the user.
 	 * If successful, returns the newly created user.
@@ -62,7 +62,7 @@ export class AdminService {
         }
     }
 
-    /*
+    /**
 	 * Creates a new calendar. 
      * Uses a CalendarCreationPayload instance to create the calendar.
 	 * If successful, returns the newly created calendar.
@@ -75,7 +75,7 @@ export class AdminService {
         return await this.calendarRepository.add(calendarPayload);
     }
 
-    /*
+    /**
 	 * Updates a calendar. 
      * Uses a CalendarUpdatePayload instance to update the calendar.
 	 * If successful, returns the updated calendar.
@@ -108,7 +108,7 @@ export class AdminService {
         return await calendar.update(calendarPayload)
     }
 
-    /*
+    /**
 	 * Retrieves a calendar by its UUID. 
 	 * If successful, returns the found calendar.
 	*/
@@ -117,7 +117,7 @@ export class AdminService {
         return await this.getCalendarIfExists(calendar_id);
     }
 
-    /*
+    /**
 	 * Deletes a calendar by its UUID. 
 	 * If successful, returns the deleted calendar.
 	*/
@@ -136,7 +136,7 @@ export class AdminService {
         return calendar;
     }
 
-    /*
+    /**
 	 * Archives a calendar by its UUID. 
 	 * If successful, returns the archived calendar.
 	*/
@@ -151,7 +151,7 @@ export class AdminService {
         return await calendar.update({ "isArchived": true })
     }
 
-    /*
+    /**
 	 * Updates the status of a request to either Approved or Refused. 
      * Uses a RequestApprovalPayload instance to update the status of the request.
 	 * If successful, returns the request whose status was updated.
@@ -189,7 +189,7 @@ export class AdminService {
         }
     }
 
-    /*
+    /**
 	 * Retrieves all the requests by their calendar UUID. 
 	 * If successful, returns the list of filtered requests.
 	*/
@@ -201,7 +201,7 @@ export class AdminService {
         return await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
     }
 
-    /*
+    /**
 	 * Updates the amount of tokens a user possesses. 
      * Uses a UserRechargePayload instance to update the tokens of the user.
 	 * If successful, returns information about the old and new token amounts.

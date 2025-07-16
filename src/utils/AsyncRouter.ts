@@ -1,6 +1,6 @@
 import e, { Request, Response, NextFunction, RequestHandler } from "express";
 
-/*
+/**
  * AsyncRouter is a wrapper around Express's Router that ensures all async route handlers
  * automatically catch errors and forward them to Express error middleware via `next()`.
  * This eliminates the need for repetitive try-catch blocks in controllers or service methods.

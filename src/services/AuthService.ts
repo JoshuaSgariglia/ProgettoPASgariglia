@@ -3,10 +3,10 @@ import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
 import { PRIVATE_KEY, SIGNING_ALGORITHM, TOKEN_DURATION } from "../utils/config";
 import { ErrorType } from "../utils/enums";
-import { LoginPayload } from "../utils/schemas";
+import { LoginPayload } from "../utils/validation/schemas";
 import jwt from 'jsonwebtoken';
 
-/*
+/**
  * Service with business logic, orchestrator between controller and repositories.
  * Requires a UserRepository instance, passed through dependency injection.
  * Throws ErrorType instances in case of domain-specific errors.
@@ -15,7 +15,7 @@ import jwt from 'jsonwebtoken';
 export class AuthService {
     constructor(private userRepository: UserRepository) { }
 
-    /*
+    /**
 	 * Allows a user to login. 
      * Uses a LoginPayload instance with the credentials needed to log in.
 	 * If successful, returns a generated JWT.

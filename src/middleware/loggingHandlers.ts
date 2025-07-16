@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-/*
+/**
  * This file includes the middleware handlers for the logging.
 */
 

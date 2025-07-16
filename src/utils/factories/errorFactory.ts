@@ -11,7 +11,7 @@ import {
     UnrecognizedInputField, UsernameAlreadyInUse, UserNotFound
 } from "../responses/errorResponses";
 
-/*
+/**
  * Factory class to generate ErrorResponses based on an ErrorType and (optionally) an error message.
  * It uses predefined error response classes defined in "errorResponses.ts".
 */

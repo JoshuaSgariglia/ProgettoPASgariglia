@@ -1,17 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { ErrorType, UserRole } from "../utils/enums";
 import jwt, { NotBeforeError, TokenExpiredError } from "jsonwebtoken";
-import { TokenPayload, TokenPayloadSchema } from "../utils/schemas";
+import { TokenPayload, TokenPayloadSchema } from "../utils/validation/schemas";
 import { PUBLIC_KEY, SIGNING_ALGORITHM } from "../utils/config";
 
-/*
+/**
  * This file includes the middleware handlers for the authentication and authorization of users.
  * The handlers are in the order in which they are called.
 */
 
 // --- Auth validation functions ---
 
-/*
+/**
  * Checks that the authentication header is present.
  * Throws MissingAuthorizationHeader if the authorization header is missing.
 */
@@ -28,7 +28,7 @@ function checkAuthHeader(req: Request, res: Response, next: NextFunction) {
     }
 };
 
-/*
+/**
  * Checks that the authentication type is the expected one.
  * Throws InvalidAuthorizationType if the authorization type is not Bearer token.
 */
@@ -49,7 +49,7 @@ function checkAuthType(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-/*
+/**
  * Verifies that the token is valid and not expired.
  * Throws TokenExpiredError if the token is expired.
  * Throws NotBeforeError if the token is not activated.
@@ -80,7 +80,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
 
 }
 
-/*
+/**
  * Verifies that the provided token payload is valid using a schema (Zod validation library).
  * Throws InvalidTokenPayload if the token is invalid.
 */
@@ -99,7 +99,7 @@ function verifyTokenPayload(req: Request, res: Response, next: NextFunction) {
 
 }
 
-/*
+/**
  * Generator of functions that verify that the user is authorized.
  * Expects a UserRole to generate a function that performs the authorization check.
  * Throws InsufficientPermissions if the user role is different from the required one.

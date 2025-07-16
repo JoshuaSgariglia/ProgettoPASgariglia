@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/AuthService";
-import { LoginPayload } from "../utils/schemas";
+import { LoginPayload } from "../utils/validation/schemas";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
 import { SuccessType } from "../utils/enums";
 
-/*
+/**
  * Controller for unprotected actions (no authentication required).
  * Requires an AuthService object passed through dependency injection.
  * Uses SuccessResponseFactory class to generate and send JSON reponses.
@@ -14,7 +14,7 @@ export class AuthController {
 	// Constructor with AuthService instance
   constructor(private authService: AuthService) { }
 
-  /*
+  /**
 	 * Action that allows a user to login.
 	 * Expects a validated LoginPayload object to be present in "res.locals.validated".
 	 * If successful, returns the newly created JWT.

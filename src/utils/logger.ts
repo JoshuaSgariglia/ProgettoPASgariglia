@@ -24,17 +24,11 @@ const logFormat = winston.format.printf(({ timestamp, level, message, label }) =
 });
 
 // Set up the logger transports (destinations):
-// Always log to the console
+// Log to the console and to a file
 const transports: winston.transport[] = [
     new winston.transports.Console(),
+    new winston.transports.File({ filename: logFilename }),
 ];
-
-// Also log to a file
-transports.push(
-    new winston.transports.File({
-        filename: logFilename,
-    })
-);
 
 // Create the base Winston logger instance
 const baseLogger = winston.createLogger({

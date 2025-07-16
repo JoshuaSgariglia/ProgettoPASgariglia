@@ -1,136 +1,13 @@
-import { CalendarConfig, SlotRequestConfig, UserConfig } from "./config";
-import { ErrorType, RequestStatus, UserRole } from "./enums";
-import { z, ZodType } from 'zod';
-import { ErrorResponse } from "./responses/errorResponses";
-import { ErrorFactory } from "./factories/errorFactory";
-import { inputStringToDate, isDateValid } from "./datetimeUtils";
+import { CalendarConfig, SlotRequestConfig, UserConfig } from "../config";
+import { RequestStatus, UserRole } from "../enums";
+import { z } from 'zod';
+import { datetimeHourStringSchema, datetimeStringSchema } from "./schemasUtils";
 
-
-
-// === Validate function ===
-export function validate<T>(
-	schema: ZodType<T>,
-	input: unknown,
-	payloadOptional: boolean = false
-) {
-
-	// If payload is optional...
-	if (!payloadOptional) {
-		// ...check for null, undefined, or empty object - If it is, return error
-		const isEmptyObject = typeof input === 'object' && Object.keys(input!).length === 0;
-		if (input === null || input === undefined || isEmptyObject) {
-			return { success: false, error: ErrorType.MissingPayload };
-		}
-	}
-
-	// Validate the input according to the schema
-	const result = schema.safeParse(input);
-
-	// Check if validation was successful
-	if (!result.success) {
-		// Extract the ErrorTypes provided in the schema from the first issue
-		const firstIssue = result.error.issues[0]
-		const issueField = firstIssue.path[0] as string
-
-		console.log(firstIssue)
-
-		// Default error
-		let message: string = firstIssue.message
-		let response: ErrorResponse = ErrorFactory.getError(ErrorType.InvalidPayload, message);
-
-		// Custom error based on first Zod reposted issue (factory pattern)
-		switch (firstIssue.code) {
-			case 'unrecognized_keys':
-				message = firstIssue.message;
-				response = ErrorFactory.getError(ErrorType.UnrecognizedInputField, message);
-				break;
-
-			case 'invalid_type':
-				const receivedType = firstIssue.message.split(' ').pop();
-				if (receivedType === "undefined") {
-					message = `Missing ${issueField} field`;
-					response = ErrorFactory.getError(ErrorType.MissingInputField, message);
-				} else {
-					message = `Invalid ${issueField} type: Expected ${firstIssue.expected}, received ${receivedType}`;
-					response = ErrorFactory.getError(ErrorType.InvalidInputType, message);
-				}
-				break;
-
-			case 'invalid_value':
-				message = `Invalid ${issueField} value - ${firstIssue.message}`;
-				response = ErrorFactory.getError(ErrorType.InvalidInputValue, message);
-				break;
-
-			case 'invalid_format':
-				message = `Invalid ${issueField} format: ${firstIssue.message}`;
-				response = ErrorFactory.getError(ErrorType.InvalidInputFormat, message);
-				break;
-
-			case 'too_big':
-				if (firstIssue.message.toLowerCase().includes('characters')) {
-					message = `${issueField} is too long - ${firstIssue.message}`;
-					response = ErrorFactory.getError(ErrorType.InputValueTooLong, message);
-				} else {
-					message = `${issueField} value is too big - ${firstIssue.message}`;
-					response = ErrorFactory.getError(ErrorType.InputValueTooBig, message);
-				}
-				break;
-
-			case 'too_small':
-				if (firstIssue.message.toLowerCase().includes('characters')) {
-					message = `${issueField} is too short - ${firstIssue.message}`;
-					response = ErrorFactory.getError(ErrorType.InputValueTooShort, message);
-				} else {
-					message = `${issueField} value is too small - ${firstIssue.message}`;
-					response = ErrorFactory.getError(ErrorType.InputValueTooSmall, message);
-				}
-				break;
-
-			case 'custom':
-				message = firstIssue.message;
-				response = ErrorFactory.getError(ErrorType.InvalidInputValue, message);
-				break;
-		}
-
-
-		return { success: false, error: response };
-	}
-
-	return { success: true, data: result.data };
-}
-
-// === Custom validation rules for schemas ===
-
-// Datetime that forces minutes and seconds to zero
-// Reusable factory for datetime schemas
-function createDatetimeSchema({ format, regex, errorMessage }: {
-	format: string;
-	regex: RegExp;
-	errorMessage: string;
-}) {
-	return z
-		.string()
-		.regex(regex, { message: `Datetime must be in format ${format} (${errorMessage})` })
-		.refine((str) => {
-			return isDateValid(inputStringToDate(str))
-		}, {
-			message: "Invalid date (e.g. month > 12, day > 31, etc.)"
-		})
-		.transform((str) => inputStringToDate(str));
-}
-
-// Define specific schemas for datetimes
-export const datetimeHourStringSchema = createDatetimeSchema({
-	format: "YYYY-MM-DD HH:00",
-	regex: /^\d{4}-\d{2}-\d{2} \d{2}:00$/,
-	errorMessage: "minutes and seconds must be zero"
-});
-
-export const datetimeStringSchema = createDatetimeSchema({
-	format: "YYYY-MM-DD HH:mm",
-	regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/,
-	errorMessage: "seconds must be zero"
-});
+/**
+ * This file defines validation schemas and corresponding inferred types
+ * for all payloads used in the application. It ensures that input data
+ * is structured correctly, with clear constraints and custom error messages.
+ */
 
 // === Schemas and inferred types ===
 
@@ -327,6 +204,7 @@ export const RequestStatusAndPeriodPayloadSchema = z.object({
 
 // Type
 export type RequestStatusAndPeriodPayload = z.infer<typeof RequestStatusAndPeriodPayloadSchema>;
+
 
 // --- UserRechargePayload ---
 // Schema

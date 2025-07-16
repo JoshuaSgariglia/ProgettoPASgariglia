@@ -11,12 +11,11 @@ import {
     SlotRequestPayloadSchema,
     UserPayloadSchema,
     UserRechargePayloadSchema,
-    UUIDParameterSchema,
-    validate
-} from "../utils/schemas";
+    UUIDParameterSchema} from "../utils/validation/schemas";
+import { validate } from "../utils/validation/validate";
 import { Request, Response, NextFunction } from "express";
 
-/*
+/**
  * This file includes the middleware handlers for the validation of URL params and body payloads.
 */
 

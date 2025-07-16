@@ -1,9 +1,9 @@
 import { Op, Transaction } from "sequelize";
 import { SlotRequest } from "../models/SlotRequest";
-import { SlotRequestCreationData } from "../utils/schemas";
+import { SlotRequestCreationData } from "../utils/validation/schemas";
 import { RequestStatus } from "../utils/enums";
 
-/*
+/**
  * Repository class for the SlotRequest model.
  * Provides higher-level methods to interact with the SlotRequest model.
  */

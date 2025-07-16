@@ -1,7 +1,7 @@
 import { Transaction } from "sequelize";
 import { DatabaseConnector } from "./DatabaseConnector";
 
-/*
+/**
  * This file provides utility functions to manage database transactions using Sequelize.
 */
 

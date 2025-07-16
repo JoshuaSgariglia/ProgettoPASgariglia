@@ -9,7 +9,7 @@ import { APP_HOST, APP_PORT } from "./utils/config";
 import { adminAuthHandlers, userAuthHandlers } from "./middleware/authHandlers";
 import { logginghandlers } from "./middleware/loggingHandlers";
 
-/*
+/**
  * This is the entry point on the application.
 */
 

@@ -7,7 +7,7 @@ import {
     CalendarRequestsRetrieved, UserTokensRecharged
 } from "../responses/successResponses";
 
-/*
+/**
  * Factory class to generate SuccessResponses based on a SuccessType and 
  * (optionally) some data to include in the response.
  * It uses predefined success response classes defined in "successResponses.ts".

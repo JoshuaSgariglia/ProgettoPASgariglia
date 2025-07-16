@@ -3,7 +3,7 @@ import { ErrorFactory } from "../utils/factories/errorFactory";
 import { Request, Response, NextFunction } from "express";
 import { ErrorResponse } from "../utils/responses/errorResponses";
 
-/*
+/**
  * This file includes the middleware handlers for the errors.
  * The handlers are in the order in which they are called.
 */

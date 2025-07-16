@@ -7,12 +7,12 @@ import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { UserRepository } from "../repositories/UserRepository";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
-import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/schemas";
+import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/validation/schemas";
 import { CalendarSlotInfo, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/interfaces";
 import { hoursDiff } from "../utils/datetimeUtils";
 import { SlotRequestConfig } from "../utils/config";
 
-/*
+/**
  * Service with business logic, orchestrator between controller and repositories.
  * Requires all repository objects except ComputingResourceRepository, passed through dependency injection.
  * Throws ErrorType instances in case of domain-specific errors.
@@ -27,7 +27,7 @@ export class UserService {
 
 	// === Main methods ===
 
-	/*
+	/**
 	 * Creates a new slot request. 
      * Uses a SlotRequestPayload instance to create the request.
 	 * If successful, returns the newly created request.
@@ -92,7 +92,7 @@ export class UserService {
 		return { "request": slotRequest, "requestCost": requestCost, "remainingTokens": user!.tokenAmount }
 	}
 
-	/*
+	/**
 	 * Retrieves a list of requests created by the user, filtered by status and creation datetime. 
      * Uses a RequestStatusAndCreationPayload instance to filter the requests.
 	 * Returns the list of filtered requests.
@@ -201,7 +201,7 @@ export class UserService {
 		}
 	}
 
-	/*
+	/**
 	 * Provides information on the availability of a certain time slot in a calendar. 
      * Uses a CheckSlotPayload instance to verify the availability.
 	 * If successful, returns information on the calendar slot availability.
@@ -227,7 +227,7 @@ export class UserService {
 		}
 	}
 
-	/*
+	/**
 	 * Retrieves a list of requests created by the user, filtered by calendar, status and period. 
      * Uses a RequestStatusAndPeriodPayload instance to filter the requests.
 	 * If successful, returns the list of filtered requests.

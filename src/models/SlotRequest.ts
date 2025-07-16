@@ -3,7 +3,7 @@ import { RequestStatus } from '../utils/enums';
 import { SlotRequestConfig } from '../utils/config';
 
 
-/*
+/**
  * SlotRequest model class that extends Sequelize's Model class.
  * "CreationOptional" marks properties that can be undefined during creation, since they have default values.
 */
@@ -21,7 +21,7 @@ export class SlotRequest extends Model<InferAttributes<SlotRequest>, InferCreati
 
 }
 
-/*
+/**
  * Function that initializes the SlotRequest class, defining the declared properties and the options.
  * Static class SlotRequestConfig (defined in config.ts) is used to get the default values.
  * "paranoid: true" ensures that soft deletion is enabled.

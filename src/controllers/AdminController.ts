@@ -50,4 +50,10 @@ export class AdminController {
 		SuccessResponseFactory.getResponse(successType, { request: request }).sendIn(res);
 	};
 
+	public readonly getRequestsByCalendar = async (req: Request, res: Response): Promise<void> => {
+		const requests = await this.adminService.getRequestsByCalendar(req.params.id.toString());
+
+		SuccessResponseFactory.getResponse(SuccessType.CalendarRequestsRetrieved, { requests }).sendIn(res);
+	}
+
 }

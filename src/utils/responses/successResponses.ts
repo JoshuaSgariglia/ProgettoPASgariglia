@@ -144,6 +144,15 @@ export class CalendarSlotUnavailable extends OkayResponse {
     }
 }
 
+export class CalendarRequestsRetrieved extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The requests for the selected calendar have been retrieved", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {

@@ -32,6 +32,7 @@ router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController
 
 // Request
 router.patchAsync("/request-status/:id", uuidParameterHandler, requestApprovalPayloadHandler, adminController.updateRequestStatus);
+router.getAsync("/calendar/:id/requests", uuidParameterHandler, adminController.getRequestsByCalendar);
 
 
 

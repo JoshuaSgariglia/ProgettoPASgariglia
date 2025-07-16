@@ -149,6 +149,14 @@ export class AdminService {
         }
     }
 
+    // Get the satus of all requests by calendar
+    public async getRequestsByCalendar(calendar_id: string) {
+        // Throws an error if the calendar is nonexistent
+        await this.getCalendarIfExists(calendar_id);
+
+        return await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
+    }
+
 
     // === Helper functions ===
 

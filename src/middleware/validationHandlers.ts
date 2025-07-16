@@ -10,6 +10,7 @@ import {
     RequestStatusAndPeriodPayloadSchema,
     SlotRequestPayloadSchema,
     UserPayloadSchema,
+    UserRechargePayloadSchema,
     UUIDParameterSchema,
     validate
 } from "../utils/schemas";
@@ -48,3 +49,4 @@ export const requestStatusAndCreationPayloadHandler = validationHandlerGenerator
 export const requestApprovalPayloadHandler = validationHandlerGenerator(RequestApprovalPayloadSchema);
 export const checkSlotPayloadHandler = validationHandlerGenerator(CheckSlotPayloadSchema);
 export const requestStatusAndPeriodPayloadHandler = validationHandlerGenerator(RequestStatusAndPeriodPayloadSchema, InputSource.BODY, true);
+export const userRechargePayloadHandler = validationHandlerGenerator(UserRechargePayloadSchema, InputSource.BODY, true);

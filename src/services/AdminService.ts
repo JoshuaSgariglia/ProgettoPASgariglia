@@ -1,9 +1,9 @@
 import { User } from "../models/User";
 import { UserRepository } from "../repositories/UserRepository";
-import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload } from "../utils/schemas";
+import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload, UserRechargePayload } from "../utils/schemas";
 import { genSalt, hash } from "bcrypt-ts";
 import { ErrorType, RequestStatus } from "../utils/enums";
-import { SALT_ROUNDS } from "../utils/config";
+import { SALT_ROUNDS, UserConfig } from "../utils/config";
 import { Calendar } from "../models/Calendar";
 import { CalendarRepository } from "../repositories/CalendarRepository";
 import { ComputingResourceRepository } from "../repositories/ComputingResourceRepository";
@@ -11,6 +11,7 @@ import { ComputingResource } from "../models/ComputingResource";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
 import { getTransaction, withTransaction } from "../utils/connector/transactionDecorator";
+import { UserTokenUpdateInfo } from "../utils/misc";
 
 export class AdminService {
     constructor(
@@ -157,6 +158,23 @@ export class AdminService {
         return await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
     }
 
+    // Update the tokens of a user
+    public async updateUserTokens(user_id: string, userRechargePayload: UserRechargePayload): Promise<UserTokenUpdateInfo> {
+        // Throws an error if the user is nonexistent
+        const user: User = await this.getUserIfExists(user_id);
+
+        // Get current token amount
+        const oldTokenAmount: number = user.tokenAmount;
+
+        // Determine new token amount
+        const newTokenAmount: number = userRechargePayload.newTokenAmount ?? UserConfig.INITIAL_TOKEN_AMOUNT;
+
+        // Update tokenAmount
+        await user.update({ "tokenAmount": newTokenAmount });
+
+        return { user_id, oldTokenAmount, newTokenAmount };
+    }
+
 
     // === Helper functions ===
 
@@ -172,6 +190,17 @@ export class AdminService {
         // There are active ongoing requests
         if (requests.length !== 0)
             throw ErrorType.OngoingRequests;
+    }
+
+    private async getUserIfExists(user_id: string): Promise<User> {
+        // Search user by id
+        const user: User | null = await this.userRepository.getById(user_id);
+
+        // User does not exist
+        if (user === null)
+            throw ErrorType.UserNotFound;
+
+        return user;
     }
 
     private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {

@@ -327,3 +327,12 @@ export const RequestStatusAndPeriodPayloadSchema = z.object({
 
 // Type
 export type RequestStatusAndPeriodPayload = z.infer<typeof RequestStatusAndPeriodPayloadSchema>;
+
+// --- UserRechargePayload ---
+// Schema
+export const UserRechargePayloadSchema = z.object({
+	newTokenAmount: z.int().min(UserConfig.MIN_TOKEN_AMOUNT).max(UserConfig.MAX_TOKEN_AMOUNT).optional()
+}).strict();
+
+// Type
+export type UserRechargePayload = z.infer<typeof UserRechargePayloadSchema>;

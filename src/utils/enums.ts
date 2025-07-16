@@ -81,6 +81,7 @@ export enum ErrorType {
 	ComputingResourceNotFound = "ComputingResourceNotFound",
 	CalendarNotFound = "CalendarNotFound",
     SlotRequestNotFound = "SlotRequestNotFound",
+    UserNotFound = "UserNotFound",
 }
 
 export enum SuccessType {
@@ -101,6 +102,7 @@ export enum SuccessType {
 	CalendarSlotAvailable = "CalendarSlotAvailable",
 	CalendarSlotUnavailable = "CalendarSlotUnavailable",
 	CalendarRequestsRetrieved = "CalendarRequestsRetrieved",
+	UserTokensRecharged = "UserTokensRecharged",
 
 	// Created Success
 	AccountLoggedIn = "AccountLoggedIn",

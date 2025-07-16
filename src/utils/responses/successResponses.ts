@@ -153,6 +153,15 @@ export class CalendarRequestsRetrieved extends OkayResponse {
     }
 }
 
+export class UserTokensRecharged extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The tokens of the selected user have been recharged", 
+            data
+        );
+    }
+}
+
 // Created responses
 export class AccountRegistered extends CreatedResponse {
     constructor(data?: object) {

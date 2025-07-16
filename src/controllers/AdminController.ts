@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AdminService } from "../services/AdminService";
-import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload } from "../utils/schemas";
+import { CalendarCreationPayload, CalendarUpdatePayload, RequestApprovalPayload, UserPayload, UserRechargePayload } from "../utils/schemas";
 import { SuccessResponseFactory } from "../utils/factories/successFactory";
 import { RequestStatus, SuccessType } from "../utils/enums";
 
@@ -54,6 +54,12 @@ export class AdminController {
 		const requests = await this.adminService.getRequestsByCalendar(req.params.id.toString());
 
 		SuccessResponseFactory.getResponse(SuccessType.CalendarRequestsRetrieved, { requests }).sendIn(res);
+	}
+
+	public readonly updateUserTokens = async (req: Request, res: Response): Promise<void> => {
+		const userTokenUpdateInfo = await this.adminService.updateUserTokens(req.params.id.toString(), res.locals.validated as UserRechargePayload);
+
+		SuccessResponseFactory.getResponse(SuccessType.UserTokensRecharged, userTokenUpdateInfo).sendIn(res);
 	}
 
 }

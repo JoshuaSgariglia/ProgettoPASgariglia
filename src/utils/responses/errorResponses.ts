@@ -276,3 +276,9 @@ export class SlotRequestNotFound extends NotFound {
         super("The selected slot request does not exist")
     }
 }
+
+export class UserNotFound extends NotFound {
+    constructor() {
+        super("The selected user does not exist")
+    }
+}

@@ -38,3 +38,9 @@ export interface CalendarSlotInfo {
     datetimeEnd: Date;
     available: boolean;
 };
+
+export interface UserTokenUpdateInfo {
+    user_id: string;
+    oldTokenAmount: number;
+    newTokenAmount: number;
+};

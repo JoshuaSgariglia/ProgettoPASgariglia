@@ -28,15 +28,16 @@ export class UserController {
 	}
 
 	/**
-	 * Action that allows to get a list of slot requests created by the user, filtered by status and creation datetime.
+	 * Action that allows to get a list of information about slot requests status created by the user, 
+	 * filtered by status and creation datetime.
 	 * Expects the authenticated user UUID to be present in "res.locals.tokenPayload.id".
 	 * Expects a validated RequestStatusAndCreationPayload object to be present in "res.locals.validated".
-	 * If successful, returns the list of filtered slot requests.
+	 * If successful, returns the filtered list of information about slot requests status.
 	*/
 	public readonly getRequestsByStatusAndCreation = async (req: Request, res: Response): Promise<void> => {
-		const requests = await this.userService.getRequestsByStatusAndCreation(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
+		const requestsStatusInfo = await this.userService.getRequestsByStatusAndCreation(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
 
-		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requests }).sendIn(res);
+		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requestsStatusInfo }).sendIn(res);
 	}
 
 	/**

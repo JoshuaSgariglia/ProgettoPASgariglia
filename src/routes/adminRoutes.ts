@@ -55,8 +55,8 @@ router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController
 // Approve or reject a slot request by its UUID
 router.patchAsync("/request-status/:id", uuidParameterHandler, requestApprovalPayloadHandler, adminController.updateRequestStatus);
 
-// Get all requests by calendar UUID
-router.getAsync("/calendar/:id/requests", uuidParameterHandler, adminController.getRequestsByCalendar);
+// Get all requests status by calendar UUID
+router.getAsync("/calendar/:id/requests-status", uuidParameterHandler, adminController.getRequestsStatusByCalendar);
 
 // --- User ---
 

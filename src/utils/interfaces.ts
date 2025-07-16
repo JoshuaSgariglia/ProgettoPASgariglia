@@ -1,4 +1,5 @@
 import { SlotRequest } from "../models/SlotRequest";
+import { RequestStatus } from "./enums";
 import logger from "./logger";
 
 /**
@@ -34,6 +35,20 @@ export interface UserTokenUpdateInfo {
     user_id: string;
     oldTokenAmount: number;
     newTokenAmount: number;
+};
+
+export interface RequestStatusInfo {
+    uuid: string;
+    status: RequestStatus;
+    datetimeCreated: Date;
+    datetimeStart: Date;
+};
+
+export interface CalendarRequestStatusInfo {
+    uuid: string;
+    calendar: string;
+    status: RequestStatus;
+    datetimeStart: Date;
 };
 
 logger.info('Interfaces loaded successfully');

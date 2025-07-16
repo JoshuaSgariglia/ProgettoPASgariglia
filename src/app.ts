@@ -47,12 +47,12 @@ withDatabaseConnected((sequelize: Sequelize) => {
   // Use error handlers
   app.use(...errorHandlers)
 
+  logger.info('Express application initialization completed');
+
   // Start listening on port APP_PORT
   app.listen(APP_PORT, () => {
     logger.info(`App listening at http://${APP_HOST}:${APP_PORT}`);
   });
-
-  logger.info('Express application initialization completed');
 });
 
 

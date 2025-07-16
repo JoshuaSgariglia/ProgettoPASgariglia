@@ -8,7 +8,7 @@ import { UserRepository } from "../repositories/UserRepository";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { ErrorType, RequestStatus } from "../utils/enums";
 import { CheckSlotPayload, RequestStatusAndCreationPayload, RequestStatusAndPeriodPayload, SlotRequestCreationData, SlotRequestPayload } from "../utils/validation/schemas";
-import { CalendarSlotInfo, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/interfaces";
+import { CalendarSlotInfo, RequestStatusInfo, SlotRequestCreationInfo, SlotRequestDeletionInfo } from "../utils/interfaces";
 import { hoursDiff } from "../utils/datetimeUtils";
 import { SlotRequestConfig } from "../utils/config";
 
@@ -29,7 +29,7 @@ export class UserService {
 
 	/**
 	 * Creates a new slot request. 
-     * Uses a SlotRequestPayload instance to create the request.
+	 * Uses a SlotRequestPayload instance to create the request.
 	 * If successful, returns the newly created request.
 	*/
 	public async createSlotRequest(user_id: string, slotRequestPayload: SlotRequestPayload): Promise<SlotRequestCreationInfo> {
@@ -93,17 +93,29 @@ export class UserService {
 	}
 
 	/**
-	 * Retrieves a list of requests created by the user, filtered by status and creation datetime. 
-     * Uses a RequestStatusAndCreationPayload instance to filter the requests.
-	 * Returns the list of filtered requests.
+	 * Retrieves a list of information about the status of slot requests created by the user, 
+	 * filtered by status and creation datetime. 
+	 * Uses a RequestStatusAndCreationPayload instance to filter the requests.
+	 * Returns the the filtered list of information about slot requests status.
 	*/
-	public async getRequestsByStatusAndCreation(user_id: string, slotRequestPayload: RequestStatusAndCreationPayload): Promise<SlotRequest[]> {
-		return await this.slotRequestRepository.getRequestsByStatusAndCreationPeriod(
+	public async getRequestsByStatusAndCreation(user_id: string, slotRequestPayload: RequestStatusAndCreationPayload): Promise<RequestStatusInfo[]> {
+		// Get list of requests that match the filters
+		const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsByStatusAndCreationPeriod(
 			user_id,
 			slotRequestPayload.status,
 			slotRequestPayload.datetimeCreatedFrom,
 			slotRequestPayload.datetimeCreatedTo
 		);
+
+		// Map the requests in a list of RequestStatusInfo
+		const requestsStatusInfo: RequestStatusInfo[] = requests.map((r) => ({
+			uuid: r.uuid,
+			status: r.status,
+			datetimeCreated: r.datetimeCreated,
+			datetimeStart: r.datetimeStart,
+		}));
+
+		return requestsStatusInfo;
 	}
 
 	/*
@@ -200,7 +212,7 @@ export class UserService {
 
 	/**
 	 * Provides information on the availability of a certain time slot in a calendar. 
-     * Uses a CheckSlotPayload instance to verify the availability.
+	 * Uses a CheckSlotPayload instance to verify the availability.
 	 * If successful, returns information on the calendar slot availability.
 	*/
 	public async checkCalendarSlot(checkSlotPayload: CheckSlotPayload): Promise<CalendarSlotInfo> {
@@ -218,7 +230,7 @@ export class UserService {
 		// Return info about the availability of the slot
 		return {
 			"calendar_id": calendar.uuid,
-			"datetimeStart": checkSlotPayload.datetimeStart, 
+			"datetimeStart": checkSlotPayload.datetimeStart,
 			"datetimeEnd": checkSlotPayload.datetimeEnd,
 			"available": requests.length === 0
 		}
@@ -226,7 +238,7 @@ export class UserService {
 
 	/**
 	 * Retrieves a list of requests created by the user, filtered by calendar, status and period. 
-     * Uses a RequestStatusAndPeriodPayload instance to filter the requests.
+	 * Uses a RequestStatusAndPeriodPayload instance to filter the requests.
 	 * If successful, returns the list of filtered requests.
 	*/
 	public async getRequestsByStatusAndPeriod(user_id: string, slotRequestPayload: RequestStatusAndPeriodPayload): Promise<SlotRequest[]> {
@@ -246,7 +258,7 @@ export class UserService {
 
 	// === Helper methods ===
 
-    // Retrieve a Request by its UUID and by the user that created it, if it exists
+	// Retrieve a Request by its UUID and by the user that created it, if it exists
 	private async getRequestIfExistsAndOwnedByUser(request_id: string, user_id: string): Promise<SlotRequest> {
 		// Search request by id
 		const request: SlotRequest | null = await this.slotRequestRepository.getById(request_id);
@@ -260,15 +272,15 @@ export class UserService {
 
 	// Retrieve a calendar by its UUID, if it exists
 	private async getCalendarIfExists(calendar_id: string): Promise<Calendar> {
-        // Search calendar by id
-        const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
+		// Search calendar by id
+		const calendar: Calendar | null = await this.calendarRepository.getById(calendar_id);
 
-        // Calendar does not exist
-        if (calendar === null)
-            throw ErrorType.CalendarNotFound;
+		// Calendar does not exist
+		if (calendar === null)
+			throw ErrorType.CalendarNotFound;
 
-        return calendar;
-    }
+		return calendar;
+	}
 
 	// Retrieve a calendar by its UUID, if it exists and it's not archived
 	private async getCalendarIfExistsAndNotArchived(calendar_id: string): Promise<Calendar> {

@@ -30,7 +30,7 @@ const userController = new UserController(userService);
 // Create a new slot request
 router.postAsync("/request", slotRequestPayloadHandler, userController.createSlotRequest);
 
-// Get all requests for the current user, filtered by status and creation date
+// Get all requests status for the current user, filtered by status and creation date
 router.getAsync("/requests-status", requestStatusAndCreationPayloadHandler, userController.getRequestsByStatusAndCreation);
 
 // Delete a slot request by its UUID

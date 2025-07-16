@@ -11,7 +11,7 @@ import { ComputingResource } from "../models/ComputingResource";
 import { SlotRequestRepository } from "../repositories/SlotRequestRepository";
 import { SlotRequest } from "../models/SlotRequest";
 import { withTransaction } from "../utils/connector/transactionDecorator";
-import { UserTokenUpdateInfo } from "../utils/interfaces";
+import { CalendarRequestStatusInfo, UserTokenUpdateInfo } from "../utils/interfaces";
 import logger from "../utils/logger";
 
 /**
@@ -31,10 +31,10 @@ export class AdminService {
     // === Main methods ===
 
     /**
-	 * Creates a new user. 
+     * Creates a new user. 
      * Uses a UserPayload instance to create the user.
-	 * If successful, returns the newly created user.
-	*/
+     * If successful, returns the newly created user.
+    */
     public async createUser(userPayload: UserPayload): Promise<User> {
         logger.info(`Creating new user with username \"${userPayload.username}\"`);
 
@@ -62,10 +62,10 @@ export class AdminService {
     }
 
     /**
-	 * Creates a new calendar. 
+     * Creates a new calendar. 
      * Uses a CalendarCreationPayload instance to create the calendar.
-	 * If successful, returns the newly created calendar.
-	*/
+     * If successful, returns the newly created calendar.
+    */
     public async createCalendar(calendarPayload: CalendarCreationPayload): Promise<Calendar> {
         // Throws errors if the resource is nonexistent or unavailable
         await this.checkResourceAvailability(calendarPayload.resource)
@@ -75,10 +75,10 @@ export class AdminService {
     }
 
     /**
-	 * Updates a calendar. 
+     * Updates a calendar. 
      * Uses a CalendarUpdatePayload instance to update the calendar.
-	 * If successful, returns the updated calendar.
-	*/
+     * If successful, returns the updated calendar.
+    */
     public async updateCalendar(calendar_id: string, calendarPayload: CalendarUpdatePayload): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id)
@@ -108,18 +108,18 @@ export class AdminService {
     }
 
     /**
-	 * Retrieves a calendar by its UUID. 
-	 * If successful, returns the found calendar.
-	*/
+     * Retrieves a calendar by its UUID. 
+     * If successful, returns the found calendar.
+    */
     public async getCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         return await this.getCalendarIfExists(calendar_id);
     }
 
     /**
-	 * Deletes a calendar by its UUID. 
-	 * If successful, returns the deleted calendar.
-	*/
+     * Deletes a calendar by its UUID. 
+     * If successful, returns the deleted calendar.
+    */
     public async deleteCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
@@ -136,9 +136,9 @@ export class AdminService {
     }
 
     /**
-	 * Archives a calendar by its UUID. 
-	 * If successful, returns the archived calendar.
-	*/
+     * Archives a calendar by its UUID. 
+     * If successful, returns the archived calendar.
+    */
     public async archiveCalendar(calendar_id: string): Promise<Calendar> {
         // Throws an error if the calendar is nonexistent
         const calendar: Calendar = await this.getCalendarIfExists(calendar_id);
@@ -151,10 +151,10 @@ export class AdminService {
     }
 
     /**
-	 * Updates the status of a request to either Approved or Refused. 
+     * Updates the status of a request to either Approved or Refused. 
      * Uses a RequestApprovalPayload instance to update the status of the request.
-	 * If successful, returns the request whose status was updated.
-	*/
+     * If successful, returns the request whose status was updated.
+    */
     public async updateRequestStatus(request_id: string, requestApprovalPayload: RequestApprovalPayload): Promise<SlotRequest> {
         // Throws an error if the calendar is nonexistent
         const request: SlotRequest = await this.getRequestIfExists(request_id);
@@ -182,29 +182,39 @@ export class AdminService {
         } else {
             if (request.status === RequestStatus.Refused)
                 return request
-                
+
             // Update Request status to Refused
-            return await request.update({ "status": RequestStatus.Refused, "refusalReason":  requestApprovalPayload.refusalReason })
+            return await request.update({ "status": RequestStatus.Refused, "refusalReason": requestApprovalPayload.refusalReason })
         }
     }
 
     /**
-	 * Retrieves all the requests by their calendar UUID. 
-	 * If successful, returns the list of filtered requests.
-	*/
-    public async getRequestsByCalendar(calendar_id: string) {
+     * Retrieves all the requests status by their calendar UUID. 
+     * If successful, returns the list of filtered requests status.
+    */
+    public async getRequestsStatusByCalendar(calendar_id: string): Promise<CalendarRequestStatusInfo[]> {
         // Throws an error if the calendar is nonexistent
         await this.getCalendarIfExists(calendar_id);
 
         // Only filters by calendar_id because all other parameters are undefined
-        return await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
+        const requests: SlotRequest[] = await this.slotRequestRepository.getRequestsInPeriod(calendar_id);
+
+        // Map the requests in a list of CalendarRequestStatusInfo
+        const requestsStatusInfo: CalendarRequestStatusInfo[] = requests.map((r) => ({
+            uuid: r.uuid,
+            calendar: r.calendar,
+            status: r.status,
+            datetimeStart: r.datetimeStart,
+        }));
+
+        return requestsStatusInfo;
     }
 
     /**
-	 * Updates the amount of tokens a user possesses. 
+     * Updates the amount of tokens a user possesses. 
      * Uses a UserRechargePayload instance to update the tokens of the user.
-	 * If successful, returns information about the old and new token amounts.
-	*/
+     * If successful, returns information about the old and new token amounts.
+    */
     public async updateUserTokens(user_id: string, userRechargePayload: UserRechargePayload): Promise<UserTokenUpdateInfo> {
         // Throws an error if the user is nonexistent
         const user: User = await this.getUserIfExists(user_id);

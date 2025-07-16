@@ -19,6 +19,8 @@ export class SlotRequest extends Model<InferAttributes<SlotRequest>, InferCreati
   declare reason: string;
   declare refusalReason: CreationOptional<string | null>;
 
+  declare datetimeCreated: CreationOptional<Date>; // Declared so that it can be used out side of Sequelize queries
+
 }
 
 /**
@@ -67,6 +69,11 @@ export function defineSlotRequestModel(sequelize: Sequelize) {
       refusalReason: {
         type: DataTypes.STRING(SlotRequestConfig.MAX_REFUSAL_REASON_LENGTH),
         allowNull: true,
+      },
+      datetimeCreated: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Date.now()
       },
     },
     // Options

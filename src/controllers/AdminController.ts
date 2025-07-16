@@ -96,14 +96,14 @@ export class AdminController {
 	};
 
 	/**
-	 * Action that allows to get a list of requests by calendar.
+	 * Action that allows to get a list of information about requests status, filtered by calendar.
 	 * Expects the calendar UUID to be present in "req.params.id".
-	 * If successful, returns the list of requests associated to the calendar.
+	 * If successful, returns the filtered list with information on requests status.
 	*/
-	public readonly getRequestsByCalendar = async (req: Request, res: Response): Promise<void> => {
-		const requests = await this.adminService.getRequestsByCalendar(req.params.id.toString());
+	public readonly getRequestsStatusByCalendar = async (req: Request, res: Response): Promise<void> => {
+		const requestsStatusInfo = await this.adminService.getRequestsStatusByCalendar(req.params.id.toString());
 
-		SuccessResponseFactory.getResponse(SuccessType.CalendarRequestsRetrieved, { requests }).sendIn(res);
+		SuccessResponseFactory.getResponse(SuccessType.CalendarRequestsRetrieved, { "requests": requestsStatusInfo }).sendIn(res);
 	}
 
 	/**

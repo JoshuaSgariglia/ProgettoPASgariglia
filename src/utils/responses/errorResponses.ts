@@ -12,6 +12,10 @@ import { HttpResponse } from "./HttpResponse";
 export class ErrorResponse extends HttpResponse {
     protected errorType: string;
 
+    public getErrorType(): string {
+        return this.errorType;
+    }
+
     constructor(
         message: string,
         statusCode: StatusCodes = StatusCodes.INTERNAL_SERVER_ERROR,
@@ -20,7 +24,6 @@ export class ErrorResponse extends HttpResponse {
         super(message, statusCode);
         this.errorType = errorType ?? this.constructor.name;
     }
-
 }
 
 

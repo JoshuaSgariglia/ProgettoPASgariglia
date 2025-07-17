@@ -22,8 +22,7 @@ export function validate<T>(
 	// If payload is optional...
 	if (!payloadOptional) {
 		// ...check for null, undefined, or empty object - If it is, return error
-		const isEmptyObject = typeof input === 'object' && Object.keys(input!).length === 0;
-		if (input === null || input === undefined || isEmptyObject) {
+		if (input === null || input === undefined || (typeof input === 'object' && Object.keys(input!).length === 0)) {
 			return { success: false, error: ErrorType.MissingPayload };
 		}
 	}

@@ -19,6 +19,7 @@ export class SuccessResponse extends HttpResponse {
     }
 }
 
+
 // --- Middle SuccessResponse classes ---
 export class OkayResponse extends SuccessResponse {
     constructor(message?: string, data?: object) {
@@ -39,6 +40,7 @@ export class CreatedResponse extends SuccessResponse {
         );
     }
 }
+
 
 // --- Specialized SuccessResponse classes ---
 

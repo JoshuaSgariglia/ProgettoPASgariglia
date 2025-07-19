@@ -38,6 +38,7 @@ export enum ErrorType {
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
 	NotFound = "NotFound",
+	Conflict = "Conflict",
 	InternalServerError = "InternalServerError",
 
 	// BadRequest errors
@@ -46,12 +47,9 @@ export enum ErrorType {
 	InvalidLoginCredentials = "InvalidCredentials",
 	UsernameAlreadyInUse = "UsernameAlreadyInUse",
 	EmailAlreadyInUse = "EmailAlreadyInUse",
-	ComputingResourceUnavailable = "ComputingResourceUnavailable",
 	CalendarNameAlreadyInUse = "CalendarNameAlreadyInUse",
-	CalendarSlotUnavailable = "CalendarSlotUnavailable",
 	CalendarArchived = "CalendarArchived",
 	OngoingRequests = "OngoingRequests",
-    IntersectingRequests = "IntersectingRequests",
 	RefusedRequestDeletion = "RefusedRequestDeletion",
 	ArchivedRequestDeletion = "ArchivedRequestDeletion",
 	FullyUsedRequestDeletion = "FullyUsedRequestDeletion",
@@ -84,6 +82,11 @@ export enum ErrorType {
 	CalendarNotFound = "CalendarNotFound",
     SlotRequestNotFound = "SlotRequestNotFound",
     UserNotFound = "UserNotFound",
+
+	// Conflict errors
+	ComputingResourceUnavailable = "ComputingResourceUnavailable",
+	CalendarSlotUnavailable = "CalendarSlotUnavailable",
+    IntersectingRequests = "IntersectingRequests",
 }
 
 // Used in the controller layer for response generation with SuccessResponseFactory

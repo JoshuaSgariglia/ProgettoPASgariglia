@@ -8,7 +8,8 @@ import {
     InvalidToken, InvalidTokenPayload, MissingAuthorizationHeader, MissingInputField, MissingPayload,
     NotFound, OngoingRequests, ArchivedRequestDeletion, FullyUsedRequestDeletion, RefusedRequestDeletion,
     SlotRequestNotFound, TokenExpired, TokenNotActivated, Unauthorized, UndefinedRouteOrInvalidMethod,
-    UnrecognizedInputField, UsernameAlreadyInUse, UserNotFound
+    UnrecognizedInputField, UsernameAlreadyInUse, UserNotFound,
+    Conflict
 } from "../responses/errorResponses";
 
 /**
@@ -32,6 +33,9 @@ export class ErrorFactory {
             case ErrorType.NotFound:
                 error = new NotFound(message);
                 break;
+            case ErrorType.Conflict:
+                error = new Conflict(message);
+                break;
             case ErrorType.InternalServerError:
                 error = new InternalServerError(message);
                 break;
@@ -52,23 +56,14 @@ export class ErrorFactory {
             case ErrorType.EmailAlreadyInUse:
                 error = new EmailAlreadyInUse();
                 break;
-            case ErrorType.ComputingResourceUnavailable:
-                error = new ComputingResourceUnavailable();
-                break;
             case ErrorType.CalendarNameAlreadyInUse:
                 error = new CalendarNameAlreadyInUse();
-                break;
-            case ErrorType.CalendarSlotUnavailable:
-                error = new CalendarSlotUnavailable();
                 break;
             case ErrorType.CalendarArchived:
                 error = new CalendarArchived();
                 break;
             case ErrorType.OngoingRequests:
                 error = new OngoingRequests();
-                break;
-            case ErrorType.IntersectingRequests:
-                error = new IntersectingRequests();
                 break;
             case ErrorType.RefusedRequestDeletion:
                 error = new RefusedRequestDeletion();
@@ -149,6 +144,17 @@ export class ErrorFactory {
                 break;
             case ErrorType.UserNotFound:
                 error = new UserNotFound();
+                break;
+            
+            // Conflict
+            case ErrorType.ComputingResourceUnavailable:
+                error = new ComputingResourceUnavailable();
+                break;
+            case ErrorType.CalendarSlotUnavailable:
+                error = new CalendarSlotUnavailable();
+                break;
+            case ErrorType.IntersectingRequests:
+                error = new IntersectingRequests();
                 break;
 
             // Default error

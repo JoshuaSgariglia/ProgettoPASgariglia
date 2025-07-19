@@ -64,6 +64,15 @@ export class NotFound extends ErrorResponse {
     }
 }
 
+export class Conflict extends ErrorResponse {
+    constructor(message?: string) {
+        super(
+            message ?? "The submitted request cannot be fulfilled due to a conflict",
+            StatusCodes.CONFLICT,
+        )
+    }
+}
+
 export class InternalServerError extends ErrorResponse {
     constructor(message?: string) {
         super(
@@ -71,7 +80,6 @@ export class InternalServerError extends ErrorResponse {
             StatusCodes.INTERNAL_SERVER_ERROR,
         )
     }
-
 }
 
 
@@ -108,21 +116,9 @@ export class EmailAlreadyInUse extends BadRequest {
     }
 }
 
-export class ComputingResourceUnavailable extends BadRequest {
-    constructor() {
-        super("The selected computing resource is already associated to a calendar")
-    }
-}
-
 export class CalendarNameAlreadyInUse extends BadRequest {
     constructor() {
         super("The selected name is already associated to a calendar")
-    }
-}
-
-export class CalendarSlotUnavailable extends BadRequest {
-    constructor() {
-        super("The selected time range is already assigned to another request")
     }
 }
 
@@ -135,12 +131,6 @@ export class CalendarArchived extends BadRequest {
 export class OngoingRequests extends BadRequest {
     constructor() {
         super("Cannot delete or archive the calendar while there are ongoing requests")
-    }
-}
-
-export class IntersectingRequests extends BadRequest {
-    constructor() {
-        super("Cannot approve the request because there are approved intersecting requests")
     }
 }
 
@@ -289,5 +279,24 @@ export class SlotRequestNotFound extends NotFound {
 export class UserNotFound extends NotFound {
     constructor() {
         super("The selected user does not exist")
+    }
+}
+
+// Conflict errors
+export class ComputingResourceUnavailable extends Conflict {
+    constructor() {
+        super("The selected computing resource is already associated to a calendar")
+    }
+}
+
+export class CalendarSlotUnavailable extends Conflict {
+    constructor() {
+        super("The selected time range is already assigned to another request")
+    }
+}
+
+export class IntersectingRequests extends Conflict {
+    constructor() {
+        super("Cannot approve the request because there are approved intersecting requests")
     }
 }

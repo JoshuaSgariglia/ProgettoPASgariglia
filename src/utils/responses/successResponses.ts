@@ -108,6 +108,15 @@ export class SlotRequestsRetrieved extends OkayResponse {
     }
 }
 
+export class SlotRequestsStatusRetrieved extends OkayResponse {
+    constructor(data?: object) {
+        super(
+            "The status of the requests that match the filters has been retrieved", 
+            data
+        );
+    }
+}
+
 export class SlotRequestApproved extends OkayResponse {
     constructor(data?: object) {
         super(

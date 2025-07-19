@@ -1,6 +1,10 @@
 import winston from 'winston';          
 import path from 'path';                
-import fs from 'fs';                 
+import fs from 'fs';       
+
+/**
+ * This file includes the logic for a custom logger that allows to log both on console and file
+ */
 
 // In Docker if .dockerenv is present
 const inDocker = fs.existsSync('/.dockerenv');

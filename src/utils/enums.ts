@@ -102,6 +102,7 @@ export enum SuccessType {
 	CalendarDeleted = "CalendarDeleted",
 	CalendarArchived = "CalendarArchived",
 	SlotRequestsRetrieved = "SlotRequestsRetrieved",
+	SlotRequestsStatusRetrieved = "SlotRequestsStatusRetrieved",
 	SlotRequestApproved = "SlotRequestApproved",
 	SlotRequestRefused = "SlotRequestRefused",
 	SlotRequestDeleted = "SlotRequestDeleted",

@@ -37,7 +37,7 @@ export class UserController {
 	public readonly getRequestsByStatusAndCreation = async (req: Request, res: Response): Promise<void> => {
 		const requestsStatusInfo = await this.userService.getRequestsByStatusAndCreation(res.locals.tokenPayload.uuid, res.locals.validated as RequestStatusAndCreationPayload);
 
-		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsRetrieved, { "requests": requestsStatusInfo }).sendIn(res);
+		SuccessResponseFactory.getResponse(SuccessType.SlotRequestsStatusRetrieved, { "requests": requestsStatusInfo }).sendIn(res);
 	}
 
 	/**

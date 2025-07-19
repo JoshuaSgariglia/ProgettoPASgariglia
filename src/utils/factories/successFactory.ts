@@ -4,7 +4,8 @@ import {
     CalendarRetrieved, CalendarUpdated, CreatedResponse, InvalidSlotRequestCreated, OkayResponse,
     ServiceOnline, SlotRequestCreated, SlotRequestApproved, SlotRequestRefused, SlotRequestsRetrieved,
     SuccessResponse, SlotRequestDeleted, CalendarSlotAvailable, CalendarSlotUnavailable,
-    CalendarRequestsRetrieved, UserTokensRecharged
+    CalendarRequestsRetrieved, UserTokensRecharged,
+    SlotRequestsStatusRetrieved
 } from "../responses/successResponses";
 
 /**
@@ -45,6 +46,9 @@ export class SuccessResponseFactory {
                 break;
             case SuccessType.SlotRequestsRetrieved:
                 response = new SlotRequestsRetrieved(data);
+                break;
+            case SuccessType.SlotRequestsStatusRetrieved:
+                response = new SlotRequestsStatusRetrieved(data);
                 break;
             case SuccessType.SlotRequestApproved:
                 response = new SlotRequestApproved(data);

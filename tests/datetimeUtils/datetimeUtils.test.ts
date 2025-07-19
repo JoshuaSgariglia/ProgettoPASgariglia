@@ -68,9 +68,9 @@ describe('Datetime Utils Unit Tests', () => {
             expect(date.toLocaleString()).toBe('17/07/2025, 09:00:00');
         });
 
-        test('Should add ":00" seconds', () => {
-            const date = inputStringToDate('2025-07-17 23:45');
-            expect(date.toLocaleString()).toBe('17/07/2025, 23:45:00');
+        test('Should create and invalid date', () => {
+            const date = inputStringToDate('2025-13-17 23:45');
+            expect(isDateValid(date)).toBe(false);
         });
     });
 

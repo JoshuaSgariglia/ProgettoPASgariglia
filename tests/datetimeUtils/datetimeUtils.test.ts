@@ -9,12 +9,12 @@ describe('Datetime Utils Unit Tests', () => {
 
     // === isDateValid ===
     describe('isDateValid', () => {
-        it('Should return true for a valid date', () => {
+        test('Should return true for a valid date', () => {
             const date = new Date('2025-07-17T10:00:00');
             expect(isDateValid(date)).toBe(true);
         });
 
-        it('Should return false for an invalid date', () => {
+        test('Should return false for an invalid date', () => {
             const invalid = new Date('invalid');
             expect(isDateValid(invalid)).toBe(false);
         });

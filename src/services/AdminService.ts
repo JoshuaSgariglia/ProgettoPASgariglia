@@ -13,6 +13,8 @@ import { SlotRequest } from "../models/SlotRequest";
 import { withTransaction } from "../utils/connector/transactionDecorator";
 import { CalendarRequestStatusInfo, UserTokenUpdateInfo } from "../utils/interfaces";
 import logger from "../utils/logger";
+import { Transaction } from "sequelize";
+import { hoursDiff } from "../utils/datetimeUtils";
 
 /**
  * Service with business logic, orchestrator between controller and repositories.
@@ -183,8 +185,24 @@ export class AdminService {
             if (request.status === RequestStatus.Refused)
                 return request
 
-            // Update Request status to Refused
-            return await request.update({ "status": RequestStatus.Refused, "refusalReason": requestApprovalPayload.refusalReason })
+            // Get calendar
+            const calendar: Calendar | null = await this.calendarRepository.getById(request.calendar);
+
+            // Calculate total cost, it's the amount that needs to be refunded
+            const refund: number = hoursDiff(request.datetimeStart, request.datetimeEnd) * calendar!.tokenCostPerHour;
+
+            // Get user
+            const user: User | null = await this.userRepository.getById(request.user);
+
+            // If the request is refused, the spent tokens need to be refunded and the request updated
+            return await withTransaction(async (transaction: Transaction) => {
+
+                // Update user tokens
+                await user!.increment("tokenAmount", { by: refund, transaction });
+
+                // Update Request status to Refused
+                return await request.update({ "status": RequestStatus.Refused, "refusalReason": requestApprovalPayload.refusalReason }, { transaction })
+            });
         }
     }
 

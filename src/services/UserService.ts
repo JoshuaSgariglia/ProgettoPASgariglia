@@ -58,7 +58,7 @@ export class UserService {
 		let slotRequest: SlotRequest;
 
 		// The request will be pending if the user has enough tokens...
-		if (user!.tokenAmount > requestCost) {
+		if (user!.tokenAmount >= requestCost) {
 			slotRequest = await withTransaction(async (transaction: Transaction) => {
 				// Initialize SlotRequest creation data
 				const slotRequestCreationData: SlotRequestCreationData = {

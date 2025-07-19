@@ -54,7 +54,7 @@ describe('RequestApprovalPayloadSchema Unit Tests', () => {
 	});
 
 	// === Type errors ===
-	it('Should fail because approved is not a boolean', () => {
+	test('Should fail because approved is not a boolean', () => {
 		const input = { approved: 'yes' };
 		const result = validate(RequestApprovalPayloadSchema, input);
 		expect(result.success).toBe(false);

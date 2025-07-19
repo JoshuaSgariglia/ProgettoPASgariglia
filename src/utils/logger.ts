@@ -46,6 +46,7 @@ function formatLogFilenameTimestamp(date: Date): string {
     return `log_${year}-${month}-${day}_${hours}-${minutes}-${seconds}.txt`;
 }
 
+// Determine log filename based on current datetime
 const now = new Date();
 const logFilename = path.join(LOGS_PATH, formatLogFilenameTimestamp(now));
 

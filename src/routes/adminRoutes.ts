@@ -48,7 +48,7 @@ router.getAsync("/calendar/:id", uuidParameterHandler, adminController.getCalend
 router.deleteAsync("/calendar/:id", uuidParameterHandler, adminController.deleteCalendar);
 
 // Archive a calendar (soft delete) by its UUID
-router.patchAsync("/archive-calendar/:id", uuidParameterHandler, adminController.archiveCalendar);
+router.patchAsync("/calendar/:id/archive", uuidParameterHandler, adminController.archiveCalendar);
 
 // --- Request ---
 

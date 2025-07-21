@@ -8,8 +8,6 @@ Questo progetto consiste nella realizzazione di un sistema backend per la gestio
 
 Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Università Politecnica delle Marche (UNIVPM).
 
----
-
 ### 1.2 - Strumenti e Librerie utilizzati
 
 #### Strumenti e Tecnologie Principali
@@ -193,6 +191,8 @@ Le rotte riservate agli utenti Admin hanno il prefisso `/api/admin`.
 
 ### 4.1 - Struttura dell'applicazione
 
+Di seguito è fornita la struttura dell'applicazione in maniera schematica. Successivamente è presente una descrizione più discorsiva dei componenti principali.
+
 ```plaintext
 ProgettoPASgariglia/              
 ├── docs/         
@@ -297,12 +297,79 @@ ProgettoPASgariglia/
 └── tsconfig.json          
 ```
 
+Il progetto segue una struttura modulare basata su una variante estesa dell'architettura MVC. Il codice sorgente è contenuto nella directory [`src/`](./src), suddivisa logicamente in sotto-moduli:
+
+- [`controllers/`](./src/controllers): contiene i controller responsabili della gestione delle richieste in ingresso e del coordinamento con i servizi. Vi è un controller per ogni gruppo di rotte.
+- [`services/`](./src/services): implementa la logica di business centralizzata, orchestrando l’interazione tra controller, repository e utilità. Vi è una classe service per ogni classe controller.
+- [`repositories/`](./src/repositories): fornisce un layer di accesso ai dati, astraendo rispetto ai modelli e alla logica base di Sequelize. Vi è una repository per ciascuna classe model.
+- [`models/`](./src/models): definisce le entità dell'applicazione e realizza l'ORM con Sequelize.
+- [`routes/`](./src/routes): contiene le definizioni delle rotte Express divise in tre gruppi (pubbliche, utente, admin).
+- [`middleware/`](./src/middleware): include middleware per autenticazione, logging, gestione degli errori e validazione schema-based.
+
+Particolarmente articolata è la directory [`utils/`](./src/utils), suddivisa in più sottocartelle e file di utilità:
+
+- [`connector/`](./src/utils/connector): connessione al database, inizializzazione delle classi model e decoratore per le transazioni.
+- [`factories/`](./src/utils/factories): generazione di risposte di errore e di successo.
+- [`responses/`](./src/utils/responses): definizioni comuni per formattare le risposte HTTP.
+- [`validation/`](./src/utils/validation): schemi Zod e helper per la validazione dei payload.
+
+- *AsyncRouter.ts*: wrapper asincrono per la gestione centralizzata degli errori lanciati nei service.
+- *config.ts*: file di configurazione per variabili d’ambiente.
+- *datetimeUtils.ts*: funzioni per la gestione e manipolazione delle date.
+- *enums.ts*: enumeratori utilizzati per stati, ruoli, e tipi di errore e di successo usati nelle factory.
+- *interfaces.ts*: interfacce TypeScript per oggetti personalizzati forniti in risposta ad alcune richieste HTTP.
+- *logger.ts*: console e file logger basato sulla libreria Winston.
+
+Completano la struttura del progetto le cartelle [`docs/`](./docs) con i diagrammi UML e E-R, [`scripts/`](./scripts) con gli script SQL di inizializzazione del database, e [`tests/`](./tests) contenente gli unit test Jest.
+
 ### 4.2 - Pattern Architetturali utilizzati
 
+Nella definizione dell'architettura del progetto sono stati utilizzati i pattern *MVC* e *Repository*, messi in comunicazione da uno strato *Service*.
+
+#### Pattern MVC (Model‑View‑Controller)
+Il pattern **MVC** è una suddivisione classica dell’applicazione in tre componenti chiave: **Model**, **View** e **Controller**. Il *Model* incapsula il dominio e lo stato, la *View* visualizza l’interfaccia utente con i dati, e il *Controller* gestisce l’interazione utente, orchestrando le chiamate al Model e aggiornando la View.  
+
+Nel progetto, i *Controller* ricevono le richieste HTTP, interagiscono con i *Service* per ottenere e modificare i dati dei *Model* tramite le *Repository*, e inviano i dati elaborati al client. I *Model* rappresentano semplicemente le entità del dominio e non includono la logica di business, mentre le *View* classiche non sono presenti, trattandosi di un backend.
+
+#### Service Layer
+Il **Service layer** introduce uno strato di logica di business tra *Controller* e *Repository*. Qui si trovano validazioni legate al dominio, calcoli e orchestrazioni fra più entità. Questo approccio consente ai *Controller* di restare “leggeri”, occupandosi solo di ricevere le richieste HTTP, estrarre i dati in input da passare ai *Service*, e preparare la risposta con i dati forniti dai *Service*: tutta la logica significativa è collocata nei *Service*.
+
+Nel progetto, ogni operazione importante (es. registrazione utente, gestione dei calendari, approvazione delle richieste) è gestita di un metodo di una classe *Service*. Tali classi accedono alle *Repository* per persistere o recuperare dati, applicano logiche complesse (es. validazioni incrociate che coinvolgono più classi model) e restituiscono a un *Controller* un output pronto per essere iniettato in una risposta generata tramite una factory, da inviare al client. Le classi *Service* sono utilizzate per inizializzare i rispettivi *Controller* tramite Dependency Injection.
+
+#### Pattern Repository
+Il **Repository** è un ponte tra la logica dell’applicazione e la persistenza dei dati. Espone metodi come `getById`, `getByUsername`, `add` nascondendo i dettagli di come tali operazioni sono eseguite. Si occupa esclusivamente di operazioni CRUD su entità, senza contenere logica di business e senza lanciare eccezioni.
+
+Nel progetto, le quattro entità — `Calendar`, `ComputingResource`, `Slot`, e `User` — sono rappresentate da classi model che estendono la classe base `Model` fornita da Sequelize. Per ciascuna di queste classi model è definita una repository dedicata, incaricata di gestire le operazioni di accesso e persistenza dei dati. Tali repository incapsulano le interazioni con il database e vengono iniettate nei *Service* tramite Dependency Injection, permettendo così di mantenere separata la gestione della persistenza.
 
 
 ### 4.3 - Design Pattern utilizzati
 
+#### Singleton
+
+Il **Singleton** è un pattern architetturale che garantisce che una determinata classe abbia una sola istanza globale durante l'intero ciclo di vita dell'applicazione. Questo pattern è utile quando si desidera centralizzare la gestione di una risorsa condivisa. Il Singleton espone un metodo pubblico (spesso chiamato `getInstance`) che restituisce l'istanza unica, creando l'oggetto solo alla prima invocazione.
+
+##### [DatabaseConnector.ts](./src/utils/connector/DatabaseConnector.ts)
+
+Nel progetto, il pattern Singleton è utilizzato nella classe `DatabaseConnector` per garantire un'unica istanza della connessione Sequelize al database PostgreSQL. Il costruttore della classe è privato, impedendo l'istanziazione esterna. Il metodo statico `getInstance()` controlla se l'istanza Sequelize esiste già: se non esiste, viene creata tramite `getDatabaseConnector()` e salvata nella proprietà statica `instance`. Questo approccio evita che vengano create connessioni multiple e ridondanti al database.
+
+#### Factory method
+
+Il **Factory Method** è un design pattern creazionale che fornisce un'interfaccia per creare oggetti. Invece di usare direttamente `new`, l’oggetto viene creato attraverso un metodo dedicato, centralizzando la logica di costruzione e facilitando l’estensione e la manutenzione del codice.
+
+##### [errorFactory.ts](./src/utils/factories/errorFactory.ts)
+
+Nel progetto, il file `errorFactory.ts` applica questo pattern attraverso la classe `ErrorFactory`. Il metodo statico `getError()` agisce come factory method, ricevendo un valore dall'enum `ErrorType` e restituendo un’istanza di una delle classi di errore definite in `errorResponses.ts`, tutte eredi della classe base `ErrorResponse`. In base al tipo di errore passato, viene istanziata la classe corrispondente (es. `BadRequest`, `TokenExpired`, `InvalidInputValue`, ecc.), con un messaggio opzionale. In questo modo si evita l'abuso di `if` o `switch` sparsi nel codice applicativo, concentrando la generazione delle risposte di errore HTTP in un solo punto. *ErrorFactory* è utilizzata nella validazione dei dati forniti in input e nel middleware per quanto riguarda gli handler degli errori.
+
+##### [successFactory.ts](./src/utils/factories/successFactory.ts)
+
+Nel file `successFactory.ts`, il *Factory Method* viene applicato tramite la classe `SuccessResponseFactory`, la quale centralizza la creazione di oggetti di risposta positiva verso i client. Il metodo statico `getResponse()` agisce da factory method: accetta un valore dell'enum `SuccessType` e opzionalmente un oggetto `data` da iniettare nell'oggetto risposta da generare, e restituisce quindi un'istanza della classe di risposta corrispondente, che eredita `SuccessResponse`. In base al tipo specificato (es. `CalendarCreated`, `SlotRequestsRetrieved`, `AccountLoggedIn`, ecc.), viene creata la classe di successo adeguata. Questo approccio consente di generare risposte in modo coerente. *SuccessResposeFactory* è utilizzata nelle action dei Controller per generare risposte iniettandovi i dati ottenuti dai Service.
+
+#### Decorator
+
+##### [connect.ts](./src/utils/connector/connect.ts)
+##### [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts)
+
+#### Middleware
 
 
 ### 4.4 - Inizializzazione del database
@@ -320,7 +387,7 @@ ProgettoPASgariglia/
 
 ---
 
-## 🚀 6 - Avvio del Progetto con Docker
+## 6 - Avvio del Progetto con Docker
 
 1. Clona la repository:
 ```bash

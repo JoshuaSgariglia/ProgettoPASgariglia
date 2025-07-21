@@ -2,7 +2,7 @@
 
 ## 1 - Obiettivo del progetto e Strumenti utilizzati
 
-### 🎯 Obiettivo del Progetto
+### 1.1 - Obiettivo del Progetto
 
 Questo progetto consiste nella realizzazione di un sistema backend per la gestione di prenotazioni di slot temporali su risorse HPC (High Performance Computing), come GPU o altri dispositivi. L'accesso e le azioni sono differenziate in base al ruolo (Pubbliche, Utente o Admin), e tutte le rotte, ad eccezione di quelle pubbliche, sono protette tramite JWT e autorizzazione basata su ruoli. Il sistema permette agli utenti autenticati di visualizzare, effettuare, cancellare e monitorare le proprie richieste di utilizzo, con un sistema di token virtuali per gestire i costi. Gli admin autenticati possono invece creare nuovi account, eseguire operazioni CRUD sui calendari, visualizzare e approvare\rifiutare le richieste di utilizzo degli utenti, e ricaricare i loro token.
 
@@ -10,9 +10,9 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 
 ---
 
-### ⚙️ Strumenti e Librerie utilizzati
+### 1.2 - Strumenti e Librerie utilizzati
 
-#### 🛠️ Strumenti e Tecnologie Principali
+#### Strumenti e Tecnologie Principali
 
 - [**Node.js**](https://nodejs.org/) – Runtime JavaScript lato server  
 - [**Express**](https://expressjs.com/) – Framework per la creazione di API RESTful  
@@ -24,7 +24,7 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 - [**DBeaver**](https://dbeaver.io/) – Per l'interazione con il database tramite interfaccia grafica  
 - [**JWT (RSA 256)**](https://jwt.io/) – Sistema di autenticazione basato su token con crittografia asimmetrica  
 
-#### 📦 Librerie e Dipendenze TypeScript
+#### Librerie e Dipendenze TypeScript
 
 - [**Sequelize**](https://sequelize.org/) – Libreria per l'ORM compatibile con PostgreSQL  
 - [**pg**](https://node-postgres.com/) – Driver di PostgreSQL per Node.js  
@@ -40,7 +40,7 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 
 ## 2 - Analisi
 
-### 🧩 Entità Principali
+### 2.1 - Entità Principali
 
 - **User**: rappresenta un utente autenticato con un numero limitato di token.
 - **Admin**: rappresenta un utente con privilegi elevati per la gestione del sistema.
@@ -48,7 +48,7 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 - **Calendar**: calendario associato ad una risorsa computazionale con costo orario.
 - **SlotRequest**: richiesta di prenotazione su un calendario, effettuata da uno User.
 
-### 🧪 Validazione e Vincoli
+### 2.2 - Validazione e Vincoli
 
 #### Utenti e Sicurezza
 
@@ -73,7 +73,7 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 - L'utente non deve poter eliminare richieste archiviate, rifiutate o pienamente utilizzate.
 - In caso di rifiuto di una richiesta, l'admin deve fornire una motivazione e l'utente ha diritto a un pieno risarcimento.
 
-### Diagrammi dei Casi d'Uso
+### 2.3 - Diagrammi dei Casi d'Uso
 
 I diagrammi dei casi d'uso sono disponibili nella cartella [`/docs/use_case_diagrams`](<docs/use_case_diagrams>).
 
@@ -96,18 +96,18 @@ I diagrammi dei casi d'uso sono disponibili nella cartella [`/docs/use_case_diag
 
 ---
 
-## 🧱 3 - Progettazione
+## 3 - Progettazione
 
-### Diagramma Entity-Relationship
+### 3.1 - Diagramma Entity-Relationship
 
 Il diagramma E-R è disponibile nella cartella [`/docs/entity_relationship_diagram`](<docs/entity_relationship_diagram>) ed è mostrato di seguito.
 
-La relazione *Usage* riguarda solo le risorse assegnate a calendari non archiviati. Un *Calendar*, archiviato o non, è sempre associato a una sola *ComputingResource*, mentre una ComputingResource può essere associata al più a un Calendar attivo, e a molteplici Calendar archiviati.
+La relazione *Usage* è semplificata e riguarda solo le risorse assegnate a calendari non archiviati. Un *Calendar*, archiviato o non, è sempre associato a una sola *ComputingResource*, mentre una ComputingResource può essere associata al più a un Calendar attivo, e a molteplici Calendar archiviati.
 
 ![Diagramma entità-relazione](<docs/entity_relationship_diagram/E-R Diagram.jpg>)
 
 
-### 📐 Diagrammi di Sequenza
+### 3.2 - Diagrammi di Sequenza
 
 I diagrammi di sequenza sono disponibili nella cartella [`/docs/sequence_diagrams`](<docs/sequence_diagrams>).
 
@@ -191,12 +191,127 @@ Le rotte riservate agli utenti Admin hanno il prefisso `/api/admin`.
 
 ## 4 - Implementazione
 
-### 🧠 Architectural Pattern utilizzati
+### 4.1 - Struttura dell'applicazione
+
+```plaintext
+ProgettoPASgariglia/              
+├── docs/         
+│   ├── entity_relationship_diagrams/    
+│   │   └── E-R Diagram.jpg    
+│   │   
+│   ├── sequence_diagrams/    
+│   │   ├── 01 - Authentication.jpg   
+│   │   ├── ...   
+│   │   └── 29 - CheckOngoingRequests.jpg  
+│   │          
+│   └── use_case_diagrams/
+│       ├── 1 - Attori.jpg   
+│       ├── ...   
+│       └── 5 - Use Case Admin.jpg
+│      
+├── scripts/    
+│   ├── 00_database.sql   
+│   ├── 01_tables.sql   
+│   └── 02_seeding.sql  
+│                        
+├── src/                
+│   ├── controllers/
+│   │   ├── AdminController.ts   
+│   │   ├── AuthController.ts   
+│   │   └── UserController.ts 
+│   │            
+│   ├── middleware/
+│   │   ├── authHandlers.ts 
+│   │   ├── errorHandlers.ts   
+│   │   ├── loggingHandlers.ts   
+│   │   └── validationHandlers.ts 
+│   │            
+│   ├── models/
+│   │   ├── Calendar.ts 
+│   │   ├── ComputingResource.ts   
+│   │   ├── SlotRequest.ts   
+│   │   └── User.ts 
+│   │            
+│   ├── repositories/
+│   │   ├── CalendarRepository.ts 
+│   │   ├── ComputingResourceRepository.ts   
+│   │   ├── SlotRequestRepository.ts   
+│   │   └── UserRepository.ts 
+│   │            
+│   ├── routes/
+│   │   ├── adminRoutes.ts   
+│   │   ├── publicRoutes.ts   
+│   │   └── userRoutes.ts 
+│   │            
+│   ├── services/
+│   │   ├── AdminService.ts   
+│   │   ├── AuthService.ts   
+│   │   └── UserService.ts 
+│   │              
+│   ├── utils/
+│   │   ├── connector/  
+│   │   │   ├── connect.ts   
+│   │   │   ├── DatabaseConnector.ts   
+│   │   │   └── transactionDecorator.ts 
+│   │   │         
+│   │   ├── factories/    
+│   │   │   ├── errorFactory.ts   
+│   │   │   └── successFactory.ts 
+│   │   │         
+│   │   ├── responses/  
+│   │   │   ├── errorResponses.ts   
+│   │   │   ├── HttpResponse.ts   
+│   │   │   └── successResponses.ts 
+│   │   │         
+│   │   ├── validation/  
+│   │   │   ├── schemas.ts   
+│   │   │   ├── schemasUtils.ts   
+│   │   │   └── validate.ts 
+│   │   │         
+│   │   │
+│   │   ├── AsyncRouter.ts             
+│   │   ├── config.ts          
+│   │   ├── datetimeUtils.ts               
+│   │   ├── enums.ts                    
+│   │   ├── interfaces.ts        
+│   │   └── logger.ts  
+│   │
+│   └── app.ts     
+│ 
+├── tests/                         
+│   ├── datetimeUtils/   
+│   │   └── datetimeUtils.test.ts        
+│   │
+│   └── validation/                 
+│       ├── LoginPayloadSchema.test.ts
+│       ├── RequestApprovalPayloadSchema.test.ts      
+│       └── SlotRequestPayloadSchema.test.ts         
+│
+├── .dockerignore
+├── .gitignore
+├── .docker-compose.yaml
+├── Dockerfile
+├── jest.config.js
+├── package.json
+├── README.md                  
+└── tsconfig.json          
+```
+
+### 4.2 - Pattern Architetturali utilizzati
 
 
-### 🧠 Design Pattern utilizzati
 
-### 
+### 4.3 - Design Pattern utilizzati
+
+
+
+### 4.4 - Inizializzazione del database
+
+
+
+### 4.4 - Altri aspetti implementativi interessanti
+
+
 
 
 ---

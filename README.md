@@ -14,27 +14,27 @@ Il progetto è stato realizzato per il corso di Programmazione Avanzata dell'Uni
 
 #### 🛠️ Strumenti e Tecnologie Principali
 
-- **Node.js** – Runtime JavaScript lato server
-- **Express** – Framework per la creazione di API RESTful
-- **TypeScript** – Estensione di JavaScript con tipizzazione statica
-- **PostgreSQL** – Database relazionale scelto per la persistenza dei dati
-- **Docker** – Per la containerizzazione e orchestrazione dei servizi
-- **Visual Studio Code** - Per lo sviluppo dell'API
-- **Postman** – Per il testing dell'API
-- **DBeaver** - Per l'interazione con Postgres tramite interfaccia grafica
-- **JWT (RSA 256)** – Sistema di autenticazione basato su token con crittografia asimmetrica
+- [**Node.js**](https://nodejs.org/) – Runtime JavaScript lato server  
+- [**Express**](https://expressjs.com/) – Framework per la creazione di API RESTful  
+- [**TypeScript**](https://www.typescriptlang.org/) – Estensione di JavaScript con tipizzazione statica  
+- [**PostgreSQL**](https://www.postgresql.org/) – Database relazionale scelto per la persistenza dei dati  
+- [**Docker**](https://www.docker.com/) – Per la containerizzazione e orchestrazione dei servizi  
+- [**Visual Studio Code**](https://code.visualstudio.com/) – Per lo sviluppo dell'API  
+- [**Postman**](https://www.postman.com/) – Per il testing dell'API  
+- [**DBeaver**](https://dbeaver.io/) – Per l'interazione con il database tramite interfaccia grafica  
+- [**JWT (RSA 256)**](https://jwt.io/) – Sistema di autenticazione basato su token con crittografia asimmetrica  
 
 #### 📦 Librerie e Dipendenze TypeScript
 
-- **Sequelize** – Libreria per l'ORM compatibile con PostgreSQL
-- **pg** – Driver di PostgreSQL per Node.js
-- **jsonwebtoken** – Per la firma e verifica dei token JWT
-- **Zod** – Libreria di validazione schema-based utilizzata nei middleware
-- **Winston** – Logging sia su console che su file
-- **dotenv** – Gestione delle variabili di ambiente tramite file `.env`
-- **bcrypt** – Hashing e salting delle password degli utenti
-- **http-status-codes** - Utilizzo di enumerabili per gli Status Code HTTP.
-- **Jest** – Framework di testing usato per la scrittura degli unit test
+- [**Sequelize**](https://sequelize.org/) – Libreria per l'ORM compatibile con PostgreSQL  
+- [**pg**](https://node-postgres.com/) – Driver di PostgreSQL per Node.js  
+- [**jsonwebtoken**](https://github.com/auth0/node-jsonwebtoken) – Per la firma e verifica dei token JWT  
+- [**Zod**](https://zod.dev/) – Libreria di validazione schema-based utilizzata nei middleware  
+- [**Winston**](https://github.com/winstonjs/winston) – Logging sia su console che su file  
+- [**dotenv**](https://github.com/motdotla/dotenv) – Gestione delle variabili di ambiente tramite file `.env`  
+- [**bcrypt**](https://github.com/kelektiv/node.bcrypt.js) – Hashing e salting delle password degli utenti  
+- [**http-status-codes**](https://www.npmjs.com/package/http-status-codes) – Utilizzo di enumerabili per gli Status Code HTTP  
+- [**Jest**](https://jestjs.io/) – Framework di testing usato per la scrittura degli unit test
 
 ---
 

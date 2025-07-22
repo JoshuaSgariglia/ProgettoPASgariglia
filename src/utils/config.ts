@@ -39,7 +39,7 @@ export const LOGS_PATH: string = process.env.LOGS_PATH || '/usr/app/logs'
 // --- Certificates config ---
 
 // Certificates
-const CERTS_DIRECTORY: string = path.resolve(__dirname, '../../certs');
+const CERTS_DIRECTORY: string = path.resolve(process.cwd(), 'certs');
 const PRIVATE_KEY_FILENAME: string = 'privateRS256.key'
 const PUBLIC_KEY_FILENAME: string = 'publicRS256.key'
 

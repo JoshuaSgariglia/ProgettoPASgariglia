@@ -1,7 +1,8 @@
 # Environment
-.env
-.key
-.pem
+*.env
+*.postman_environment.json
+*.key
+*.pem
 certs/
 
 # Compiled files, libraries, and other generated files

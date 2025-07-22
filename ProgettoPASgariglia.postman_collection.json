@@ -1,0 +1,2410 @@
+{
+	"info": {
+		"_postman_id": "97500ec0-65a3-46fe-a6d1-65ac43cc5599",
+		"name": "ProgettoPASgariglia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13755751"
+	},
+	"item": [
+		{
+			"name": "Service Online",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (User role)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"let token = response.data.authToken\r",
+							"\r",
+							"console.log(\"Token received:\", token);\r",
+							"\r",
+							"pm.environment.set(\"USER_TOKEN\", token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"mariorossi89\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/login",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (Admin role)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"let token = response.data.authToken\r",
+							"\r",
+							"console.log(\"Token received:\", token);\r",
+							"\r",
+							"pm.environment.set(\"ADMIN_TOKEN\", token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"luca_bramb_92\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/login",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User (MissingAuthorizationHeader)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 401\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is MissingAuthorizationHeader\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"MissingAuthorizationHeader\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User (InvalidAuthorizationType)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 401\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is InvalidAuthorizationType\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"InvalidAuthorizationType\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Not-Bearer {{ADMIN_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User (InvalidToken)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 401\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is InvalidToken\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"InvalidToken\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{INVALID_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User (ExpiredToken)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 401\", function () {\r",
+							"  pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is TokenExpired\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"TokenExpired\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{EXPIRED_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User (InsufficientPermissions)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 403\", function () {\r",
+							"  pm.response.to.have.status(403);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is InsufficientPermissions\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"InsufficientPermissions\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"jossgar\",\r\n    \"password\": \"password\",\r\n    \"email\": \"joshuasgariglia0@gmail.com\",\r\n    \"name\": \"joshua\",\r\n    \"surname\": \"sgariglia\",\r\n    \"tokenAmount\": 100,\r\n    \"role\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"let uuid = response.data.calendar.uuid\r",
+							"\r",
+							"console.log(\"UUID of created calendar:\", uuid);\r",
+							"\r",
+							"pm.environment.set(\"NEW_CALENDAR_UUID\", uuid);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Calendario per Computer Vision - a.a. 2024/2025\",\r\n    \"resource\": \"02ab7562-4bee-4163-a894-2e24ad6e626c\",\r\n    \"tokenCostPerHour\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar (ResourceNotFound)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is ComputingResourceNotFound\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"ComputingResourceNotFound\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Calendario per Computer Vision - a.a. 2024/2025\",\r\n    \"resource\": \"f5a5f2a3-e6c7-4615-bccb-c590eeb305f0\",\r\n    \"tokenCostPerHour\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar (ResourceUnavailable)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is ComputingResourceUnavailable\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"ComputingResourceUnavailable\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Calendario per Computer Vision - a.a. 2024/2025\",\r\n    \"resource\": \"bc607e5e-2286-4ce9-95f5-c52098138883\",\r\n    \"tokenCostPerHour\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check calendar name\", function () {\r",
+							"  pm.expect(response.data.calendar.name).to.eql(\"Calendario per Computer Vision - a.a. 2024/2025\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check resource UUID\", function () {\r",
+							"  pm.expect(response.data.calendar.resource).to.eql(\"02ab7562-4bee-4163-a894-2e24ad6e626c\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check token cost per hour\", function () {\r",
+							"  pm.expect(response.data.calendar.tokenCostPerHour).to.eql(3);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{NEW_CALENDAR_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{NEW_CALENDAR_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar (CalendarNotFound)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is CalendarNotFound\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"CalendarNotFound\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{NONEXISTENT_CALENDAR_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{NONEXISTENT_CALENDAR_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check calendar name update\", function () {\r",
+							"  pm.expect(response.data.calendar.name).to.eql(\"Calendario per Computer Vision - a.a. 2024/2025 (modificato)\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check resource UUID update\", function () {\r",
+							"  pm.expect(response.data.calendar.resource).to.eql(\"87c5ec26-dd51-47a1-bbe4-803fd11f903e\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check token cost per hour update\", function () {\r",
+							"  pm.expect(response.data.calendar.tokenCostPerHour).to.eql(6);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Calendario per Computer Vision - a.a. 2024/2025 (modificato)\",\r\n    \"resource\": \"87c5ec26-dd51-47a1-bbe4-803fd11f903e\",\r\n    \"tokenCostPerHour\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{NEW_CALENDAR_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{NEW_CALENDAR_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archive Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check calendar archived\", function () {\r",
+							"  pm.expect(response.data.calendar.isArchived).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{NEW_CALENDAR_UUID}}/archive",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{NEW_CALENDAR_UUID}}",
+						"archive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archive Calendar (OngoingRequests)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is OngoingRequests\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"OngoingRequests\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{CALENDAR_UUID}}/archive",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{CALENDAR_UUID}}",
+						"archive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check datetimeDeleted not null\", function () {\r",
+							"  pm.expect(response.data.calendar.datetimeDeleted).to.not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{NEW_CALENDAR_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{NEW_CALENDAR_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar (OngoingRequests)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is OngoingRequests\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"OngoingRequests\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{CALENDAR_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{CALENDAR_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"console.log(\"UUID of created request:\", response.data.request.uuid);\r",
+							"\r",
+							"pm.environment.set(\"NEW_REQUEST_UUID\", response.data.request.uuid);\r",
+							"\r",
+							"pm.test(\"Request status is pending\", function () {\r",
+							"  pm.expect(response.data.request.status).to.eql(\"pending\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"title\": \"Addestramento UNet, UNet++ e TransUNet per segmentazione di Oil Spill\",\r\n    \"reason\": \"Abbiamo bisogno di una mezza giornata per poter addestrare diverse reti, varianti della famiglia UNet, al task di segmentazione di Oil Spill negli oceani\",\r\n    \"datetimeStart\": \"2025-09-17 06:00\",\r\n    \"datetimeEnd\": \"2025-09-17 12:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (Invalid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"console.log(\"UUID of created request:\", response.data.request.uuid);\r",
+							"\r",
+							"pm.environment.set(\"INVALID_REQUEST_UUID\", response.data.request.uuid);\r",
+							"\r",
+							"pm.test(\"Requesy status is invalid\", function () {\r",
+							"  pm.expect(response.data.request.status).to.eql(\"invalid\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"title\": \"Addestramento UNet, UNet++ e TransUNet per segmentazione di Oil Spill\",\r\n    \"reason\": \"Abbiamo bisogno di una mezza giornata per poter addestrare diverse reti, varianti della famiglia UNet, al task di segmentazione di Oil Spill negli oceani\",\r\n    \"datetimeStart\": \"2025-09-17 06:00\",\r\n    \"datetimeEnd\": \"2025-09-18 12:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (CalendarSlotUnavailable)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is CalendarSlotUnavailable\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"CalendarSlotUnavailable\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"title\": \"Addestramento UNet, UNet++ e TransUNet per segmentazione di Oil Spill\",\r\n    \"reason\": \"Abbiamo bisogno di una mezza giornata per poter addestrare diverse reti, varianti della famiglia UNet, al task di segmentazione di Oil Spill negli oceani\",\r\n    \"datetimeStart\": \"2025-09-17 05:00\",\r\n    \"datetimeEnd\": \"2025-09-17 12:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RequestsByStatusAndCreation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Request body\r",
+							"const datetimeCreatedFrom = new Date(\"2025-07-15T08:00:00Z\");\r",
+							"const datetimeCreatedTo = new Date(\"2025-09-15T08:00:00Z\");\r",
+							"const status = \"pending\";\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Ensure it's an array\r",
+							"pm.test(\"An array of requests was returned\", function () {\r",
+							"  pm.expect(response.data.requests).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Check every request has expected status and creation datetime\r",
+							"pm.test(\"All requests have valid status\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    // Check that status is a valid RequestStatus\r",
+							"    pm.expect(req.status).to.eql(status);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"All requests have datetimeCreated within the expected range\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    pm.expect(req).to.have.property('datetimeCreated');\r",
+							"\r",
+							"    const createdAt = new Date(req.datetimeCreated);\r",
+							"    \r",
+							"    pm.expect(createdAt >= datetimeCreatedFrom).to.be.true;\r",
+							"    pm.expect(createdAt <= datetimeCreatedTo).to.be.true;\r",
+							"  });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\": \"pending\",\r\n    \"datetimeCreatedFrom\": \"2025-07-15 08:00\",\r\n    \"datetimeCreatedTo\": \"2025-09-15 08:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/requests-status",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"requests-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Status (Refused)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request status is refused\", function () {\r",
+							"  pm.expect(response.data.request.status).to.eql(\"refused\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"refusalReason is not null\", function () {\r",
+							"  pm.expect(response.data.request.refusalReason).to.not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"approved\": false,\r\n    \"refusalReason\": \"La motivazione non è sufficientemente valida\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/request-status/{{NEW_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"request-status",
+						"{{NEW_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Status (Approved)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Request status is approved\", function () {\r",
+							"  pm.expect(response.data.request.status).to.eql(\"approved\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"refusalReason is null\", function () {\r",
+							"  pm.expect(response.data.request.refusalReason).to.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"approved\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/request-status/{{NEW_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"request-status",
+						"{{NEW_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request Status (IntersectingRequests)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is IntersectingRequests\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"IntersectingRequests\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"approved\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/request-status/{{INTERSECTING_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"request-status",
+						"{{INTERSECTING_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check datetimeDeleted not null\", function () {\r",
+							"  pm.expect(response.data.request.datetimeDeleted).to.not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{NEW_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{NEW_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (Invalid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check datetimeDeleted not null\", function () {\r",
+							"  pm.expect(response.data.request.datetimeDeleted).to.not.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{INVALID_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{INVALID_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (SlotRequestNotFound)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is SlotRequestNotFound\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"SlotRequestNotFound\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{NONEXISTENT_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{NONEXISTENT_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (RefusedRequestDeletion)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is RefusedRequestDeletion\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"RefusedRequestDeletion\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{REFUSED_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{REFUSED_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (ArchivedRequestDeletion)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is ArchivedRequestDeletion\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"ArchivedRequestDeletion\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{ARCHIVED_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{ARCHIVED_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request (FullyUsedRequestDeletion)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is FullyUsedRequestDeletion\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"FullyUsedRequestDeletion\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/request/{{FULLY_USED_REQUEST_UUID}}",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"request",
+						"{{FULLY_USED_REQUEST_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar Slot (Available)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Calendar slot is available\", function () {\r",
+							"  pm.expect(response.data.available).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"datetimeStart\": \"2025-09-17 06:00\",\r\n    \"datetimeEnd\": \"2025-09-17 12:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/calendar-slot",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"calendar-slot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar Slot (Unavailable)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"let response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Calendar slot is unavailable\", function () {\r",
+							"  pm.expect(response.data.available).to.eql(false);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"datetimeStart\": \"2025-09-17 05:00\",\r\n    \"datetimeEnd\": \"2025-09-17 12:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/calendar-slot",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"calendar-slot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RequestsByStatusAndPeriod",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Request body\r",
+							"const datetimeStart = new Date(\"2025-07-15T08:00:00Z\");\r",
+							"const datetimeEnd = new Date(\"2025-09-17T08:00:00Z\");\r",
+							"const status = \"approved\";\r",
+							"const calendar = \"1baa324d-c819-4187-92da-41ab7508d13c\";\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Ensure it's an array\r",
+							"pm.test(\"An array of requests was returned\", function () {\r",
+							"  pm.expect(response.data.requests).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Check every request has expected status\r",
+							"pm.test(\"All requests have expected status\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    pm.expect(req.status).to.eql(status);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"// Check every request has expected calendar\r",
+							"pm.test(\"All requests have expected calendar\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    pm.expect(req.calendar).to.eql(calendar);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"// Check all requests intersect with the time range\r",
+							"pm.test(\"All requests intersect with the time range\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    const reqStart = new Date(req.datetimeStart);\r",
+							"    const reqEnd = new Date(req.datetimeEnd);\r",
+							"\r",
+							"    const intersects = !(reqEnd <= datetimeStart || reqStart >= datetimeEnd);\r",
+							"\r",
+							"    pm.expect(intersects).to.be.true;\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{USER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"calendar\": \"1baa324d-c819-4187-92da-41ab7508d13c\",\r\n    \"status\": \"approved\",\r\n    \"datetimeStart\": \"2025-07-15 08:00\",\r\n    \"datetimeEnd\": \"2025-09-17 08:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/user/requests",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"user",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calendar Requests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Request body\r",
+							"const calendar = \"1baa324d-c819-4187-92da-41ab7508d13c\";\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Ensure it's an array\r",
+							"pm.test(\"An array of requests was returned\", function () {\r",
+							"  pm.expect(response.data.requests).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Check every request has expected calendar\r",
+							"pm.test(\"All requests have expected calendar\", function () {\r",
+							"  const requests = response.data.requests;\r",
+							"\r",
+							"  requests.forEach((req, index) => {\r",
+							"    pm.expect(req.calendar).to.eql(calendar);\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/calendar/{{CALENDAR_UUID}}/requests-status",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"calendar",
+						"{{CALENDAR_UUID}}",
+						"requests-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Tokens",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Request body\r",
+							"const newTokenAmount = 75;\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check new token amount\r",
+							"pm.test(\"User token amount was updated\", function () {\r",
+							"    pm.expect(response.data.newTokenAmount).to.eql(newTokenAmount);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newTokenAmount\": 75\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user/{{USER_UUID}}/tokens",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user",
+						"{{USER_UUID}}",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Tokens (UserNotFound)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is UserNotFound\", function () {\r",
+							"  pm.expect(response.errorType).to.eql(\"UserNotFound\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ADMIN_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newTokenAmount\": 75\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{APP_HOST}}:{{APP_PORT}}/{{APP_ROUTES_PREFIX}}/admin/user/{{NONEXISTENT_USER_UUID}}/tokens",
+					"protocol": "http",
+					"host": [
+						"{{APP_HOST}}"
+					],
+					"port": "{{APP_PORT}}",
+					"path": [
+						"{{APP_ROUTES_PREFIX}}",
+						"admin",
+						"user",
+						"{{NONEXISTENT_USER_UUID}}",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

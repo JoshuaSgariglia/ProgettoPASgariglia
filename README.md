@@ -484,13 +484,13 @@ docker-compose up --build
 
 - Joshua Sgariglia
 
-> Supervisione: Prof. Adriano Mancini
+> Supervisione: Prof. Adriano Mancini  
 > Università Politecnica delle Marche – A.A. 2024/2025
 ---
 
 ## Licenza
 
-Questo progetto è distribuito sotto licenza **MIT**.  
+Questo progetto è distribuito sotto licenza **MIT**.
 Consulta il file [LICENSE](LICENSE) per maggiori dettagli.
 
 

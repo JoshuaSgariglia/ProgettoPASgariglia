@@ -426,7 +426,12 @@ Nella sottocartella `/validation` troviamo tre file di test, ciascuno dedicato a
 
 Nella sottocartella `/datetimeUtils` c’è un unico file di test che mira a verificare le funzioni del modulo [`datetimeUtils.ts`](./src//utils/datetimeUtils.ts). Qui vengono testati i casi di parsing corretto di date in formati previsti, così come i casi in cui vengono passati input non validi (es. date malformate o fuori range), controllando che il modulo generi errori appropriati.
 
-Gli unit test possono essere eseguiti da console con il comando `npm test`.
+Gli unit test possono essere eseguiti da console con la seguente coppia di comandi:
+
+```bash
+npm install
+npm test
+```
 
 ---
 
@@ -473,9 +478,9 @@ docker-compose up --build
 
 La collection include test su ciascuna rotta dell'applicazione. Per molte rotte sono testati sia i casi di successo che quelli di errore. Il file di ambiente `ProgettoPASgarigliaEnv.postman_environment.json` deve essere ottenuto o creato. Il sistema si aspetta che tale file sia posto nella working directory prima della build dell'applicazione.
 
-Il seguente comando consente di eseguire la collection da console:
+Il seguente comando consente di eseguire la collection da console (powershell):
 
-```bash
+```powershell
 docker run --rm -v "${PWD}:/etc/newman" postman/newman run ProgettoPASgariglia.postman_collection.json -e ProgettoPASgarigliaEnv.postman_environment.json
 ```
 

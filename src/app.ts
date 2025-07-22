@@ -1,14 +1,14 @@
 import express, { Router } from "express";
-import userRoutes from "./routes/userRoutes";
-import { withDatabaseConnected } from "./utils/connector/connect";
-import { Sequelize } from "sequelize";
-import { errorHandlers } from "./middleware/errorHandlers";
-import publicRoutes from "./routes/publicRoutes";
-import adminRoutes from "./routes/adminRoutes";
+import logger from "./utils/logger";
 import { APP_HOST, APP_PORT } from "./utils/config";
+import { Sequelize } from "sequelize";
+import { withDatabaseConnected } from "./utils/connector/connect";
 import { adminAuthHandlers, userAuthHandlers } from "./middleware/authHandlers";
 import { loggingHandlers } from "./middleware/loggingHandlers";
-import logger from "./utils/logger";
+import { errorHandlers } from "./middleware/errorHandlers";
+import publicRoutes from "./routes/publicRoutes";
+import userRoutes from "./routes/userRoutes";
+import adminRoutes from "./routes/adminRoutes";
 
 /**
  * This is the entry point on the application.

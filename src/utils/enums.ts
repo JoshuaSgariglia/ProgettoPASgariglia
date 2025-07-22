@@ -73,7 +73,7 @@ export enum ErrorType {
 	InvalidToken = "InvalidToken",
 	InvalidTokenPayload = "InvalidTokenPayload",
 
-	// Forbidden
+	// Forbidden errors
 	InsufficientPermissions = "InsufficientPermissions",
 
 	// NotFound errors

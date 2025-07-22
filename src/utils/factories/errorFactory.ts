@@ -146,7 +146,7 @@ export class ErrorFactory {
                 error = new UserNotFound();
                 break;
             
-            // Conflict
+            // Conflict errors
             case ErrorType.ComputingResourceUnavailable:
                 error = new ComputingResourceUnavailable();
                 break;

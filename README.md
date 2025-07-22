@@ -490,7 +490,7 @@ docker-compose up --build
 
 ## Licenza
 
-Questo progetto è distribuito sotto licenza **MIT**.
+Questo progetto è distribuito sotto licenza **MIT**.  
 Consulta il file [LICENSE](LICENSE) per maggiori dettagli.
 
 

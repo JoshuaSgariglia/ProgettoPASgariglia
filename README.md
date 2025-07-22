@@ -341,6 +341,12 @@ Il **Repository** è un ponte tra la logica dell’applicazione e la persistenza
 
 Nel progetto, le quattro entità — `Calendar`, `ComputingResource`, `Slot`, e `User` — sono rappresentate da classi model che estendono la classe base `Model` fornita da Sequelize. Per ciascuna di queste classi model è definita una repository dedicata, incaricata di gestire le operazioni di accesso e persistenza dei dati. Tali repository incapsulano le interazioni con il database e vengono iniettate nei *Service* tramite Dependency Injection, permettendo così di mantenere separata la gestione della persistenza.
 
+#### Middleware
+
+Il pattern **Middleware**, ampiamente adottato in framework come Express, consiste in una catena di funzioni che ricevono un oggetto richiesta (`req`), risposta (`res`) e una funzione `next()` per passare il controllo al middleware successivo. Ogni middleware può modificare la richiesta o la risposta, eseguire logica aggiuntiva o gestire errori, rendendo il flusso delle operazioni modulare e facilmente estendibile.
+
+In questo progetto, il pattern middleware viene applicato seguendo un ordine ben definito e coerente per ogni richiesta HTTP. Il primo file ad agire è [`loggingHandlers.ts`](./src/middleware/loggingHandlers.ts), che esegue il logging della richiesta in ingresso tramite il middleware `logRouteMethod`. Subito dopo entra in azione [`authHandlers.ts`](./src/middleware/authHandlers.ts), che esegue una catena di controlli sull'autenticazione: verifica la presenza e il formato dell'header di autorizzazione, convalida e decodifica il token JWT tramite *jsonwebtoken*, ne verifica lo schema tramite Zod, e infine controlla che l’utente abbia il ruolo autorizzato per la rotta. Successivamente, interviene [`validationHandlers.ts`](./src/middleware/validationHandlers.ts), che attraverso una serie di handler generati e basati su schema Zod, convalida i parametri URL e/o il corpo della richiesta in base alla rotta specifica. Infine, una volta completate tutte queste fasi preliminari, la richiesta raggiunge una action di un controller specifico, che contiene la logica principale da eseguire. Se durante l’intera catena si verifica un errore, viene passato ai middleware di [`errorHandlers.ts`](./src/middleware/errorHandlers.ts), che sono applicati alla fine della catena: prima si gestiscono errori relativi a rotte non definite, poi errori come `ErrorType`, poi errori già istanziati come `ErrorResponse`, e infine eventuali errori imprevisti tramite un generico gestore delle eccezioni. Per gli errori, in ogni caso alla fine viene generato un oggetto di tipo `ErrorResponse`, che viene fornito al client in risposta.
+
 
 ### 4.3 - Design Pattern utilizzati
 
@@ -348,42 +354,77 @@ Nel progetto, le quattro entità — `Calendar`, `ComputingResource`, `Slot`, e 
 
 Il **Singleton** è un pattern architetturale che garantisce che una determinata classe abbia una sola istanza globale durante l'intero ciclo di vita dell'applicazione. Questo pattern è utile quando si desidera centralizzare la gestione di una risorsa condivisa. Il Singleton espone un metodo pubblico (spesso chiamato `getInstance`) che restituisce l'istanza unica, creando l'oggetto solo alla prima invocazione.
 
-##### [DatabaseConnector.ts](./src/utils/connector/DatabaseConnector.ts)
+##### Modulo [DatabaseConnector.ts](./src/utils/connector/DatabaseConnector.ts)
 
-Nel progetto, il pattern Singleton è utilizzato nella classe `DatabaseConnector` per garantire un'unica istanza della connessione Sequelize al database PostgreSQL. Il costruttore della classe è privato, impedendo l'istanziazione esterna. Il metodo statico `getInstance()` controlla se l'istanza Sequelize esiste già: se non esiste, viene creata tramite `getDatabaseConnector()` e salvata nella proprietà statica `instance`. Questo approccio evita che vengano create connessioni multiple e ridondanti al database.
+Nel progetto, il pattern Singleton è utilizzato nella classe `DatabaseConnector` dell'omonimo modulo per garantire un'unica istanza della connessione Sequelize al database PostgreSQL. Il costruttore della classe è privato, impedendo l'istanziazione esterna. Il metodo statico `getInstance()` controlla se l'istanza Sequelize esiste già: se non esiste, viene creata tramite `getDatabaseConnector()` e salvata nella proprietà statica `instance`. Questo approccio evita che vengano create connessioni multiple e ridondanti al database.
 
 #### Factory method
 
 Il **Factory Method** è un design pattern creazionale che fornisce un'interfaccia per creare oggetti. Invece di usare direttamente `new`, l’oggetto viene creato attraverso un metodo dedicato, centralizzando la logica di costruzione e facilitando l’estensione e la manutenzione del codice.
 
-##### [errorFactory.ts](./src/utils/factories/errorFactory.ts)
+##### Modulo [errorFactory.ts](./src/utils/factories/errorFactory.ts)
 
-Nel progetto, il file `errorFactory.ts` applica questo pattern attraverso la classe `ErrorFactory`. Il metodo statico `getError()` agisce come factory method, ricevendo un valore dall'enum `ErrorType` e restituendo un’istanza di una delle classi di errore definite in `errorResponses.ts`, tutte eredi della classe base `ErrorResponse`. In base al tipo di errore passato, viene istanziata la classe corrispondente (es. `BadRequest`, `TokenExpired`, `InvalidInputValue`, ecc.), con un messaggio opzionale. In questo modo si evita l'abuso di `if` o `switch` sparsi nel codice applicativo, concentrando la generazione delle risposte di errore HTTP in un solo punto. *ErrorFactory* è utilizzata nella validazione dei dati forniti in input e nel middleware per quanto riguarda gli handler degli errori.
+Nel progetto, il file [`errorFactory.ts`](./src/utils/factories/errorFactory.ts) applica questo pattern attraverso la classe `ErrorFactory`. Il metodo statico `getError()` agisce come factory method, ricevendo un valore dall'enum `ErrorType` e restituendo un’istanza di una delle classi di errore definite in [`errorResponses.ts`](./src/utils/responses/errorResponses.ts), tutte eredi della classe base `ErrorResponse`. In base al tipo di errore passato, viene istanziata la classe corrispondente (es. `BadRequest`, `TokenExpired`, `InvalidInputValue`, ecc.), con un messaggio opzionale. In questo modo si evita l'abuso di `if` o `switch` sparsi nel codice applicativo, concentrando la generazione delle risposte di errore HTTP in un solo punto. *ErrorFactory* è utilizzata nella validazione dei dati forniti in input e nel middleware per quanto riguarda gli handler degli errori.
 
-##### [successFactory.ts](./src/utils/factories/successFactory.ts)
+##### Modulo [successFactory.ts](./src/utils/factories/successFactory.ts)
 
-Nel file `successFactory.ts`, il *Factory Method* viene applicato tramite la classe `SuccessResponseFactory`, la quale centralizza la creazione di oggetti di risposta positiva verso i client. Il metodo statico `getResponse()` agisce da factory method: accetta un valore dell'enum `SuccessType` e opzionalmente un oggetto `data` da iniettare nell'oggetto risposta da generare, e restituisce quindi un'istanza della classe di risposta corrispondente, che eredita `SuccessResponse`. In base al tipo specificato (es. `CalendarCreated`, `SlotRequestsRetrieved`, `AccountLoggedIn`, ecc.), viene creata la classe di successo adeguata. Questo approccio consente di generare risposte in modo coerente. *SuccessResposeFactory* è utilizzata nelle action dei Controller per generare risposte iniettandovi i dati ottenuti dai Service.
+Nel file [`successFactory.ts`](./src/utils/factories/successFactory.ts), il *Factory Method* viene applicato tramite la classe `SuccessResponseFactory`, la quale centralizza la creazione di oggetti di risposta positiva verso i client. Il metodo statico `getResponse()` agisce da factory method: accetta un valore dell'enum `SuccessType` e opzionalmente un oggetto `data` da iniettare nell'oggetto risposta da generare, e restituisce quindi un'istanza della classe di risposta corrispondente, che eredita `SuccessResponse`, definita in [`successResponses.ts`](./src/utils/responses/successResponses.ts). In base al tipo specificato (es. `CalendarCreated`, `SlotRequestsRetrieved`, `AccountLoggedIn`, ecc.), viene creata la classe di successo adeguata. Questo approccio consente di generare risposte in modo coerente. *SuccessResposeFactory* è utilizzata nelle action dei Controller per generare risposte iniettandovi i dati ottenuti dai Service.
+
+##### Modulo [validationHandlers.ts](./src/middleware/validationHandlers.ts)
+
+Nel file [`validationHandlers.ts`](./src/middleware/validationHandlers.ts), la funzione `validationHandlerGenerator` rappresenta un esempio di factory method: essa accetta come parametri uno schema di validazione (definito con Zod), una sorgente dei dati (`body`, `params`, `query`) e un flag opzionale. In base a questi parametri, restituisce una funzione middleware specifica, che valida i dati in arrivo e, se corretti, li salva in `res.locals.validated`. Ogni handler esportato (es. `loginPayloadHandler`, `uuidParameterHandler`, ecc.) è un'istanza generata dalla factory, costruita passando lo schema e le opzioni necessarie.
+
+
+##### Modulo [authHandlers.ts](./src/middleware/validationHandlers.ts)
+
+Anche in [`authHandlers.ts`](./src/middleware/authHandlers.ts) troviamo un'applicazione simile del pattern. La funzione `verifyAuthorizationGenerator` genera dinamicamente un middleware che verifica il ruolo utente in base a un parametro passato (`UserRole.User` oppure `UserRole.Admin`). Questo consente di produrre catene di autenticazione specifiche su base ruolo (`userAuthHandlers`, `adminAuthHandlers`), evitando la duplicazione del codice per l'autorizzazione.
+
 
 #### Decorator
 
-##### [connect.ts](./src/utils/connector/connect.ts)
-##### [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts)
+Il **design pattern Decorator** è un pattern strutturale che consente di estendere o modificare il comportamento di un oggetto in modo flessibile, senza alterarne la struttura originale. Questo viene fatto "decorando" una funzione o un oggetto con altre funzioni che aggiungono funzionalità prima o dopo l’esecuzione dell’originale.
 
-#### Middleware
+##### Modulo [connect.ts](./src/utils/connector/connect.ts)
+
+Nel codice presente nel file [connect.ts](./src/utils/connector/connect.ts), il pattern Decorator viene implementato tramite funzioni higher-order che arricchiscono la logica di connessione al database. La funzione `connect` rappresenta il comportamento di base, ovvero la semplice autenticazione con Sequelize. Questo comportamento viene decorato con `withRetry`, che aggiunge la logica di retry con backoff esponenziale, e successivamente con `withConnectionLogged`, che introduce messaggi di log prima e dopo la connessione. Ogni decoratore riceve in input una funzione `ConnectionFunction` e ne restituisce una versione estesa, mantenendo lo stesso contratto. In questo modo, il codice risulta modulare e riusabile, con una chiara separazione delle responsabilità. 
+
+##### Modulo [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts)
+
+Nel modulo [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts), il pattern Decorator viene utilizzato per estendere il comportamento di una funzione asincrona con la gestione automatica delle transazioni tramite Sequelize. La funzione `withTransaction` agisce come un decoratore: riceve in input una funzione (`transactionCallback`) che incapsula la logica applicativa da eseguire all'interno di una transazione e la "decora" aggiungendo il controllo sul commit o sul rollback. In caso di esecuzione corretta, `withTransaction` effettua il commit; in caso di errore, esegue un rollback e propaga l'eccezione. Questo approccio consente di separare la gestione della transazione dalla logica che ne fa uso, migliorando la riusabilità e semplificando il codice nei metodi del Service, layer in cui le transazioni sono utilizzate.
+
+##### Modulo [AsyncRouter.ts](./src/utils/AsyncRouter.ts)
+
+Anche la classe `AsyncRouter` può essere vista come un'applicazione del pattern Decorator. Qui viene utilizzato per decorare i controller asincroni di Express con una gestione automatica degli errori: la funzione `asyncHandlerWrapper` avvolge la action del controller, intercettando eventuali eccezioni asincrone e inoltrandole alla catena di middleware tramite `next()`. Questo consente di evitare blocchi `try-catch` ripetitivi all’interno di ogni controller. Il metodo `wrapHandlers` garantisce che solo l’ultimo handler (la action del controller) venga decorato, lasciando intatti eventuali middleware di logging, autenticazione o validazione. Ogni metodo della classe (`getAsync`, `postAsync`, ecc.) incapsula così il comportamento standard del Router di Express, con un livello aggiuntivo di gestione delle eccezioni.
 
 
-### 4.4 - Inizializzazione del database
 
 
 
 ### 4.4 - Altri aspetti implementativi interessanti
 
+#### Inizializzazione del database
 
+L'inizializzazione automatica del database PostgreSQL è gestita attraverso l'integrazione tra Docker Compose e una serie di script SQL presenti nella directory [`./scripts`](./scripts). All’avvio del container `postgres`, Docker rileva automaticamente la presenza della cartella montata come volume in `/docker-entrypoint-initdb.d` e ne esegue i file `.sql` in ordine alfanumerico: lo script `00_database.sql` crea il database, `01_tables.sql` definisce la struttura delle tabelle, e `02_seeding.sql` popola le tabelle con dati iniziali. Questo approccio consente di avere un database pronto all’uso in fase di avvio, senza interventi manuali o configurazioni aggiuntive.
+
+#### File di configurazione
+
+Il file [`config.ts`](./src/utils/config.ts) centralizza la configurazione dell'applicazione, gestendo sia variabili di ambiente provenienti dal file `.env`, sia parametri specifici del dominio applicativo. In fase di avvio, il file carica il contenuto del `.env` tramite la libreria `dotenv`, notificando tramite log eventuali errori di caricamento. Successivamente, definisce una serie di variabili che leggono dal processo (`process.env`) con valori di fallback. In aggiunta, il file gestisce il caricamento dei certificati RSA da una directory `certs/`, fondamentali per la firma e la verifica dei token JWT: in caso di errore nella lettura dei certificati, l’applicazione si arresta immediatamente con un errore fatale. Oltre ai parametri legati ai servizi, il file include anche configurazioni legate al dominio applicativo, come limiti di lunghezza per nomi utente, email e titoli delle richieste, soglie di penalità per l’uso scorretto delle risorse, e impostazioni di salting per le password e di cifratura per i JWT. In questo modo, `config.ts` agisce da punto unico di riferimento per la configurazione.
+
+
+#### Schemi di validazione Zod
+
+Il sistema di validazione nel progetto si basa sugli schemi Zod e sulla funzione `validate`, definita nel file [`validate.ts`](./src/utils/validation/validate.ts). Questa funzione si occupa di ricevere uno schema Zod e dei dati in input, verificandone la correttezza. In particolare, controlla inizialmente se l’input è assente (a meno che non sia marcato come opzionale) e, in seguito, delega la validazione allo schema fornito. Se lo schema fallisce, la funzione analizza il primo errore restituito da Zod e lo traduce in un errore semantico più leggibile attraverso l’uso di un `ErrorFactory`, utilizzando uno switch per restituire messaggi specifici a seconda del tipo di errore (campo mancante, tipo errato, formato non valido, ecc.).
+
+Il file [`schemas.ts`](./src/utils/validation/schemas.ts) contiene la definizione di tutti gli schemi di validazione utilizzati nelle varie operazioni dell'applicazione. Gli schemi sono costruiti con la libreria Zod e garantiscono che i payload rispettino determinati vincoli strutturali e semantici. Alcuni di questi schemi sfruttano `.refine()` per definire regole di validazione personalizzate non esprimibili tramite i vincoli standard: ad esempio, per verificare che il datetime di fine di una richiesta sia successivo a quello di inizio, o che una richiesta venga fatta almeno 24 ore prima dell’orario di inizio desiderato.
+
+A supporto degli schemi, [`schemasUtils.ts`](./src/utils/validation/schemasUtils.ts) fornisce funzioni riutilizzabili come `createDatetimeSchema`, che permette di definire formati specifici per date e orari combinando espressioni regolari e validazioni custom tramite `.refine()`. Consente di assicurare che i datetime rispettino il formato atteso e rappresentino effettivamente date valide.
 
 
 ---
 
 ## 5 - Unit Testing
+
+
 
 ---
 

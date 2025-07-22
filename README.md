@@ -464,7 +464,7 @@ LOGS_PATH
 docker-compose up --build
 ```
 
-5. Testa l'API usando la Postman Collection:
+5. Testa l'API usando la Postman Collection e Postman Newman:
 La collection include test su ciascuna rotta dell'applicazione. Per molte rotte sono testati sia i casi di successo che quelli di errore. Il file di ambiente `ProgettoPASgarigliaEnv.postman_environment.json` deve essere ottenuto o creato.
 Il seguente comando consente di eseguire la collection da console:
 
@@ -478,5 +478,19 @@ Alcuni test possono fallire se la collection viene eseguita più volte consecuti
 docker-compose down -v --remove-orphans
 docker-compose up --build
 ```
+
+
+## Autori
+
+- Joshua Sgariglia
+
+> Supervisione: Prof. Adriano Mancini
+> Università Politecnica delle Marche – A.A. 2024/2025
+---
+
+## Licenza
+
+Questo progetto è distribuito sotto licenza **MIT**.
+Consulta il file [LICENSE](LICENSE) per maggiori dettagli.
 
 

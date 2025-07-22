@@ -386,11 +386,11 @@ Il design pattern **Decorator** è un pattern strutturale che consente di estend
 
 ##### Modulo [connect.ts](./src/utils/connector/connect.ts)
 
-Nel codice presente nel file [connect.ts](./src/utils/connector/connect.ts), il pattern Decorator viene implementato tramite funzioni higher-order che arricchiscono la logica di connessione al database. La funzione `connect` rappresenta il comportamento di base, ovvero la semplice autenticazione con Sequelize. Questo comportamento viene decorato con `withRetry`, che aggiunge la logica di retry con backoff esponenziale, e successivamente con `withConnectionLogged`, che introduce messaggi di log prima e dopo la connessione. Ogni decoratore riceve in input una funzione `ConnectionFunction` e ne restituisce una versione estesa, mantenendo lo stesso contratto. In questo modo, il codice risulta modulare e riusabile, con una chiara separazione delle responsabilità. 
+Nel codice presente nel file [`connect.ts`](./src/utils/connector/connect.ts), il pattern Decorator viene implementato tramite funzioni higher-order che arricchiscono la logica di connessione al database. La funzione `connect` rappresenta il comportamento di base, ovvero la semplice autenticazione con Sequelize. Questo comportamento viene decorato con `withRetry`, che aggiunge la logica di retry con backoff esponenziale, e successivamente con `withConnectionLogged`, che introduce messaggi di log prima e dopo la connessione. Ogni decoratore riceve in input una funzione `ConnectionFunction` e ne restituisce una versione estesa, mantenendo lo stesso contratto. In questo modo, il codice risulta modulare e riusabile, con una chiara separazione delle responsabilità. 
 
 ##### Modulo [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts)
 
-Nel modulo [transactionDecorator.ts](./src/utils/connector/transactionDecorator.ts), il pattern Decorator viene utilizzato per estendere il comportamento di una funzione asincrona con la gestione automatica delle transazioni tramite Sequelize. La funzione `withTransaction` agisce come un decoratore: riceve in input una funzione (`transactionCallback`) che incapsula la logica applicativa da eseguire all'interno di una transazione e la "decora" aggiungendo il controllo sul commit o sul rollback. In caso di esecuzione corretta, `withTransaction` effettua il commit; in caso di errore, esegue un rollback e propaga l'eccezione. Questo approccio consente di separare la gestione della transazione dalla logica che ne fa uso, migliorando la riusabilità e semplificando il codice nei metodi del Service, layer in cui le transazioni sono utilizzate.
+Nel modulo [`transactionDecorator.ts`](./src/utils/connector/transactionDecorator.ts), il pattern Decorator viene utilizzato per estendere il comportamento di una funzione asincrona con la gestione automatica delle transazioni tramite Sequelize. La funzione `withTransaction` agisce come un decoratore: riceve in input una funzione (`transactionCallback`) che incapsula la logica applicativa da eseguire all'interno di una transazione e la "decora" aggiungendo il controllo sul commit o sul rollback. In caso di esecuzione corretta, `withTransaction` effettua il commit; in caso di errore, esegue un rollback e propaga l'eccezione. Questo approccio consente di separare la gestione della transazione dalla logica che ne fa uso, migliorando la riusabilità e semplificando il codice nei metodi del Service, layer in cui le transazioni sono utilizzate.
 
 ##### Modulo [AsyncRouter.ts](./src/utils/AsyncRouter.ts)
 
@@ -463,3 +463,20 @@ LOGS_PATH
 ```bash
 docker-compose up --build
 ```
+
+5. Testa l'API usando la Postman Collection:
+La collection include test su ciascuna rotta dell'applicazione. Per molte rotte sono testati sia i casi di successo che quelli di errore. Il file di ambiente `ProgettoPASgarigliaEnv.postman_environment.json` deve essere ottenuto o creato.
+Il seguente comando consente di eseguire la collection da console:
+
+```bash
+docker run --rm -v "${PWD}:/etc/newman" postman/newman run ProgettoPASgariglia.postman_collection.json -e ProgettoPASgarigliaEnv.postman_environment.json
+```
+
+Alcuni test possono fallire se la collection viene eseguita più volte consecutivamente per via di entità già esistenti e vincoli di unicità. Per poterla rieseguire è necessario rigenerare il database. Ciò può essere fatto con la seguente coppia di comandi:
+
+```bash
+docker-compose down -v --remove-orphans
+docker-compose up --build
+```
+
+

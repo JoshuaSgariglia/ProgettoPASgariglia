@@ -313,12 +313,12 @@ Particolarmente articolata è la directory [`utils/`](./src/utils), suddivisa in
 - [`responses/`](./src/utils/responses): definizioni comuni per formattare le risposte HTTP.
 - [`validation/`](./src/utils/validation): schemi Zod e helper per la validazione dei payload.
 
-- *AsyncRouter.ts*: wrapper asincrono per la gestione centralizzata degli errori lanciati nei service.
-- *config.ts*: file di configurazione per variabili d’ambiente.
-- *datetimeUtils.ts*: funzioni per la gestione e manipolazione delle date.
-- *enums.ts*: enumeratori utilizzati per stati, ruoli, e tipi di errore e di successo usati nelle factory.
-- *interfaces.ts*: interfacce TypeScript per oggetti personalizzati forniti in risposta ad alcune richieste HTTP.
-- *logger.ts*: console e file logger basato sulla libreria Winston.
+- [`AsyncRouter.ts`](./src/utils/AsyncRouter.ts): wrapper asincrono per la gestione centralizzata degli errori lanciati nei service.
+- [`config.ts`](./src/utils/config.ts): file di configurazione per variabili d’ambiente.
+- [`datetimeUtils.ts`](./src/utils/datetimeUtils.ts): funzioni per la gestione e manipolazione delle date.
+- [`enums.ts`](./src/utils/enums.ts): enumeratori utilizzati per stati, ruoli, e tipi di errore e di successo usati nelle factory.
+- [`interfaces.ts`](./src/utils/interfaces.ts): interfacce TypeScript per oggetti personalizzati forniti in risposta ad alcune richieste HTTP.
+- [`logger.ts`](./src/utils/logger.ts): console e file logger basato sulla libreria Winston.
 
 Completano la struttura del progetto le cartelle [`docs/`](./docs) con i diagrammi UML e E-R, [`scripts/`](./scripts) con gli script SQL di inizializzazione del database, e [`tests/`](./tests) contenente gli unit test Jest.
 
@@ -382,7 +382,7 @@ Anche in [`authHandlers.ts`](./src/middleware/authHandlers.ts) troviamo un'appli
 
 #### Decorator
 
-Il **design pattern Decorator** è un pattern strutturale che consente di estendere o modificare il comportamento di un oggetto in modo flessibile, senza alterarne la struttura originale. Questo viene fatto "decorando" una funzione o un oggetto con altre funzioni che aggiungono funzionalità prima o dopo l’esecuzione dell’originale.
+Il design pattern **Decorator** è un pattern strutturale che consente di estendere o modificare il comportamento di un oggetto in modo flessibile, senza alterarne la struttura originale. Questo viene fatto "decorando" una funzione o un oggetto con altre funzioni che aggiungono funzionalità prima o dopo l’esecuzione dell’originale.
 
 ##### Modulo [connect.ts](./src/utils/connector/connect.ts)
 
@@ -396,10 +396,6 @@ Nel modulo [transactionDecorator.ts](./src/utils/connector/transactionDecorator.
 
 Anche la classe `AsyncRouter` può essere vista come un'applicazione del pattern Decorator. Qui viene utilizzato per decorare i controller asincroni di Express con una gestione automatica degli errori: la funzione `asyncHandlerWrapper` avvolge la action del controller, intercettando eventuali eccezioni asincrone e inoltrandole alla catena di middleware tramite `next()`. Questo consente di evitare blocchi `try-catch` ripetitivi all’interno di ogni controller. Il metodo `wrapHandlers` garantisce che solo l’ultimo handler (la action del controller) venga decorato, lasciando intatti eventuali middleware di logging, autenticazione o validazione. Ogni metodo della classe (`getAsync`, `postAsync`, ecc.) incapsula così il comportamento standard del Router di Express, con un livello aggiuntivo di gestione delle eccezioni.
 
-
-
-
-
 ### 4.4 - Altri aspetti implementativi interessanti
 
 #### Inizializzazione del database
@@ -408,7 +404,7 @@ L'inizializzazione automatica del database PostgreSQL è gestita attraverso l'in
 
 #### File di configurazione
 
-Il file [`config.ts`](./src/utils/config.ts) centralizza la configurazione dell'applicazione, gestendo sia variabili di ambiente provenienti dal file `.env`, sia parametri specifici del dominio applicativo. In fase di avvio, il file carica il contenuto del `.env` tramite la libreria `dotenv`, notificando tramite log eventuali errori di caricamento. Successivamente, definisce una serie di variabili che leggono dal processo (`process.env`) con valori di fallback. In aggiunta, il file gestisce il caricamento dei certificati RSA da una directory `certs/`, fondamentali per la firma e la verifica dei token JWT: in caso di errore nella lettura dei certificati, l’applicazione si arresta immediatamente con un errore fatale. Oltre ai parametri legati ai servizi, il file include anche configurazioni legate al dominio applicativo, come limiti di lunghezza per nomi utente, email e titoli delle richieste, soglie di penalità per l’uso scorretto delle risorse, e impostazioni di salting per le password e di cifratura per i JWT. In questo modo, `config.ts` agisce da punto unico di riferimento per la configurazione.
+Il file [`config.ts`](./src/utils/config.ts) centralizza la configurazione dell'applicazione, gestendo sia variabili di ambiente provenienti dal file `.env`, sia parametri specifici del dominio applicativo. In fase di avvio, il file carica il contenuto del `.env` tramite la libreria `dotenv`, notificando tramite log eventuali errori di caricamento. Successivamente, definisce una serie di variabili che leggono dal `.env` (`process.env`) con valori di fallback. In aggiunta, il file gestisce il caricamento dei certificati RSA da una directory `certs/`, fondamentali per la firma e la verifica dei token JWT: in caso di errore nella lettura dei certificati, l’applicazione si arresta immediatamente con un errore fatale. Oltre ai parametri legati ai servizi, il file include anche configurazioni legate al dominio applicativo, come limiti di lunghezza per nomi utente, email e titoli delle richieste, soglie di penalità per l’uso scorretto delle risorse, e impostazioni di salting per le password e di cifratura per i JWT. In questo modo, `config.ts` agisce da punto unico di riferimento per la configurazione.
 
 
 #### Schemi di validazione Zod
@@ -424,7 +420,13 @@ A supporto degli schemi, [`schemasUtils.ts`](./src/utils/validation/schemasUtils
 
 ## 5 - Unit Testing
 
+Gli unit test sono stati realizzati facendo uso di Jest. Sono contenuti nella cartella [`/tests`](./tests) e sono organizzati in due sottocartelle: una per la validazione dei payload ([`/validation`](./tests/validation)) e l'altra per logica di gestione datetime ([`/datetimeUtils`](./tests/datetimeUtils)).
 
+Nella sottocartella `/validation` troviamo tre file di test, ciascuno dedicato a uno schema specifico definito con Zod. Generalmente questi test verificano due aspetti principali: che vengano accettati payload validi e che vengano correttamente rigettati quelli invalidi, con il relativo `ErrorResponse` atteso. I test coprono casi come: campo obbligatorio mancante, tipo errato, formato non conforme o vincoli di lunghezza non rispettati, assicurando che la funzione `validate()` rispetti la logica di gestione degli errori e restituisca i messaggi corretti attraverso la factory di errori.
+
+Nella sottocartella `/datetimeUtils` c’è un unico file di test che mira a verificare le funzioni del modulo [`datetimeUtils.ts`](./src//utils/datetimeUtils.ts). Qui vengono testati i casi di parsing corretto di date in formati previsti, così come i casi in cui vengono passati input non validi (es. date malformate o fuori range), controllando che il modulo generi errori appropriati.
+
+Gli unit test possono essere eseguiti da console con il comando `npm test`.
 
 ---
 
@@ -436,19 +438,28 @@ git clone https://github.com/JoshuaSgariglia/ProgettoPASgariglia.git
 cd ProgettoPASgariglia
 ```
 
-2. Crea un file .env:
+2. Ottieni o crea un file `.env`. Il sistema si aspetta che sia posto nella working directory, allo stesso livello del `package.json`. Un file di ambiente completo include i sequenti campi: 
 ```env
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=hpc_booking
-DB_HOST=db
-DB_PORT=5432
+# App
+APP_HOST
+APP_PORT
 
-JWT_PRIVATE_KEY_PATH=./keys/private.pem
-JWT_PUBLIC_KEY_PATH=./keys/public.pem
+# Postgres
+POSTGRES_VERSION
+POSTGRES_DB
+POSTGRES_USER
+POSTGRES_PASSWORD
+POSTGRES_HOST
+POSTGRES_PORT
+
+# Volumes
+POSTGRES_PATH
+LOGS_PATH
 ```
 
-3. Avvia i servizi:
+3. Ottieni o crea i file per i certificati. Sono necessari un file per la chiave privata e uno per la chiave pubblica. I nomi dei file devono essere `privateRS256.key` e `publicRS256.key` rispettivamente. Il sistema si aspetta di trovarli nella cartella `certs/` posta nella working directory, allo stesso livello di `src/`. In alternativa è possibile modificare il file [`config.ts`](./src/utils/config.ts) per specificare un percorso differente (variabili di configurazione `CERTS_DIRECTORY`, `PRIVATE_KEY_FILENAME` e `PUBLIC_KEY_FILENAME`).
+
+4. Costruisci e avvia i servizi:
 ```bash
 docker-compose up --build
 ```

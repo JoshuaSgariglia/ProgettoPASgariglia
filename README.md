@@ -375,7 +375,7 @@ Nel file [`successFactory.ts`](./src/utils/factories/successFactory.ts), il *Fac
 Nel file [`validationHandlers.ts`](./src/middleware/validationHandlers.ts), la funzione `validationHandlerGenerator` rappresenta un esempio di factory method: essa accetta come parametri uno schema di validazione (definito con Zod), una sorgente dei dati (`body`, `params`, `query`) e un flag opzionale. In base a questi parametri, restituisce una funzione middleware specifica, che valida i dati in arrivo e, se corretti, li salva in `res.locals.validated`. Ogni handler esportato (es. `loginPayloadHandler`, `uuidParameterHandler`, ecc.) è un'istanza generata dalla factory, costruita passando lo schema e le opzioni necessarie.
 
 
-##### Modulo [authHandlers.ts](./src/middleware/validationHandlers.ts)
+##### Modulo [authHandlers.ts](./src/middleware/authHandlers.ts)
 
 Anche in [`authHandlers.ts`](./src/middleware/authHandlers.ts) troviamo un'applicazione simile del pattern. La funzione `verifyAuthorizationGenerator` genera dinamicamente un middleware che verifica il ruolo utente in base a un parametro passato (`UserRole.User` oppure `UserRole.Admin`). Questo consente di produrre catene di autenticazione specifiche su base ruolo (`userAuthHandlers`, `adminAuthHandlers`), evitando la duplicazione del codice per l'autorizzazione.
 
@@ -432,13 +432,16 @@ Gli unit test possono essere eseguiti da console con il comando `npm test`.
 
 ## 6 - Avvio del Progetto con Docker
 
-1. Clona la repository:
+#### 1. Clona la repository
+
 ```bash
 git clone https://github.com/JoshuaSgariglia/ProgettoPASgariglia.git
 cd ProgettoPASgariglia
 ```
 
-2. Ottieni o crea un file `.env`. Il sistema si aspetta che sia posto nella working directory, allo stesso livello del `package.json`. Un file di ambiente completo include i sequenti campi: 
+#### 2. Ottieni o crea un file `.env`. 
+
+Il sistema si aspetta che sia posto nella working directory, allo stesso livello del `package.json`. Un file di ambiente completo include i sequenti campi: 
 ```env
 # App
 APP_HOST
@@ -457,15 +460,19 @@ POSTGRES_PATH
 LOGS_PATH
 ```
 
-3. Ottieni o crea i file per i certificati. Sono necessari un file per la chiave privata e uno per la chiave pubblica. I nomi dei file devono essere `privateRS256.key` e `publicRS256.key` rispettivamente. Il sistema si aspetta di trovarli nella cartella `certs/` posta nella working directory, allo stesso livello di `src/`. In alternativa è possibile modificare il file [`config.ts`](./src/utils/config.ts) per specificare un percorso differente (variabili di configurazione `CERTS_DIRECTORY`, `PRIVATE_KEY_FILENAME` e `PUBLIC_KEY_FILENAME`).
+#### 3. Ottieni o crea i file per i certificati 
 
-4. Costruisci e avvia i servizi:
+Sono necessari un file per la chiave privata e uno per la chiave pubblica. I nomi dei file devono essere `privateRS256.key` e `publicRS256.key` rispettivamente. Il sistema si aspetta di trovarli nella cartella `certs/` posta nella working directory, allo stesso livello di `src/`. In alternativa è possibile modificare il file [`config.ts`](./src/utils/config.ts) per specificare un percorso differente (variabili di configurazione `CERTS_DIRECTORY`, `PRIVATE_KEY_FILENAME` e `PUBLIC_KEY_FILENAME`).
+
+#### 4. Costruisci e avvia i servizi
 ```bash
 docker-compose up --build
 ```
 
-5. Testa l'API usando la Postman Collection e Postman Newman:
-La collection include test su ciascuna rotta dell'applicazione. Per molte rotte sono testati sia i casi di successo che quelli di errore. Il file di ambiente `ProgettoPASgarigliaEnv.postman_environment.json` deve essere ottenuto o creato.
+#### 5. Testa l'API usando la Postman Collection e Postman Newman
+
+La collection include test su ciascuna rotta dell'applicazione. Per molte rotte sono testati sia i casi di successo che quelli di errore. Il file di ambiente `ProgettoPASgarigliaEnv.postman_environment.json` deve essere ottenuto o creato. Il sistema si aspetta che tale file sia posto nella working directory prima della build dell'applicazione.
+
 Il seguente comando consente di eseguire la collection da console:
 
 ```bash
